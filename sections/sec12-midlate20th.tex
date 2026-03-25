@@ -1,0 +1,313 @@
+% ============================================================
+% Section 12: Mid-Late 20th Century (Slides 84-91)
+% ============================================================
+\section{Mid-Late 20th Century}
+
+% ----------------------------------------------------------
+% Slide 84: Section Divider
+% ----------------------------------------------------------
+{
+\setbeamercolor{background canvas}{bg=digitalBlue}
+\begin{frame}[plain]
+  \centering
+  \vspace{2cm}
+  \textcolor{white}{\Huge\bfseries Mathematics Goes Digital}\\[1em]
+  \textcolor{white!80}{\large 1950--2000 CE}\\[1.5em]
+  \textcolor{white!60}{\normalsize Shannon \(\cdot\) Lorenz \(\cdot\) Mandelbrot \(\cdot\) Wiles}\\[0.3em]
+  \textcolor{white!60}{\normalsize Cryptography \(\cdot\) Computer-Assisted Proof}
+
+  \note{
+    This half-century saw mathematics go from a purely abstract discipline to
+    the hidden engine of the digital world.
+    Information theory, chaos, fractals, cryptography, and computer-assisted proof
+    all emerged in this period.
+  }
+\end{frame}
+}
+
+% ----------------------------------------------------------
+% Slide 85: Claude Shannon and Information Theory
+% ----------------------------------------------------------
+\begin{frame}{Claude Shannon --- The Bit and Information Theory}
+
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{personbox}[Claude Elwood Shannon (1916--2001)]{digitalBlue}
+        \textbf{Origin:} Petoskey, Michigan, USA; worked at Bell Labs and MIT\\[3pt]
+        \textbf{Key work:} Founded \alert{information theory}
+        (``A Mathematical Theory of Communication,'' 1948). Defined the
+        \textbf{bit} as the fundamental unit of information. Showed that
+        all communication can be reduced to binary digits.
+      \end{personbox}
+
+      \vspace{0.4em}
+      \begin{insightbox}
+        Every text message, every video stream, every bit of data on the
+        internet exists because of Shannon's mathematics.
+      \end{insightbox}
+    \end{column}
+
+    \begin{column}{0.49\textwidth}
+      % TikZ: Shannon communication model
+      \visualplaceholder[5cm]{Blocks}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``Every text message, every video stream, every bit of data on the internet
+    exists because of Shannon's mathematics.''
+    Shannon also proved fundamental limits: the channel capacity theorem tells us
+    the maximum rate at which information can be reliably transmitted.
+    Fun fact: Shannon was also a juggler and built a flame-throwing trumpet.
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 86: Edward Lorenz and Chaos Theory
+% ----------------------------------------------------------
+\begin{frame}{Edward Lorenz --- The Butterfly Effect}
+
+  \begin{columns}[T]
+    \begin{column}{0.45\textwidth}
+      \begin{personbox}[Edward Norton Lorenz (1917--2008)]{digitalBlue}
+        \textbf{Origin:} West Hartford, Connecticut, USA; worked at MIT\\[3pt]
+        \textbf{Key work:} Discovered \alert{deterministic chaos} (1963)
+        while running a weather simulation. Tiny rounding differences in
+        initial conditions produced wildly different outcomes ---
+        the \textbf{butterfly effect}. Even perfectly deterministic systems
+        can be practically unpredictable.
+      \end{personbox}
+
+      \vspace{0.3em}
+      \begin{insightbox}
+        ``Does the flap of a butterfly's wings in Brazil set off a tornado
+        in Texas?'' Not magic --- mathematics.
+      \end{insightbox}
+    \end{column}
+
+    \begin{column}{0.52\textwidth}
+      % TikZ: Lorenz attractor approximation
+      \visualplaceholder[5cm]{Approximate the butterfly shape with parametric curves}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``He discovered that the flap of a butterfly's wings in Brazil could, in
+    theory, set off a tornado in Texas. Not magic --- mathematics.''
+    Lorenz found this by accident: he re-entered initial conditions rounded to
+    3 decimal places instead of 6. The weather simulation diverged completely.
+    This showed that long-term weather prediction has fundamental limits ---
+    even with perfect equations.
+    The Lorenz attractor is one of the iconic images of mathematics.
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 87: Four-Color Theorem -- Computers Enter Mathematics
+% ----------------------------------------------------------
+\begin{frame}{The Four-Color Theorem (1976) --- Computers Enter Mathematics}
+
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \begin{personbox}[Kenneth Appel (1932--2013) \& Wolfgang Haken (1928--2022)]{digitalBlue}
+        \textbf{Proved at:} University of Illinois, 1976\\[3pt]
+        Any map can be coloured with at most \alert{four colours} such that
+        no two adjacent regions share a colour. Appel and Haken used a
+        computer to check reducible configurations --- the \textbf{first
+        major theorem proved with essential computer assistance}.
+      \end{personbox}
+
+      \vspace{0.3em}
+      \begin{insightbox}
+        Is a proof that no human can fully verify still a ``real'' proof?
+        The debate continues today.
+      \end{insightbox}
+
+      \vspace{0.2em}
+      {\scriptsize\itshape The UIUC math department used a postmark reading
+      ``Four Colors Suffice'' to celebrate.}
+    \end{column}
+
+    \begin{column}{0.47\textwidth}
+      % TikZ: Map coloring example
+      \visualplaceholder[5cm]{A simple map requiring 4 colors}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``For the first time, a computer was essential to proving a mathematical theorem.
+    Some mathematicians refused to accept it. The debate about computer-assisted
+    proofs continues today.''
+    \verifytag{Reducible configurations count: sometimes cited as 1,476 or 1,936.
+    Verify exact number. UIUC postmark detail to be verified.}
+    The proof was later simplified and verified by other computer programs
+    (Robertson et al., 1997).
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 88: Benoit Mandelbrot and Fractals
+% ----------------------------------------------------------
+\begin{frame}{Benoit Mandelbrot --- Fractals and Hidden Patterns}
+
+  \begin{columns}[T]
+    \begin{column}{0.42\textwidth}
+      \begin{personbox}[Benoit B.\ Mandelbrot (1924--2010)]{digitalBlue}
+        \textbf{Origin:} Warsaw, Poland (Lithuanian-Jewish origin);
+        worked in France and at IBM/Yale in the USA\\[3pt]
+        \textbf{Key work:} Founded \alert{fractal geometry}. The Mandelbrot
+        set (1980) revealed infinite complexity from simple equations.
+        Natural phenomena --- coastlines, mountains, blood vessels,
+        financial markets --- have fractal structure.
+      \end{personbox}
+
+      \vspace{0.3em}
+      \begin{insightbox}
+        The messiest, most irregular things in nature follow hidden
+        mathematical patterns.
+      \end{insightbox}
+    \end{column}
+
+    \begin{column}{0.55\textwidth}
+      % TikZ/pgfplots: Mandelbrot set approximation
+      \visualplaceholder[5cm]{We use a simplified visual representation since true Mandelb}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``He showed that the messiest, most irregular things in nature --- coastlines,
+    clouds, mountain ranges --- follow hidden mathematical patterns.''
+    Mandelbrot coined the word ``fractal'' from Latin \emph{fractus} (broken).
+    The Mandelbrot set contains infinite detail at every zoom level, yet is
+    defined by one of the simplest equations in mathematics.
+    Fun fact: ``The B.\ in Benoit B.\ Mandelbrot stands for Benoit B.\ Mandelbrot''
+    (a fractal joke attributed to him).
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 89: Cryptography -- The Mathematics of Secrecy
+% ----------------------------------------------------------
+\begin{frame}{Cryptography --- The Mathematics of Secrecy}
+
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      {\small Public-key cryptography, invented in the 1970s, made secure
+      internet communication possible. Based on number theory ---
+      specifically the difficulty of \textbf{factoring large numbers}.}
+
+      \vspace{0.4em}
+      \begin{personbox}[Diffie--Hellman Key Exchange (1976)]{digitalBlue}
+        \textbf{Whitfield Diffie} (b.\,1944, USA)\\
+        \textbf{Martin Hellman} (b.\,1945, USA)\\[3pt]
+        Co-invented public-key cryptography.
+      \end{personbox}
+
+      \vspace{0.3em}
+      \begin{personbox}[RSA Algorithm (1977)]{digitalBlue}
+        \textbf{Ron Rivest} (b.\,1947, USA)\\
+        \textbf{Adi Shamir} (b.\,1952, Israel)\\
+        \textbf{Leonard Adleman} (b.\,1945, USA)\\[3pt]
+        Multiply two large primes --- easy.\\
+        Factor the product --- nearly impossible.
+      \end{personbox}
+    \end{column}
+
+    \begin{column}{0.49\textwidth}
+      % TikZ: RSA concept diagram
+      \visualplaceholder[5cm]{Alice and Bob}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``Every time you see the padlock icon in your browser, every time you send a
+    message on Signal or WhatsApp --- you are relying on number theory from the
+    1970s. The math that Euler and Fermat did for fun now protects your privacy.''
+    This is a perfect example of ``useless'' pure mathematics becoming essential
+    applied mathematics centuries later.
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Interactive Moment: Encryption Poll
+% ----------------------------------------------------------
+\begin{frame}{Quick Poll}
+
+  \begin{center}
+    \vspace{1cm}
+    {\Huge\bfseries\textcolor{digitalBlue}{Raise your hand if you have}}\\[0.6em]
+    {\Huge\bfseries\textcolor{digitalBlue}{used encryption today.}}\\[2em]
+
+    \pause
+
+    {\Large\textcolor{accentOrange}{\bfseries Answer: \underline{everyone}.}}\\[1em]
+
+    \visualplaceholder[5cm]{Diagram}
+  \end{center}
+
+  \note{
+    Interactive moment --- get hands up first, then reveal the answer.
+    Point out: ``The math behind that encryption is number theory from the 1970s.
+    Ancient number theory, done for pure intellectual curiosity by Euler and Fermat,
+    now protects billions of people every day.''
+    Budget: 1--2 minutes for this interaction.
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 90: Andrew Wiles and Fermat's Last Theorem
+% ----------------------------------------------------------
+\begin{frame}{Andrew Wiles --- Fermat's Last Theorem Proved}
+
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \begin{personbox}[Sir Andrew John Wiles (b.\,1953)]{digitalBlue}
+        \textbf{Origin:} Cambridge, England; worked at Princeton\\[3pt]
+        \textbf{Key work:} Proved \alert{Fermat's Last Theorem} in 1995
+        (after finding and fixing a gap in his 1993 proof). Used deep
+        connections between elliptic curves and modular forms
+        (the Taniyama--Shimura--Weil conjecture, now the modularity theorem).
+        Closed a \textbf{358-year-old problem}.
+      \end{personbox}
+
+      \vspace{0.3em}
+      \begin{insightbox}
+        He worked in secret for seven years. When he announced the proof,
+        he famously choked up with emotion.
+      \end{insightbox}
+    \end{column}
+
+    \begin{column}{0.47\textwidth}
+      % Fermat's Last Theorem
+      \visualplaceholder[5cm]{The simple statement}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``He worked in secret for seven years. When he announced the proof, he famously
+    choked up with emotion at the end of his lecture.''
+    The proof connects three distant areas of mathematics: number theory, algebraic
+    geometry, and modular forms. It required proving a special case of the
+    Taniyama--Shimura--Weil conjecture.
+    Wiles was awarded a special Silver Plaque by the IMU (he was over the Fields
+    Medal age limit) and later the Abel Prize (2016).
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 91: 20th Century Overview
+% ----------------------------------------------------------
+\begin{frame}{The 20th Century --- An Overview}
+
+  \begin{center}
+    \visualplaceholder[5cm]{Bottom summary}
+  \end{center}
+
+  \note{
+    Quick recap. Point to each card briefly.
+    Key message: mathematics went from purely abstract to the hidden infrastructure
+    of modern civilisation.
+    Transition: ``Turing's theoretical machine became real. And now, machines are
+    beginning to DO mathematics.''
+  }
+\end{frame}

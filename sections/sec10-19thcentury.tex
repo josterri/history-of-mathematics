@@ -1,0 +1,311 @@
+% ============================================================
+% Section 10: 19th Century Foundations (Slides 71-78)
+% ============================================================
+\section{19th Century Foundations}
+
+% ----------------------------------------------------------
+% Slide 71: Section Divider
+% ----------------------------------------------------------
+{
+\setbeamercolor{background canvas}{bg=modernSteel}
+\begin{frame}[plain]
+  \centering
+  \vspace{2cm}
+  \textcolor{white}{\Huge\bfseries The Century of Rigor}\\[0.6em]
+  \textcolor{white}{\Huge\bfseries and Revolution}\\[1em]
+  \textcolor{white!80}{\large 1800--1900 CE}\\[1.5em]
+  \textcolor{white!60}{\normalsize Galois \(\cdot\) Riemann \(\cdot\) Cantor \(\cdot\) Noether \(\cdot\) Ramanujan \(\cdot\) Kovalevskaya}
+
+  \note{
+    Transition from Analysis: ``Gauss bridges two centuries. What followed was a
+    crisis: mathematicians asked what mathematics really IS.''
+    The 19th century is where mathematics became rigorous --- and where some of its
+    most romantic and tragic stories took place.
+    Gauss (1777--1855) was covered in the previous section but his influence extends
+    deeply into this era.
+  }
+\end{frame}
+}
+
+% ----------------------------------------------------------
+% Slide 72: Evariste Galois -- Genius Cut Short
+% ----------------------------------------------------------
+\begin{frame}{Evariste Galois --- Genius Cut Short}
+
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
+      \begin{personbox}[Evariste Galois (1811--1832)]{modernSteel}
+        \textbf{Origin:} Bourg-la-Reine, France\\[3pt]
+        \textbf{Key work:} Founded \alert{group theory}. Proved there is no
+        general algebraic formula for polynomials of degree~5 or higher,
+        building on Niels Henrik Abel (1802--1829, Norway) who first proved
+        the impossibility of solving the general quintic by radicals
+        (Abel--Ruffini theorem, 1824).
+        Galois went further: he characterised \emph{exactly which} equations
+        can be solved by radicals, using the group structure of their roots.
+      \end{personbox}
+
+      \vspace{0.4em}
+      \begin{insightbox}
+        He died in a duel at age~20. The night before, he wrote down his
+        mathematical ideas, scribbling: ``\emph{I have not time.}''
+      \end{insightbox}
+    \end{column}
+
+    \begin{column}{0.45\textwidth}
+      % TikZ: Simple group theory concept
+      \visualplaceholder[5cm]{Symmetry group of a triangle}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``He died at 20 in a duel. The night before, he frantically wrote down his
+    mathematical ideas, scribbling in the margins: `I have not time.' Those ideas
+    revolutionised algebra.''
+    Credit Abel explicitly: Abel proved quintic unsolvability slightly earlier
+    (published 1824). The Abel--Ruffini theorem established the impossibility;
+    Galois theory provided the deeper framework explaining why.
+    \verifytag{Abel published 1824, refined 1826. Galois provided deeper framework.}
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 73: Bernhard Riemann
+% ----------------------------------------------------------
+\begin{frame}{Bernhard Riemann --- Curved Spaces and a Million-Dollar Question}
+
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \begin{personbox}[Georg Friedrich Bernhard Riemann (1826--1866)]{modernSteel}
+        \textbf{Origin:} Breselenz, Kingdom of Hanover, Germany;
+        worked in G\"ottingen\\[3pt]
+        \textbf{Key work:}
+        \begin{itemize}\setlength\itemsep{2pt}
+          \item \alert{Riemannian geometry} --- curved spaces of arbitrary
+                dimension, essential for Einstein's general relativity
+          \item The Riemann integral
+          \item The \textbf{Riemann hypothesis} (1859) --- still unproven
+                as of 2026, one of the Millennium Prize Problems
+                worth \textbf{\$1\,million}
+        \end{itemize}
+      \end{personbox}
+    \end{column}
+
+    \begin{column}{0.47\textwidth}
+      % Curved space visualization
+      \visualplaceholder[5cm]{Flat grid}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``His hypothesis about prime numbers, stated in 1859, remains unsolved.
+    There is a million-dollar prize waiting for whoever proves it.''
+    Riemannian geometry became the mathematical language for Einstein's
+    general relativity --- space itself is curved.
+    Died young at 39 from tuberculosis.
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 74: Georg Cantor -- Infinity Has Sizes
+% ----------------------------------------------------------
+\begin{frame}{Georg Cantor --- Infinity Has Sizes}
+
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{personbox}[Georg Ferdinand Ludwig Philipp Cantor (1845--1918)]{modernSteel}
+        \textbf{Origin:} St.\ Petersburg, Russia (German--Danish parentage);
+        worked in Halle, Germany\\[3pt]
+        \textbf{Key work:} Founded \alert{set theory}. Proved that there
+        are different sizes of infinity --- the real numbers are ``more
+        infinite'' than the natural numbers. This was so controversial
+        that leading mathematicians tried to block his career.
+      \end{personbox}
+
+      \vspace{0.4em}
+      \begin{insightbox}
+        He proved that infinity comes in sizes. Some infinities are bigger
+        than others. This drove him to a breakdown --- and his critics
+        nearly destroyed his career.
+      \end{insightbox}
+    \end{column}
+
+    \begin{column}{0.49\textwidth}
+      % TikZ: Cantor's diagonal argument
+      \visualplaceholder[5cm]{Suppose we list all reals between 0 and 1}
+    \end{column}
+  \end{columns}
+
+  \note{
+    Walk through the diagonal argument step by step.
+    ``He proved that infinity comes in sizes. Some infinities are bigger than others.
+    This drove him to a breakdown --- and his critics nearly destroyed his career.''
+    Leopold Kronecker was his main antagonist:
+    ``God made the integers; all else is the work of man.''
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 75: Emmy Noether -- The Mother of Modern Algebra
+% ----------------------------------------------------------
+\begin{frame}{Emmy Noether --- The Mother of Modern Algebra}
+
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
+      \begin{personbox}[Amalie Emmy Noether (1882--1935)]{modernSteel}
+        \textbf{Origin:} Erlangen, Germany; fled to the US in 1933\\[3pt]
+        \textbf{Key work:}
+        \begin{itemize}\setlength\itemsep{2pt}
+          \item \alert{Noether's theorem} (1918): symmetries in physics
+                $\longleftrightarrow$ conservation laws
+          \item Transformed abstract algebra --- ring theory, ideal theory
+          \item Denied a proper faculty position for years because she was
+                a woman
+        \end{itemize}
+      \end{personbox}
+
+      \vspace{0.4em}
+      \begin{insightbox}
+        Einstein called her ``the most significant creative mathematical
+        genius since higher education opened to women.''
+      \end{insightbox}
+    \end{column}
+
+    \begin{column}{0.45\textwidth}
+      % Noether's theorem visualized
+      \visualplaceholder[5cm]{Noether's Theorem}
+
+      \vspace{0.3em}
+      \visualplaceholder[4cm]{Portrait of Emmy Noether\\(Wikimedia Commons)}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``She was denied a salary for years because of her gender. Her colleagues
+    had to list her courses under a male professor's name. She is now
+    considered one of the greatest algebraists in history.''
+    Her theorem is one of the most profound results in mathematical physics ---
+    every symmetry implies a conservation law.
+    She fled Nazi Germany in 1933 and died in the US in 1935.
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 76: Srinivasa Ramanujan
+% ----------------------------------------------------------
+\begin{frame}{Srinivasa Ramanujan --- The Self-Taught Genius}
+
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
+      \begin{personbox}[Srinivasa Ramanujan Aiyangar (1887--1920)]{modernSteel}
+        \textbf{Origin:} Erode, Tamil Nadu, India; worked at Cambridge\\[3pt]
+        \textbf{Key work:} Self-taught mathematical genius. Produced thousands
+        of results in number theory, infinite series, and continued fractions,
+        many without formal proof. His notebooks continue to yield new
+        mathematics a century later. Collaborated with G.\,H.~Hardy
+        at Cambridge.
+      \end{personbox}
+
+      \vspace{0.4em}
+      % Taxicab number anecdote
+      \begin{tcolorbox}[colback=modernSteel!5, colframe=modernSteel!50,
+        fonttitle=\bfseries\small, title={The Taxicab Number}, rounded corners,
+        boxrule=0.5pt, left=3pt, right=3pt, top=2pt, bottom=2pt]
+        \small
+        Hardy visited Ramanujan and mentioned his taxi was number 1729 ---
+        ``a rather dull number.'' Ramanujan instantly replied:\\[2pt]
+        ``\emph{No, it is a very interesting number; it is the smallest
+        number expressible as the sum of two cubes in two different ways.}''\\[2pt]
+        $1729 = 1^3 + 12^3 = 9^3 + 10^3$
+      \end{tcolorbox}
+    \end{column}
+
+    \begin{column}{0.45\textwidth}
+      \visualplaceholder[5cm]{Page from Ramanujan's notebooks\\(Cambridge University Library)}
+
+      \vspace{0.5em}
+      % Some Ramanujan formulas
+      \visualplaceholder[5cm]{Diagram}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``With almost no formal training, he produced results that astonished the best
+    mathematicians in the world. Hardy called their collaboration `the one romantic
+    incident in my life.'\,''
+    Ramanujan died at 32 of tuberculosis.
+    His notebooks are still being studied --- some formulas were proved only decades
+    later.
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 77: Sofia Kovalevskaya
+% ----------------------------------------------------------
+\begin{frame}{Sofia Kovalevskaya --- First Woman Doctorate in Mathematics}
+
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
+      \begin{personbox}[Sofia Vasilyevna Kovalevskaya (1850--1891)]{modernSteel}
+        \textbf{Origin:} Moscow, Russia; worked in Stockholm, Sweden\\[3pt]
+        \textbf{Key work:}
+        \begin{itemize}\setlength\itemsep{2pt}
+          \item First woman to obtain a doctorate in mathematics in modern
+                Europe (G\"ottingen, 1874)
+          \item Major contributions to analysis, partial differential
+                equations, and mechanics
+          \item The \alert{Kovalevskaya top} --- a new integrable case
+                of rigid body rotation
+          \item First woman appointed to a full professorship in northern
+                Europe (Stockholm, 1889)
+        \end{itemize}
+      \end{personbox}
+
+      \vspace{0.3em}
+      \begin{insightbox}
+        To get an education, she entered a marriage of convenience just
+        to be allowed to travel abroad and study.
+      \end{insightbox}
+    \end{column}
+
+    \begin{column}{0.45\textwidth}
+      \visualplaceholder[4.5cm]{Portrait of Sofia Kovalevskaya\\(Wikimedia Commons)}
+
+      \vspace{0.4em}
+      % Kovalevskaya top diagram
+      \visualplaceholder[5cm]{Three known integrable cases}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``To get an education, she had to enter a marriage of convenience just to be
+    allowed to travel abroad and study. She became one of the greatest analysts
+    of her century.''
+    \verifytag{``First woman PhD in mathematics'' needs qualification as
+    ``in modern Europe'' since specifics depend on definitions.}
+    The Prix Bordin jury was so impressed they increased the prize money.
+    She died of influenza at only 41.
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 78: 19th Century Overview
+% ----------------------------------------------------------
+\begin{frame}{The 19th Century --- An Overview}
+
+  \begin{center}
+    \visualplaceholder[5cm]{Five pillars}
+  \end{center}
+
+  \vspace{-0.3em}
+  {\small\textcolor{modernSteel}{\textbf{Transition:}} \textit{``The 20th century
+  would bring a crisis at the very foundations of mathematics\ldots''}}
+
+  \note{
+    Brief overview --- hit the five pillars quickly.
+    Emphasise that ALL of these developments challenged the existing understanding
+    of what mathematics IS.
+    Transition: ``The 20th century opened with Hilbert's challenge: can we prove
+    math is consistent? The answer was shocking.''
+  }
+\end{frame}

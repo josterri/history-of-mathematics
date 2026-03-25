@@ -1,0 +1,41 @@
+% Global TikZ styles for all section files
+% Moved here from inside frames to avoid Beamer double-expansion issues
+\tikzset{
+  % Islamic section styles
+  islamicbox/.style={rectangle, rounded corners, draw=islamicGreen!80, fill=islamicGreen!8,
+    text width=2.8cm, align=center, font=\scriptsize, minimum height=0.7cm},
+  islamicarr/.style={-{Stealth[length=4pt]}, thick, islamicGreen!70},
+  city/.style={circle, fill=islamicGreen!80, text=white, font=\tiny\bfseries,
+    inner sep=2pt, minimum size=0.6cm},
+  route/.style={-{Stealth[length=4pt]}, thick, islamicGreen!60, shorten >=2pt, shorten <=2pt},
+  islamiclabel/.style={font=\tiny, text=islamicGreen!80},
+  % Medieval section styles
+  event/.style={circle, fill=medievalPurple!70, inner sep=1.5pt},
+  % Renaissance section styles
+  member/.style={rectangle, rounded corners, draw=renaissanceGold!60,
+    fill=renaissanceGold!8, font=\tiny, inner sep=2pt,
+    minimum width=1.8cm, align=center},
+  major/.style={member, draw=renaissanceGold, fill=renaissanceGold!15,
+    font=\tiny\bfseries},
+  % 19th century styles
+  element/.style={circle, draw=modernSteel, fill=modernSteel!10,
+    minimum size=8mm, font=\small\bfseries},
+  modernarrow/.style={-Stealth, modernSteel, thick},
+  block/.style={draw=modernSteel, rounded corners=4pt, fill=modernSteel!8,
+    text width=3.8cm, align=center, font=\small, minimum height=1cm, inner sep=4pt},
+  namestyle/.style={font=\scriptsize\itshape, text=gray},
+  % Early 20th century styles
+  comp/.style={draw=digitalBlue, thick, rounded corners=4pt,
+    fill=digitalBlue!10, minimum width=2.5cm, minimum height=1cm,
+    font=\small\bfseries, align=center},
+  bus/.style={draw=digitalBlue, thick, -Stealth, line width=1.5pt},
+  dbus/.style={draw=digitalBlue, thick, Stealth-Stealth, line width=1.5pt},
+  % Mid-late 20th century styles
+  channelperson/.style={circle, draw=digitalBlue, thick, fill=digitalBlue!10,
+    minimum size=1.2cm, font=\scriptsize\bfseries},
+  channelkey/.style={draw=none, font=\scriptsize},
+  card/.style={draw=digitalBlue!60, rounded corners=4pt, fill=digitalBlue!6,
+    text width=2.4cm, align=center, font=\scriptsize,
+    minimum height=1.4cm, inner sep=3pt},
+  cardicon/.style={font=\normalsize, text=digitalBlue},
+}

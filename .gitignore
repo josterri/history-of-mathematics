@@ -1,0 +1,12 @@
+*.aux
+*.log
+*.nav
+*.out
+*.snm
+*.toc
+*.vrb
+*.synctex.gz
+texput.log
+fix_*.py
+strip_fragile.py
+nuke_tikz.py

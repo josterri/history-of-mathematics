@@ -1,0 +1,355 @@
+% ============================================================
+% SECTION 8: RENAISSANCE & EARLY MODERN (~1500 - 1700)
+% Slides 56-65 (10 slides)
+% Includes: Cardano, Viete, Napier, Descartes, Fermat,
+%           Newton, Leibniz, Bernoullis, Calculus summary
+% ============================================================
+
+% ---- Section Divider ----
+{
+\setbeamercolor{background canvas}{bg=renaissanceGold}
+\begin{frame}[plain]
+  \centering
+  \vfill
+  \textcolor{white}{\Huge\bfseries The Modern Age Begins}\\[0.7em]
+  \textcolor{white!85}{\Large Revolution in Symbol, Method, and Thought}\\[1.5em]
+  \textcolor{white!65}{\large 1500--1700 CE}
+  \vfill
+  \visualplaceholder[5cm]{Diagram}
+  \vfill
+\end{frame}
+}
+
+\section{Renaissance \& Early Modern Mathematics}
+
+% ---- Slide 57: Cardano and the Cubic ----
+\begin{frame}{Cardano and the Cubic Equation --- A Mathematical Drama}
+  \begin{columns}[T]
+    \column{0.50\textwidth}
+    \begin{personbox}[Gerolamo Cardano]{renaissanceGold}
+      {\small (Latin: Hieronymus Cardanus)}\\[3pt]
+      \textbf{Dates:} 1501 -- 1576 CE\\
+      \textbf{Origin:} Pavia, Italy
+    \end{personbox}
+    \vspace{0.3em}
+    \begin{itemize}\setlength\itemsep{2pt}
+      \item Published the general solution to \textbf{cubic equations} in \textit{Ars Magna} (1545)
+      \item But who really discovered it?
+      \item The solution forced the invention of \textbf{complex numbers} ($\sqrt{-1}$)
+    \end{itemize}
+
+    \vspace{0.3em}
+    % Cubic formula (simplified form)
+    \visualplaceholder[5cm]{Diagram}
+
+    \column{0.47\textwidth}
+    % Drama triangle TikZ
+    \visualplaceholder[5cm]{Arrows with labels}
+  \end{columns}
+
+  \note{
+    \textbf{Talking point:} ``The solution of the cubic equation is one of the great dramas
+    in math history --- involving disputed promises, public math duels, and a formula so
+    complicated it forced the invention of imaginary numbers.''
+
+    Del Ferro discovered the solution first ($\sim$1515) but kept it secret.
+    Tartaglia rediscovered it independently. Cardano obtained it from Tartaglia,
+    then published after finding del Ferro's priority in his papers.
+
+    \verifytag{The exact nature of Cardano's promise to Tartaglia is contested.
+    Some sources say he swore an oath of secrecy; others say the commitment was more
+    ambiguous. Cardano later argued that since del Ferro had discovered it first,
+    the oath did not apply.}
+  }
+\end{frame}
+
+% ---- Slide 58: Viete ----
+\begin{frame}{Fran\c{c}ois Vi\`{e}te --- Symbolic Algebra}
+  \begin{columns}[T]
+    \column{0.50\textwidth}
+    \begin{personbox}[Fran\c{c}ois Vi\`{e}te]{renaissanceGold}
+      {\small (Latin: Franciscus Vieta)}\\[3pt]
+      \textbf{Dates:} 1540 -- 1603 CE\\
+      \textbf{Origin:} Fontenay-le-Comte, France
+    \end{personbox}
+    \vspace{0.3em}
+    \begin{itemize}
+      \item Introduced systematic use of \textbf{letters} for \emph{both} unknowns and known quantities
+      \item Vowels for unknowns, consonants for knowns
+      \item A major step toward \textbf{modern algebraic notation}
+      \item Also worked on trigonometric identities and cryptanalysis
+    \end{itemize}
+
+    \column{0.47\textwidth}
+    % Before and after comparison
+    \visualplaceholder[5cm]{Medieval style}
+  \end{columns}
+
+  \note{
+    \textbf{Talking point:} ``Before Vi\`{e}te, algebra was mostly done in words and sentences.
+    After Vi\`{e}te, it started to look like what you see in your textbook.''
+
+    \verifytag{Vi\`{e}te's innovation was the consistent use of letters for BOTH unknowns
+    and known parameters, creating a general symbolic framework. Earlier uses (Diophantus,
+    Islamic algebraists) were more limited. Qualify ``introduced'' accordingly.}
+  }
+\end{frame}
+
+% ---- Slide 59: Napier ----
+\begin{frame}{John Napier --- Logarithms Change Everything}
+  \begin{columns}[T]
+    \column{0.52\textwidth}
+    \begin{personbox}[John Napier]{renaissanceGold}
+      \textbf{Dates:} 1550 -- 1617 CE\\
+      \textbf{Origin:} Edinburgh, Scotland
+    \end{personbox}
+    \vspace{0.3em}
+    \begin{itemize}
+      \item Invented \textbf{logarithms} (published 1614)
+      \item Transformed computation: turned \textbf{multiplication into addition}
+      \item Laplace: logarithms ``doubled the life of astronomers'' by halving their computational labor
+    \end{itemize}
+
+    \vspace{0.3em}
+    % Logarithm property
+    \visualplaceholder[5cm]{Diagram}
+
+    \column{0.45\textwidth}
+    \visualplaceholder[4cm]{Page from Napier's\\logarithm tables (1614)\\
+      \textit{Mirifici Logarithmorum\\Canonis Descriptio}}
+
+    \vspace{0.5em}
+    \visualplaceholder[4cm]{``Napier's bones'' ---\\his mechanical multiplication device}
+  \end{columns}
+
+  \note{
+    \textbf{Talking point:} ``Before calculators, before computers --- there were logarithms.
+    They were the computational revolution of the 17th century.''
+
+    Logarithm tables were the essential computational tool for scientists, navigators,
+    and engineers for over 300 years, until electronic calculators replaced them in the 1970s.
+  }
+\end{frame}
+
+% ---- Slide 60: Descartes ----
+\begin{frame}{Ren\'{e} Descartes --- Geometry Meets Algebra}
+  \begin{columns}[T]
+    \column{0.50\textwidth}
+    \begin{personbox}[Ren\'{e} Descartes]{renaissanceGold}
+      {\small (Latin: Renatus Cartesius)}\\[3pt]
+      \textbf{Dates:} 1596 -- 1650 CE\\
+      \textbf{Origin:} La Haye en Touraine, France;\\lived in the Dutch Republic
+    \end{personbox}
+    \vspace{0.3em}
+    \begin{itemize}
+      \item Created \textbf{analytic geometry} --- the merger of algebra and geometry
+      \item Published in \textit{La G\'{e}om\'{e}trie} (1637)
+      \item \textbf{Cartesian coordinates}: describe curves as equations, solve geometric problems algebraically
+    \end{itemize}
+
+    \column{0.47\textwidth}
+    % Cartesian coordinate system with a curve (pure TikZ)
+    \visualplaceholder[5cm]{Grid lines}
+  \end{columns}
+
+  \note{
+    The merger of algebra and geometry was arguably the single most important conceptual
+    advance since the Greeks. It made calculus possible.
+
+    Portrait source: Frans Hals painting (Louvre, Wikimedia Commons).
+  }
+\end{frame}
+
+% ---- Slide 61: Fermat ----
+\begin{frame}{Pierre de Fermat --- The Prince of Amateurs}
+  \begin{columns}[T]
+    \column{0.52\textwidth}
+    \begin{personbox}[Pierre de Fermat]{renaissanceGold}
+      \textbf{Dates:} 1601 -- 1665 CE\\
+      \textbf{Origin:} Beaumont-de-Lomagne, France
+    \end{personbox}
+    \vspace{0.3em}
+    \begin{itemize}
+      \item Co-founded \textbf{probability theory} (with Pascal, 1654)
+      \item Developed early \textbf{differential calculus} methods (tangents, maxima/minima)
+      \item Stated \textbf{Fermat's Last Theorem} in a marginal note (c.\ 1637)
+    \end{itemize}
+
+    \vspace{0.3em}
+    % The famous marginal note
+    \visualplaceholder[5cm]{Diagram}
+
+    \column{0.45\textwidth}
+    % Fermat's Last Theorem visual
+    \visualplaceholder[5cm]{Timeline}
+
+    \vspace{0.5em}
+    \visualplaceholder[3.5cm]{The Fermat--Pascal correspondence\\on probability (1654)}
+  \end{columns}
+
+  \note{
+    \textbf{Talking point:} ``His margin note launched a 358-year quest that became the most
+    famous unsolved problem in mathematics.''
+
+    Fermat was a lawyer by profession --- mathematics was his hobby. He communicated most of
+    his results in letters, not formal publications.
+  }
+\end{frame}
+
+% ---- Slide 62: Newton ----
+\begin{frame}{Isaac Newton --- The Method of Fluxions}
+  \begin{columns}[T]
+    \column{0.52\textwidth}
+    \begin{personbox}[Sir Isaac Newton]{renaissanceGold}
+      \textbf{Dates:} 1642 -- 1726/27 CE\\
+      \textbf{Origin:} Woolsthorpe-by-Colsterworth, England
+    \end{personbox}
+    \vspace{0.3em}
+    \begin{itemize}
+      \item Co-invented \textbf{calculus} (``the method of fluxions''), developed independently during 1665--1666
+      \item Published \textit{Principia Mathematica} (1687) --- used calculus to describe gravity and planetary motion
+      \item Also: optics, reflecting telescope
+    \end{itemize}
+
+    \column{0.45\textwidth}
+    \visualplaceholder[4cm]{Page from the \textit{Principia}\\(Cambridge University Library)}
+
+    \vspace{0.5em}
+    % Newton's notation (using tcolorbox to avoid TikZ scope issue)
+    \begin{tcolorbox}[colframe=renaissanceGold!60,colback=renaissanceGold!5,boxrule=0.5pt,arc=3pt]
+      \centering
+      \textbf{Newton's notation:}\\[4pt]
+      $\dot{x}$ \quad (fluxion of $x$)\\[2pt]
+      $\ddot{x}$ \quad (second fluxion)\\[6pt]
+      {\footnotesize\textcolor{gray}{Still used in physics today for time derivatives}}
+    \end{tcolorbox}
+  \end{columns}
+
+  \note{
+    Newton developed calculus during the ``annus mirabilis'' (miracle year) of 1665--1666
+    while Cambridge was closed due to plague. He was 23.
+
+    The priority dispute with Leibniz became one of the ugliest feuds in the history of
+    science, lasting decades and dividing British and Continental mathematics.
+  }
+\end{frame}
+
+% ---- Slide 63: Leibniz ----
+\begin{frame}{Gottfried Wilhelm Leibniz --- The Notation that Won}
+  \begin{columns}[T]
+    \column{0.50\textwidth}
+    \begin{personbox}[G.\ W.\ Leibniz]{renaissanceGold}
+      \textbf{Dates:} 1646 -- 1716 CE\\
+      \textbf{Origin:} Leipzig, Germany;\\worked in Hanover and Paris
+    \end{personbox}
+    \vspace{0.3em}
+    \begin{itemize}
+      \item Co-invented calculus \textbf{independently} of Newton (published 1684--86)
+      \item His \textbf{notation} is what we use today
+      \item Invented a mechanical calculator (Stepped Reckoner)
+      \item Pioneered \textbf{binary arithmetic}
+    \end{itemize}
+
+    \column{0.47\textwidth}
+    % Newton vs. Leibniz notation comparison
+    \visualplaceholder[5cm]{Winner arrow}
+  \end{columns}
+
+  \vspace{0.2em}
+  \begin{insightbox}
+    {\footnotesize Every time you write $\frac{dy}{dx}$ or the integral sign $\int$, you are using \textbf{Leibniz's} language, not Newton's.}
+  \end{insightbox}
+
+  \note{
+    \textbf{Talking point:} ``Newton may have gotten there first, but Leibniz's notation won.
+    Every time you write $dy/dx$ or the integral sign, you are using Leibniz's language,
+    not Newton's.''
+
+    Leibniz also envisioned a ``universal language'' of reasoning --- a precursor to
+    formal logic and computer science.
+  }
+\end{frame}
+
+% ---- Slide 64: The Bernoulli Family ----
+\begin{frame}{The Bernoulli Family --- A Mathematical Dynasty}
+  \begin{columns}[T]
+    \column{0.45\textwidth}
+    {\small The Bernoulli family of Basel, Switzerland: at least \textbf{eight} notable mathematicians across three generations.}
+
+    \vspace{0.3em}
+    \begin{personbox}[Jacob Bernoulli (1655--1705)]{renaissanceGold}
+      {\footnotesize Basel, Switzerland\\
+      Bernoulli numbers $\bullet$ \textit{Ars Conjectandi} (1713)\\
+      The \textbf{law of large numbers}}
+    \end{personbox}
+
+    \vspace{0.2em}
+    \begin{personbox}[Johann Bernoulli (1667--1748)]{renaissanceGold}
+      {\footnotesize Basel, Switzerland\\
+      \textbf{Taught Euler} $\bullet$ Brachistochrone problem\\
+      Fierce rivalry with brother Jacob}
+    \end{personbox}
+
+    \column{0.52\textwidth}
+    % Family tree
+    \visualplaceholder[5cm]{Generation 1}
+
+    \vspace{0.4em}
+    % Brachistochrone curve
+    \visualplaceholder[5cm]{start}
+  \end{columns}
+
+  \note{
+    \textbf{Talking point:} ``The Bernoullis were the mathematical equivalent of a royal
+    dynasty. Two brothers, Jacob and Johann, were bitter rivals --- and both were geniuses.
+    Johann taught Euler, who became the most prolific mathematician in history.''
+
+    The brachistochrone problem (1696): Johann posed the challenge ``find the curve of
+    fastest descent.'' Newton famously solved it in a single evening.
+  }
+\end{frame}
+
+% ---- Slide 65: Calculus Invented ----
+\begin{frame}{Calculus Invented --- The Floodgates Open}
+  \centering
+
+  {\small With calculus, analytic geometry, and modern notation in place,\\
+  mathematics had the tools for \textbf{explosive growth}.}
+
+  \vspace{0.6em}
+
+  % Cascade timeline
+  \visualplaceholder[5cm]{tiny 1637}
+
+  \vspace{0.8em}
+
+  \begin{columns}[T]
+    \column{0.48\textwidth}
+    {\small\textbf{What was now possible:}}
+    \begin{itemize}\setlength\itemsep{2pt}
+      \item[\textcolor{renaissanceGold}{\faCheck}] {\footnotesize Describe motion and change precisely}
+      \item[\textcolor{renaissanceGold}{\faCheck}] {\footnotesize Compute areas, volumes, arc lengths}
+      \item[\textcolor{renaissanceGold}{\faCheck}] {\footnotesize Model planetary orbits}
+      \item[\textcolor{renaissanceGold}{\faCheck}] {\footnotesize Predict physical phenomena mathematically}
+    \end{itemize}
+
+    \column{0.48\textwidth}
+    {\small\textbf{What came next:}}
+    \begin{itemize}\setlength\itemsep{2pt}
+      \item[\textcolor{enlightenmentTeal}{\faArrowRight}] {\footnotesize Euler: the most prolific mathematician ever}
+      \item[\textcolor{enlightenmentTeal}{\faArrowRight}] {\footnotesize Lagrange \& Laplace: mechanics and celestial theory}
+      \item[\textcolor{enlightenmentTeal}{\faArrowRight}] {\footnotesize Gauss: the ``Prince of Mathematicians''}
+    \end{itemize}
+  \end{columns}
+
+  \vspace{0.5em}
+  {\small\itshape ``With calculus invented, mathematics entered a new era of explosive growth\ldots''}
+
+  \note{
+    This is a transition slide. Emphasize: calculus was not invented by one person in
+    one moment. It was a cascade of ideas spanning 50+ years, building on 2,000 years
+    of Greek, Indian, and Islamic mathematics.
+
+    The 18th century would see mathematics applied to every branch of science.
+  }
+\end{frame}

@@ -1,0 +1,190 @@
+% ============================================================
+% Section 11: Early 20th Century (Slides 79-83)
+% ============================================================
+\section{Early 20th Century}
+
+% ----------------------------------------------------------
+% Slide 79: Section Divider
+% ----------------------------------------------------------
+{
+\setbeamercolor{background canvas}{bg=digitalBlue}
+\begin{frame}[plain]
+  \centering
+  \vspace{2cm}
+  \textcolor{white}{\Huge\bfseries Crisis, War,}\\[0.4em]
+  \textcolor{white}{\Huge\bfseries and Computers}\\[1em]
+  \textcolor{white!80}{\large 1900--1950 CE}\\[1.5em]
+  \textcolor{white!60}{\normalsize Hilbert \(\cdot\) G\"odel \(\cdot\) Turing \(\cdot\) von Neumann \(\cdot\) Nash}
+
+  \note{
+    Transition: ``The 20th century opened with Hilbert's challenge: can we prove
+    math is consistent? The answer was shocking.''
+    This section covers the most turbulent half-century in mathematics ---
+    foundations crises, world wars, and the birth of the computer.
+  }
+\end{frame}
+}
+
+% ----------------------------------------------------------
+% Slide 80: David Hilbert and the Foundations Crisis
+% ----------------------------------------------------------
+\begin{frame}{David Hilbert --- The Foundations Crisis}
+
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \begin{personbox}[David Hilbert (1862--1943)]{digitalBlue}
+        \textbf{Origin:} K\"onigsberg, Prussia (modern Kaliningrad, Russia);
+        worked in G\"ottingen\\[3pt]
+        \textbf{Key work:} In 1900, posed \alert{23 unsolved problems} that
+        shaped 20th-century mathematics. Hilbert's program aimed to put
+        \emph{all} of mathematics on a provably consistent, complete
+        foundation.
+      \end{personbox}
+
+      \vspace{0.4em}
+      \begin{personbox}[Kurt G\"odel (1906--1978)]{digitalBlue}
+        \textbf{Origin:} Brno, Austria-Hungary (now Czechia); worked at
+        Princeton, USA\\[3pt]
+        \textbf{Incompleteness Theorems (1931):} Any sufficiently powerful
+        mathematical system contains true statements that
+        \textbf{cannot be proved} within the system.
+      \end{personbox}
+    \end{column}
+
+    \begin{column}{0.47\textwidth}
+      % Hilbert's 23 problems (selected)
+      \visualplaceholder[5cm]{G "odel's theorem in plain English}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``Hilbert asked: can we prove that mathematics is free of contradictions?
+    G\"odel answered: no. And he proved it mathematically.''
+    This was a philosophical earthquake. Mathematics --- the most certain
+    of all sciences --- had fundamental limits.
+    G\"odel's proof is one of the most profound results in all of intellectual history.
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 81: Alan Turing -- The Birth of Computer Science
+% ----------------------------------------------------------
+\begin{frame}{Alan Turing --- The Birth of Computer Science}
+
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{personbox}[Alan Mathison Turing (1912--1954)]{digitalBlue}
+        \textbf{Origin:} London, England; worked at Cambridge, Bletchley Park,
+        Manchester\\[3pt]
+        \textbf{Key work:}
+        \begin{itemize}\setlength\itemsep{1pt}
+          \item The \alert{Turing machine} (1936) --- theoretical foundation
+                of all computers
+          \item Proved the \textbf{halting problem} is unsolvable
+          \item Broke wartime Enigma at Bletchley Park, building on
+                \textbf{Marian Rejewski} (1905--1980, Poland) and
+                Polish cryptanalysts who cracked earlier Enigma versions
+                in the 1930s
+          \item Pioneered the ``Turing test'' for AI
+        \end{itemize}
+      \end{personbox}
+    \end{column}
+
+    \begin{column}{0.49\textwidth}
+      % TikZ: Turing machine diagram
+      \visualplaceholder[5cm]{Tape}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``Polish mathematicians cracked the first version of Enigma. Turing and his
+    team broke the far more complex wartime versions. Every computer, every phone,
+    every AI runs on principles Turing laid down in a 1936 paper.''
+    \verifytag{Polish contribution well-documented. Rejewski broke initial Enigma
+    cipher in 1932; Poles shared work with UK/France in July 1939. Turing and team
+    then broke more complex wartime versions.}
+    Turing was persecuted for being gay and died at 41.
+    He was posthumously pardoned in 2013.
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 82: John von Neumann
+% ----------------------------------------------------------
+\begin{frame}{John von Neumann --- The Last Great Polymath}
+
+  \begin{columns}[T]
+    \begin{column}{0.47\textwidth}
+      \begin{personbox}[John von Neumann (1903--1957)]{digitalBlue}
+        \textbf{Born:} Neumann J\'anos Lajos\\
+        \textbf{Origin:} Budapest, Hungary; worked in Germany and
+        the USA (Princeton)\\[3pt]
+        \textbf{Key work:} Contributions to quantum mechanics, game theory,
+        computer architecture, cellular automata, nuclear weapons design,
+        and set theory axiomatisation. Possibly the last great polymath.
+      \end{personbox}
+
+      \vspace{0.3em}
+      \begin{insightbox}
+        The computer you use, the phone in your pocket --- they all follow
+        the architecture he designed in the 1940s.
+      \end{insightbox}
+    \end{column}
+
+    \begin{column}{0.5\textwidth}
+      % TikZ: Von Neumann architecture
+      \visualplaceholder[5cm]{CPU block}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``The computer you use, the phone in your pocket --- they all follow the
+    architecture he designed in the 1940s.''
+    von Neumann had an almost superhuman memory and processing speed.
+    He contributed to so many fields that it is hard to summarise his work
+    in one slide.
+    The key insight of his architecture: store both program and data
+    in the same memory (the ``stored-program concept'').
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 83: John Nash -- Game Theory
+% ----------------------------------------------------------
+\begin{frame}{John Nash --- Game Theory and the Nash Equilibrium}
+
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{personbox}[John Forbes Nash Jr.\ (1928--2015)]{digitalBlue}
+        \textbf{Origin:} Bluefield, West Virginia, USA; worked at MIT
+        and Princeton\\[3pt]
+        \textbf{Key work:}
+        \begin{itemize}\setlength\itemsep{2pt}
+          \item \alert{Nash equilibrium} (1950) --- no player can improve
+                their outcome by unilaterally changing strategy
+          \item Applications: economics, evolutionary biology, AI
+          \item Nobel Prize in Economics (1994)
+          \item Struggled with schizophrenia for decades; eventually recovered
+        \end{itemize}
+      \end{personbox}
+
+      \vspace{0.3em}
+      {\small\itshape Portrayed in ``A Beautiful Mind'' (2001)}
+    \end{column}
+
+    \begin{column}{0.49\textwidth}
+      % TikZ: Nash equilibrium payoff matrix
+      \visualplaceholder[5cm]{Matrix frame}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``Every time countries negotiate treaties, companies set prices, or AI agents
+    make decisions --- game theory is at work. And its foundations were laid by a
+    mathematician who nearly lost everything to mental illness.''
+    Nash's work is used today in everything from auction design to machine learning
+    multi-agent systems.
+    His recovery from schizophrenia after decades of illness is extraordinary.
+    He and his wife Alicia died in a taxi accident in 2015.
+  }
+\end{frame}

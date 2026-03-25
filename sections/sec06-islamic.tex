@@ -1,0 +1,535 @@
+% ============================================================
+% SECTION 6: ISLAMIC GOLDEN AGE MATHEMATICS (~800 - 1400 CE)
+% Slides 37-50 (14 slides, 11 mathematicians)
+% This is intentionally the LARGEST section.
+% ============================================================
+
+% ---- Section Divider ----
+{
+\setbeamercolor{background canvas}{bg=islamicGreen}
+\begin{frame}[plain]
+  \centering
+  \vfill
+  \textcolor{white}{\Huge\bfseries The House of Wisdom}\\[0.7em]
+  \textcolor{white!85}{\Large When Baghdad Was the Center of the World}\\[1.5em]
+  \textcolor{white!65}{\large 800--1400 CE}
+  \vfill
+  % Timeline marker
+  \visualplaceholder[5cm]{Diagram}
+  \vfill
+\end{frame}
+}
+
+\section{The Islamic Golden Age}
+
+% ---- Slide 38: The Translation Movement ----
+\begin{frame}{The Translation Movement}
+  \begin{columns}[T]
+    \column{0.55\textwidth}
+    \begin{itemize}
+      \item Under the Abbasid Caliphate, a massive translation project preserved Greek, Indian, and Persian texts in Arabic
+      \item The \textbf{House of Wisdom} (\textit{Bayt al-Hikma}) in Baghdad was the epicenter
+      \item Without this effort, much of Greek mathematics might have been permanently lost
+    \end{itemize}
+    \vspace{0.5em}
+    \begin{insightbox}
+      When Europeans later ``rediscovered'' Greek mathematics, they were often translating \emph{Arabic} translations of Greek originals that no longer existed in Greek.
+    \end{insightbox}
+
+    \column{0.42\textwidth}
+    % Knowledge transmission flow chart
+    \visualplaceholder[5cm]{Greek Texts  (some lost originals)}
+  \end{columns}
+
+  \note{
+    \textbf{Talking point:} ``When Europeans later `rediscovered' Greek mathematics,
+    they were often translating Arabic translations of Greek originals that no longer
+    existed in Greek.''
+
+    \verifytag{The House of Wisdom's exact nature is debated. Some historians (Gutas)
+    describe it primarily as a library/translation center; others see it as more of an
+    academy. Present cautiously --- say ``center of learning'' rather than ``university.''}
+  }
+\end{frame}
+
+% ---- Slide 39: Al-Khwarizmi ----
+\begin{frame}{Muhammad ibn Musa al-Khwarizmi --- The Father of Algebra}
+  \begin{columns}[T]
+    \column{0.58\textwidth}
+    \begin{personbox}[Al-Khwarizmi]{islamicGreen}
+      \textbf{Full name:} Abu Abdallah Muhammad ibn Musa al-Khwarizmi\\
+      % Arabic: ابو عبد الله محمد بن موسى الخوارزمي
+      {\small (Arabic name --- see manuscript image)}\\[3pt]
+      \textbf{Dates:} c.\ 780 -- c.\ 850 CE\\
+      \textbf{Origin:} Khwarezm (modern Khiva, Uzbekistan);\\
+      worked in Baghdad at the House of Wisdom
+    \end{personbox}
+    \vspace{0.4em}
+    \begin{itemize}
+      \item Wrote \textit{Kitab al-Jabr wa-l-Muqabala} (c.\ 820)
+      \item The word \textbf{``algebra''} comes from \textit{al-jabr} (``completion'')
+      \item The word \textbf{``algorithm''} comes from the Latin form of his name
+      \item Introduced the Hindu-Arabic decimal system to the Islamic world
+    \end{itemize}
+
+    \column{0.39\textwidth}
+    % Etymology visual
+    \visualplaceholder[5cm]{Arabic script: al-jabr -- requires Arabic font image}
+
+    \vspace{0.5em}
+    \visualplaceholder[3.5cm]{Page from the \textit{al-Jabr} manuscript\\(Bodleian Library MS.\@ Huntington 214)}
+  \end{columns}
+
+  \note{
+    \textbf{Talking point:} ``Two words you use constantly --- `algebra' and `algorithm'
+    --- both come from this one mathematician.''
+
+    \verifytag{Al-Khwarizmi's birth year is uncertain: some sources say c.\ 780, others c.\ 790.}
+  }
+\end{frame}
+
+% ---- Slide 40: Al-Khwarizmi's Algebra in Detail ----
+\begin{frame}{Al-Khwarizmi's Algebra: Completing the Square}
+  \begin{columns}[T]
+    \column{0.48\textwidth}
+    {\small\textbf{His words (paraphrased):}}\\[2pt]
+    {\footnotesize\itshape ``A square and ten roots equal thirty-nine dirhams''}\\[4pt]
+    {\small Modern form: $x^2 + 10x = 39$}
+
+    \vspace{0.6em}
+    {\small\textbf{Geometric method:}}
+
+    % Completing the square -- geometric TikZ
+    \visualplaceholder[5cm]{Completing the square -- geometric diagram}
+
+    \column{0.48\textwidth}
+    {\small\textbf{Step-by-step:}}
+    \begin{enumerate}\setlength\itemsep{2pt}
+      \item[\textcolor{islamicGreen}{\textbf{1.}}] {\footnotesize Start with $x^2 + 10x = 39$}
+      \item[\textcolor{islamicGreen}{\textbf{2.}}] {\footnotesize Draw the $x^2$ square}
+      \item[\textcolor{islamicGreen}{\textbf{3.}}] {\footnotesize Distribute $10x$ as two rectangles of $\frac{5}{2} \times x$}
+      \item[\textcolor{islamicGreen}{\textbf{4.}}] {\footnotesize \textcolor{accentOrange}{\textbf{Complete}} the square: add $\left(\frac{5}{2}\right)^2 = \frac{25}{4}$}
+      \item[\textcolor{islamicGreen}{\textbf{5.}}] {\footnotesize Now: $\left(x+\frac{5}{2}\right)^2 = 39 + \frac{25}{4} = \frac{181}{4}$}
+      \item[\textcolor{islamicGreen}{\textbf{6.}}] {\footnotesize $x + \frac{5}{2} = \frac{\sqrt{181}}{2}$, so $x = \frac{\sqrt{181}-5}{2} = 3$}
+    \end{enumerate}
+
+    \vspace{0.5em}
+    \begin{insightbox}
+      {\footnotesize He solved the same equations you solve --- but geometrically, in words, with no symbols.}
+    \end{insightbox}
+  \end{columns}
+
+  \note{
+    \textbf{Talking point:} ``He solved the same equations you solve in class --- but
+    instead of $x^2 + 10x = 39$, he wrote: `A square and ten roots equal thirty-nine
+    dirhams.'\,''
+
+    Note: $x^2 + 10x = 39$ gives $x = 3$ exactly. Check: $9+30=39$. Correct.
+
+    Al-Khwarizmi classified six types of equations and gave geometric solutions for each.
+    This geometric completing the square is the most famous.
+  }
+\end{frame}
+
+% ---- Slide 41: Thabit ibn Qurra ----
+\begin{frame}{Thabit ibn Qurra --- Translator and Innovator}
+  \begin{columns}[T]
+    \column{0.55\textwidth}
+    \begin{personbox}[Thabit ibn Qurra]{islamicGreen}
+      % Arabic: ثابت بن قرة
+      {\small (Thabit ibn Qurra)}\\[3pt]
+      \textbf{Dates:} 826 -- 901 CE\\
+      \textbf{Origin:} Harran (modern Turkey); worked in Baghdad
+    \end{personbox}
+    \vspace{0.3em}
+    \begin{itemize}
+      \item Prolific translator: Euclid, Archimedes, Apollonius
+      \item Extended Euclid's number theory
+      \item Proved a generalization of the Pythagorean theorem to arbitrary triangles
+      \item Discovered a rule for finding \textbf{amicable numbers}
+    \end{itemize}
+
+    \vspace{0.3em}
+    \begin{insightbox}
+      {\footnotesize \textbf{Amicable numbers:} 220 and 284. Each equals the sum of the other's proper divisors.\\[2pt]
+      $220 \to 1{+}2{+}4{+}5{+}10{+}11{+}20{+}22{+}44{+}55{+}110 = 284$\\
+      $284 \to 1{+}2{+}4{+}71{+}142 = 220$}
+    \end{insightbox}
+
+    \column{0.42\textwidth}
+    % Generalized Pythagorean theorem diagram
+    \visualplaceholder[5cm]{Arbitrary triangle}
+
+    \vspace{0.5em}
+    \visualplaceholder[3.5cm]{Manuscript page from Thabit's translation of Euclid}
+  \end{columns}
+
+  \note{
+    \textbf{Key point:} Thabit was not just a translator --- he was a creative mathematician
+    who extended the work he translated.
+
+    The amicable numbers 220 and 284 were known to the Pythagoreans, but Thabit discovered
+    a \emph{general rule} for finding such pairs.
+
+    \verifytag{Do NOT present a specific formula for Thabit's amicable number rule ---
+    describe qualitatively only, as the exact formulation needs verification from primary
+    sources (Rashed's edition or Dickson's ``History of the Theory of Numbers'').}
+  }
+\end{frame}
+
+% ---- Slide 42: Abu Kamil ----
+\begin{frame}{Abu Kamil --- Extending the Algebra}
+  \begin{columns}[T]
+    \column{0.55\textwidth}
+    \begin{personbox}[Abu Kamil Shuja ibn Aslam]{islamicGreen}
+      % Arabic: ابو كامل شجاع بن اسلم
+      {\small (Abu Kamil Shuja ibn Aslam)}\\[3pt]
+      \textbf{Dates:} c.\ 850 -- c.\ 930 CE\\
+      \textbf{Origin:} Egypt
+    \end{personbox}
+    \vspace{0.4em}
+    \begin{itemize}
+      \item Extended al-Khwarizmi's algebra \emph{significantly}
+      \item Worked with \textbf{irrational numbers} as both solutions \emph{and} coefficients
+        \begin{itemize}
+          \item[\footnotesize$\bullet$] {\footnotesize Al-Khwarizmi had restricted to rationals}
+        \end{itemize}
+      \item Solved systems of equations
+      \item Influenced al-Karaji and, through Latin translation, \textbf{Fibonacci}
+    \end{itemize}
+
+    \column{0.42\textwidth}
+    \visualplaceholder[3.8cm]{A problem from Abu Kamil's \textit{Algebra} with its geometric solution}
+
+    \vspace{0.5em}
+    % Influence chain
+    \visualplaceholder[5cm]{Al-Khwarizmi}
+  \end{columns}
+
+  \note{
+    Abu Kamil is sometimes called ``the Egyptian calculator.'' He is the crucial link
+    between al-Khwarizmi and both the later Islamic algebraic tradition (al-Karaji)
+    and European mathematics (Fibonacci).
+
+    \verifytag{Exact dates uncertain. Some sources give c.\ 850--c.\ 930, others c.\ 850--c.\ 935.}
+  }
+\end{frame}
+
+% ---- Slide 43: Al-Karaji ----
+\begin{frame}{Al-Karaji --- Algebra Freed from Geometry}
+  \begin{columns}[T]
+    \column{0.55\textwidth}
+    \begin{personbox}[Abu Bakr al-Karaji]{islamicGreen}
+      % Arabic: ابو بكر الكرجي
+      {\small (sometimes written al-Karkhi)}\\[3pt]
+      \textbf{Dates:} c.\ 953 -- c.\ 1029 CE\\
+      \textbf{Origin:} Karaj (or Karkh, Baghdad); worked in Baghdad
+    \end{personbox}
+    \vspace{0.3em}
+    \begin{itemize}
+      \item Freed algebra from geometry --- treated algebraic operations \textbf{purely arithmetically}
+      \item Proved the \textbf{binomial theorem}
+      \item Proved the sum-of-cubes formula using a method akin to \textbf{mathematical induction}
+      \item Extended algebra to powers beyond cubes
+    \end{itemize}
+
+    \column{0.42\textwidth}
+    % Sum of cubes visual proof
+    \visualplaceholder[5cm]{Visual representation: stacked squares}
+
+    \vspace{0.6em}
+    \begin{insightbox}
+      {\footnotesize He arguably used the first form of \textbf{mathematical induction} --- a proof technique you may encounter at university.}
+    \end{insightbox}
+  \end{columns}
+
+  \note{
+    \textbf{Talking point:} ``He was arguably the first person to use something like
+    mathematical induction --- a proof technique you may encounter in university.''
+
+    Al-Karaji's key insight: algebraic manipulations do not \emph{need} geometric
+    justification. This was a conceptual leap.
+
+    \verifytag{Whether his method truly constitutes ``mathematical induction'' is debated.
+    It is proto-inductive but not formalized as such. Say ``akin to'' or ``anticipating.''}
+  }
+\end{frame}
+
+% ---- Slide 44: Omar Khayyam ----
+\begin{frame}{Omar Khayyam --- Poet and Mathematician}
+  \begin{columns}[T]
+    \column{0.53\textwidth}
+    \begin{personbox}[Omar Khayyam]{islamicGreen}
+      {\small Ghiyath al-Din Abu l-Fath Umar ibn Ibrahim al-Khayyam\\
+      % Arabic: غياث الدين ابو الفتح عمر بن ابراهيم الخيام
+      }\\[3pt]
+      \textbf{Dates:} 1048 -- 1131 CE\\
+      \textbf{Origin:} Nishapur, Khorasan (modern Iran)
+    \end{personbox}
+    \vspace{0.3em}
+    \begin{itemize}
+      \item Classified and solved \textbf{all cubic equations} geometrically (intersecting conic sections)
+      \item Contributed to the \textbf{Jalali calendar} reform
+      \item Famous for the \textit{Rubaiyat} poetry
+    \end{itemize}
+
+    \column{0.44\textwidth}
+    % Conic section construction for cubics (pure TikZ)
+    \visualplaceholder[5cm]{Parabola diagram}
+  \end{columns}
+
+  \note{
+    \textbf{Talking point:} ``He is one of the few people equally famous as a mathematician
+    AND a poet. His calendar was accurate to within one day in 5,000 years.''
+
+    The title \textit{al-Jabr wa l-Muqabala} was a standard genre name for algebra treatises,
+    not unique to Khayyam or al-Khwarizmi.
+
+    \verifytag{Jalali calendar accuracy: standard claim is 1 day in $\sim$5,000 years vs.\
+    Gregorian's 1 day in $\sim$3,236 years. Verify these specific numbers before presenting.}
+  }
+\end{frame}
+
+% ---- Slide 45: Ibn al-Haytham ----
+\begin{frame}{Ibn al-Haytham --- The First Scientist?}
+  \begin{columns}[T]
+    \column{0.55\textwidth}
+    \begin{personbox}[Ibn al-Haytham (Alhazen)]{islamicGreen}
+      {\small Abu Ali al-Hasan ibn al-Hasan ibn al-Haytham\\
+      % Arabic: ابو علي الحسن بن الحسن بن الهيثم
+      known in Latin as Alhazen}\\[3pt]
+      \textbf{Dates:} c.\ 965 -- c.\ 1040 CE\\
+      \textbf{Origin:} Basra (modern Iraq); worked in Cairo
+    \end{personbox}
+    \vspace{0.3em}
+    \begin{itemize}
+      \item \textit{Kitab al-Manazir} (Book of Optics) --- revolutionized the understanding of vision and light
+      \item Solved \textbf{Alhazen's problem}: finding the reflection point on a spherical mirror (4th-degree equation)
+      \item Used an early form of \textbf{integral calculus} to compute the volume of a paraboloid
+      \item Pioneered the \textbf{scientific method}
+    \end{itemize}
+
+    \column{0.42\textwidth}
+    % Alhazen's problem diagram
+    \visualplaceholder[5cm]{Spherical mirror}
+
+    \vspace{0.4em}
+    \visualplaceholder[3.5cm]{Diagram from the \textit{Book of Optics}\\(many historical copies survive)}
+  \end{columns}
+
+  \note{
+    \textbf{Talking point:} ``Some historians call him the `first true scientist' because
+    he insisted on experimental verification --- hypothesis, experiment, conclusion.''
+
+    His Book of Optics influenced Roger Bacon, Kepler, and Descartes. The Latin translation
+    (\textit{De Aspectibus}) was widely read in medieval Europe.
+  }
+\end{frame}
+
+% ---- Slide 46: Al-Biruni ----
+\begin{frame}{Al-Biruni --- The Polymath \hfill {\small\textcolor{islamicGreen!60}{[EXTENDED]}}}
+  \begin{columns}[T]
+    \column{0.50\textwidth}
+    \begin{personbox}[Abu Rayhan al-Biruni]{islamicGreen}
+      % Arabic: ابو ريحان محمد بن احمد البيروني
+      {\small (Abu Rayhan al-Biruni)}\\[3pt]
+      \textbf{Dates:} 973 -- c.\ 1048 CE\\
+      \textbf{Origin:} Kath, Khwarezm (modern Uzbekistan)
+    \end{personbox}
+    \vspace{0.3em}
+    \begin{itemize}
+      \item Calculated the Earth's radius to within \textbf{$\sim$1\%} of the modern value
+      \item Used trigonometry and a mountain
+      \item Wrote \textit{Tarikh al-Hind} on Indian mathematics and astronomy
+      \item Pioneered comparative anthropology and geodesy
+    \end{itemize}
+
+    \column{0.47\textwidth}
+    % Earth radius measurement diagram
+    \visualplaceholder[5cm]{Earth (partial arc)}
+  \end{columns}
+
+  \note{
+    \textbf{Talking point:} ``He calculated the size of the Earth using a mountain and
+    trigonometry --- and got it right to within about 15 kilometers.''
+
+    Al-Biruni measured the angle of dip to the horizon from the top of a mountain
+    of known height, then used trigonometry to compute the Earth's radius.
+
+    \verifytag{Exact accuracy claim needs verification. ``Within 1\%'' and ``within 15~km''
+    are commonly cited but should be checked against the modern value of $\sim$6,371~km.}
+  }
+\end{frame}
+
+% ---- Slide 47: Al-Samawal and Sharaf al-Din al-Tusi ----
+\begin{frame}{Al-Samawal \& Sharaf al-Din al-Tusi \hfill {\small\textcolor{islamicGreen!60}{[EXTENDED]}}}
+  \begin{columns}[T]
+    \column{0.48\textwidth}
+    \begin{personbox}[Al-Samawal]{islamicGreen}
+      % Arabic: السموأل بن يحيى المغربي
+      {\small (al-Samawal ibn Yahya al-Maghribi)}\\[2pt]
+      \textbf{Dates:} c.\ 1130 -- c.\ 1180 CE\\
+      \textbf{Origin:} Baghdad
+    \end{personbox}
+    \vspace{0.2em}
+    \begin{itemize}\setlength\itemsep{1pt}
+      \item Advanced algebraic notation
+      \item First statement of \textbf{polynomial long division}
+    \end{itemize}
+
+    \vspace{0.4em}
+    % Polynomial division example
+    \visualplaceholder[5cm]{Diagram}
+
+    \column{0.48\textwidth}
+    \begin{personbox}[Sharaf al-Din al-Tusi]{islamicGreen}
+      % Arabic: شرف الدين الطوسي
+      {\small (Sharaf al-Din al-Tusi)}\\[2pt]
+      \textbf{Dates:} c.\ 1135 -- 1213 CE\\
+      \textbf{Origin:} Tus (modern Iran)
+    \end{personbox}
+    \vspace{0.2em}
+    \begin{itemize}\setlength\itemsep{1pt}
+      \item Analyzed cubic equations by finding their \textbf{maxima and minima}
+      \item Anticipating differential calculus!
+      \item \textit{Not} the same person as Nasir al-Din al-Tusi
+    \end{itemize}
+
+    \vspace{0.2em}
+    % Cubic curve with max/min (pure TikZ)
+    \visualplaceholder[5cm]{Cubic equation analysis diagram}
+  \end{columns}
+
+  \note{
+    These two figures show the continued vitality of Islamic mathematics well into the
+    12th--13th centuries.
+
+    Sharaf al-Din al-Tusi's analysis of maxima/minima of cubics is remarkable ---
+    it is essentially the same idea as using the derivative to find critical points,
+    centuries before calculus was formalized.
+
+    \verifytag{Al-Samawal's dates uncertain. Also verify the polynomial division attribution.}
+
+    \textbf{Important:} Sharaf al-Din al-Tusi ($\sim$1135--1213) is NOT the same person as
+    Nasir al-Din al-Tusi (1201--1274). Make this distinction explicit.
+  }
+\end{frame}
+
+% ---- Slide 48: Nasir al-Din al-Tusi ----
+\begin{frame}{Nasir al-Din al-Tusi --- Trigonometry Becomes Its Own Field}
+  \begin{columns}[T]
+    \column{0.53\textwidth}
+    \begin{personbox}[Nasir al-Din al-Tusi]{islamicGreen}
+      {\small Muhammad ibn Muhammad ibn al-Hasan al-Tusi\\
+      % Arabic: محمد بن محمد بن الحسن الطوسي
+      known as Nasir al-Din al-Tusi}\\[3pt]
+      \textbf{Dates:} 1201 -- 1274 CE\\
+      \textbf{Origin:} Tus, Khorasan (modern Iran)
+    \end{personbox}
+    \vspace{0.3em}
+    \begin{itemize}
+      \item Wrote \textit{Treatise on the Quadrilateral} --- the \textbf{first work} to treat trigonometry as an independent discipline
+      \item Stated and proved the \textbf{law of sines} for plane and spherical triangles
+      \item Built the \textbf{Maragheh observatory}, one of the most advanced of its era
+    \end{itemize}
+
+    \column{0.44\textwidth}
+    % Law of sines illustration
+    \visualplaceholder[5cm]{Triangle}
+
+    \vspace{0.3em}
+    \visualplaceholder[3.5cm]{Reconstruction of the Maragheh observatory}
+  \end{columns}
+
+  \note{
+    \textbf{Talking point:} ``Before al-Tusi, trigonometry was just a tool for astronomy.
+    He made it its own branch of mathematics.''
+
+    The Maragheh observatory was built after the Mongol conquest, under the patronage of
+    Hulagu Khan. It shows how mathematical activity continued even through periods of
+    political upheaval.
+  }
+\end{frame}
+
+% ---- Slide 49: Jamshid al-Kashi ----
+\begin{frame}{Jamshid al-Kashi --- Master of Computation}
+  \begin{columns}[T]
+    \column{0.55\textwidth}
+    \begin{personbox}[Jamshid al-Kashi]{islamicGreen}
+      {\small Ghiyath al-Din Jamshid Mas'ud al-Kashi\\
+      % Arabic: غياث الدين جمشيد مسعود الكاشي
+      }\\[3pt]
+      \textbf{Dates:} c.\ 1380 -- 1429 CE\\
+      \textbf{Origin:} Kashan (modern Iran);\\
+      worked at the Samarkand observatory under Ulugh Beg
+    \end{personbox}
+    \vspace{0.3em}
+    \begin{itemize}
+      \item Calculated $\pi$ to \textbf{16 decimal places} --- a world record that stood for $\sim$180 years
+      \item Invented an iterative algorithm for computing $n$th roots
+      \item Wrote \textit{The Key to Arithmetic} (1427), a comprehensive mathematical encyclopedia
+      \item Systematic use of \textbf{decimal fractions}
+    \end{itemize}
+
+    \column{0.42\textwidth}
+    % Pi digits display
+    \visualplaceholder[5cm]{Diagram}
+
+    \vspace{0.6em}
+    \visualplaceholder[3.5cm]{The Ulugh Beg observatory\\in Samarkand (modern photo)}
+  \end{columns}
+
+  \note{
+    \textbf{Talking point:} ``He computed pi to 16 decimal places --- by hand. That record
+    was not broken until the 1590s.''
+
+    Al-Kashi worked at the observatory of Ulugh Beg, the Timurid ruler who was himself
+    an accomplished astronomer. The observatory in Samarkand was one of the finest in
+    the world.
+
+    \verifytag{Exact number of decimal places sometimes reported as 16 or 17. Verify
+    the standard claim before presenting.}
+  }
+\end{frame}
+
+% ---- Slide 50: Islamic Mathematics Legacy ----
+\begin{frame}{Islamic Mathematics: Legacy and Transmission}
+  \begin{columns}[T]
+    \column{0.45\textwidth}
+    {\small Islamic mathematicians did not merely ``preserve'' Greek knowledge --- they \textbf{transformed} and \textbf{extended} it:}
+    \vspace{0.3em}
+    \begin{itemize}\setlength\itemsep{2pt}
+      \item[\textcolor{islamicGreen}{\faCheck}] {\small\textbf{Invented} algebra as a discipline}
+      \item[\textcolor{islamicGreen}{\faCheck}] {\small\textbf{Advanced} trigonometry to independence}
+      \item[\textcolor{islamicGreen}{\faCheck}] {\small\textbf{Developed} computational methods}
+      \item[\textcolor{islamicGreen}{\faCheck}] {\small\textbf{Pushed} toward symbolic thinking}
+      \item[\textcolor{islamicGreen}{\faCheck}] {\small\textbf{Extended} number theory, optics, geodesy}
+    \end{itemize}
+
+    \vspace{0.4em}
+    \begin{insightbox}
+      {\footnotesize The Islamic mathematical tradition was essential to the development of Renaissance mathematics, Enlightenment science, and the modern world.}
+    \end{insightbox}
+
+    \column{0.52\textwidth}
+    % Knowledge transmission map
+    \visualplaceholder[5cm]{Simplified map outline (just positioning)}
+  \end{columns}
+
+  \vspace{0.3em}
+  \centering
+  {\small\textit{``Let us now see what happened when these ideas reached medieval Europe\ldots''}}
+
+  \note{
+    \textbf{Key message:} Emphasize ORIGINAL contributions, not just preservation.
+
+    The transmission happened through specific contact points:
+    \begin{itemize}
+      \item Toledo (Reconquista --- scholars translated Arabic texts into Latin)
+      \item Sicily (Norman conquest --- multilingual court)
+      \item The Crusader states (limited but real intellectual exchange)
+    \end{itemize}
+
+    End of Session 2. Natural break point.
+  }
+\end{frame}
