@@ -145,6 +145,9 @@
 % Remove navigation symbols
 \setbeamertemplate{navigation symbols}{}
 
+% Tighten vertical spacing below frame titles
+\addtobeamertemplate{frametitle}{}{\vspace{-0.3em}}
+
 % ---- Document Info ----
 \title[Building Blocks of LLMs]{The Building Blocks of LLMs\\[0.3em]{\large A Mathematical History}}
 \subtitle{2,000+ Years of Mathematics Inside Your AI}
@@ -189,55 +192,58 @@
 \begin{frame}{What's Inside Your AI?}
 
   \begin{columns}[T]
-    \begin{column}{0.45\textwidth}
-      \vspace{0.5em}
-      When you type a question to ChatGPT or Claude\ldots
+    \begin{column}{0.46\textwidth}
+      \vspace{0.1em}
+      {\small When you type a question to ChatGPT or Claude\ldots}
 
-      \vspace{0.5em}
-      The machine that answers is built \alert{entirely from mathematics}.
+      \vspace{0.1em}
+      {\small The machine that answers is built \alert{entirely from mathematics}.}
 
-      \vspace{0.5em}
-      \begin{itemize}
+      \vspace{0.1em}
+      {\small
+      \begin{itemize}\setlength\itemsep{0pt}
         \item Not magic
         \item Not ``intelligence''
-        \item \textbf{Specific math}, invented by \textbf{specific people},\\
+        \item \textbf{Specific math}, invented by \textbf{specific people},
               at \textbf{specific times}
-      \end{itemize}
+      \end{itemize}}
 
-      \vspace{0.8em}
-      \begin{insightbox}
-        You already know some of this math.
+      \vspace{0.1em}
+      \begin{tcolorbox}[colback=accentOrange!10, colframe=accentOrange,
+        fonttitle=\bfseries, title={\faLightbulb\ Key Insight},
+        rounded corners, boxrule=1pt, left=3pt, right=3pt, top=2pt, bottom=2pt]
+        \small You already know some of this math.
         You just don't know it's inside your AI yet.
-      \end{insightbox}
+      \end{tcolorbox}
     \end{column}
 
-    \begin{column}{0.52\textwidth}
-      \begin{tikzpicture}[
-        every node/.style={font=\small\bfseries},
+    \begin{column}{0.50\textwidth}
+      \begin{tikzpicture}[scale=0.72, every node/.style={transform shape},
+        every node/.append style={font=\scriptsize\bfseries},
         arr/.style={->,>=stealth,thick}
       ]
         % Smartphone outline
         \draw[rounded corners=6pt, thick, fill=gray!10]
-          (0,0) rectangle (3,4.5);
+          (0,0) rectangle (3,3.8);
         \draw[rounded corners=2pt, fill=white]
-          (0.2,0.4) rectangle (2.8,4.1);
+          (0.2,0.4) rectangle (2.8,3.4);
         % Chat bubble inside
         \node[draw, rounded corners=3pt, fill=aiViolet!10,
               text width=2cm, align=center, font=\scriptsize]
-          (chat) at (1.5,2.5) {AI Response};
+          (chat) at (1.5,2.1) {AI Response};
         % Six labeled arrows from outside pointing in
-        \node[text=linalgTeal] (la) at (-1.8,4.2) {Linear Algebra};
-        \draw[arr, linalgTeal] (la) -- (0.4,3.8);
-        \node[text=calculusRed] (ca) at (-1.8,3.0) {Calculus};
-        \draw[arr, calculusRed] (ca) -- (0.4,3.0);
-        \node[text=probBlue] (pr) at (-1.8,1.8) {Probability};
-        \draw[arr, probBlue] (pr) -- (0.4,2.2);
-        \node[text=infoAmber] (it) at (5.3,4.2) {Info.\ Theory};
-        \draw[arr, infoAmber] (it) -- (2.6,3.8);
-        \node[text=logicGray] (lo) at (5.3,3.0) {Logic};
-        \draw[arr, logicGray] (lo) -- (2.6,3.0);
-        \node[text=approxGreen] (fa) at (5.3,1.8) {Func.\ Approx.};
-        \draw[arr, approxGreen] (fa) -- (2.6,2.2);
+        \node[text=linalgTeal] (la) at (-1.5,3.5) {Linear Algebra};
+        \draw[arr, linalgTeal] (la) -- (0.4,3.1);
+        \node[text=calculusRed] (ca) at (-1.5,2.4) {Calculus};
+        \draw[arr, calculusRed] (ca) -- (0.4,2.4);
+        \node[text=probBlue] (pr) at (-1.5,1.3) {Probability};
+        \draw[arr, probBlue] (pr) -- (0.4,1.7);
+        \node[text=infoAmber] (it) at (4.8,3.5) {Info.\ Theory};
+        \draw[arr, infoAmber] (it) -- (2.6,3.1);
+        \node[text=logicGray] (lo) at (4.8,2.4) {Logic};
+        \draw[arr, logicGray] (lo) -- (2.6,2.4);
+        \node[text=approxGreen] (fa) at (4.8,1.3) {Func.\ Approx.};
+        \draw[arr, approxGreen] (fa) -- (2.6,1.7);
       \end{tikzpicture}
     \end{column}
   \end{columns}
@@ -359,16 +365,16 @@
         \scriptsize
         \textbf{Grassmann} (1844)\\
         Schoolteacher. First general vector spaces.
-        Nobody read his book.\\[4pt]
+        Nobody read his book.\\[2pt]
         \textbf{Cayley} (1858)\\
-        Lawyer-turned-mathematician. Matrices as algebra.\\[4pt]
+        Lawyer-turned-mathematician. Matrices as algebra.\\[2pt]
         \textbf{Sylvester} (1850)\\
-        Coined ``matrix'' from Latin for ``womb.''\\[4pt]
+        Coined ``matrix'' from Latin for ``womb.''\\[2pt]
         \textbf{Gauss} (1809)\\
         Gaussian elimination --- solving linear systems.
       \end{tcolorbox}
 
-      \vspace{0.3em}
+      \vspace{0.15em}
       \begin{llmconnection}
         \scriptsize
         96 layers $\times$ matrix multiply = how ChatGPT generates every word.
@@ -407,7 +413,7 @@
         \textcolor{calculusRed}{Opposite} $\to$ large negative
       \end{tcolorbox}
 
-      \vspace{0.3em}
+      \vspace{0.2em}
       % Word vector parallelogram
       \begin{tikzpicture}[scale=0.9]
         \node[font=\footnotesize\bfseries, linalgTeal] (king) at (0,0) {King};
@@ -420,7 +426,7 @@
         \draw[->,thick,gray!60] (woman) -- node[right,font=\tiny]{royalty} (queen);
       \end{tikzpicture}
 
-      \vspace{0.2em}
+      \vspace{0.1em}
       {\scriptsize Mikolov et al., 2013: Word2Vec}
     \end{column}
 
@@ -428,7 +434,7 @@
       % Interactive callout
       \begin{tcolorbox}[colback=accentOrange!10, colframe=accentOrange,
         fonttitle=\bfseries, title={\faUsers\ Interactive Moment},
-        rounded corners, boxrule=1.5pt, left=4pt, right=4pt, top=4pt, bottom=4pt]
+        rounded corners, boxrule=1pt, left=3pt, right=3pt, top=2pt, bottom=2pt]
         \centering\large
         $\vec{\text{King}} - \vec{\text{Man}} + \vec{\text{Woman}} = \;?$
 
@@ -436,7 +442,7 @@
         {\small What word do you get?}
       \end{tcolorbox}
 
-      \vspace{0.5em}
+      \vspace{0.2em}
       % Embedding pipeline
       \begin{tcolorbox}[colback=gray!5, colframe=gray!40,
         fonttitle=\bfseries\small, title={The Embedding Pipeline},
@@ -504,8 +510,8 @@
         The math of the 1840s is the engine of 2026.
       \end{insightbox}
 
-      \vspace{0.5em}
-      {\small\itshape One node lit. Nine to go.\\[6pt]
+      \vspace{0.3em}
+      {\small\itshape One node lit. Nine to go.\\[3pt]
        A skeleton doesn't move.\\
        For that, we need \textbf{calculus} --- the mathematics of change.}
     \end{column}
@@ -707,10 +713,10 @@
         Without calculus, you can \emph{build} a neural network but you cannot \emph{train} it.
       \end{insightbox}
 
-      \vspace{0.5em}
-      {\small\itshape Two nodes lit.\\[6pt]
+      \vspace{0.3em}
+      {\small\itshape Two nodes lit.\\[3pt]
        The network has a skeleton and can learn.\\
-       But learn \textbf{what}?\\[6pt]
+       But learn \textbf{what}?\\[3pt]
        It learns to predict \textbf{probability distributions} over words.\\
        For that, we need probability theory.}
     \end{column}
@@ -829,7 +835,7 @@
       % Interactive moment
       \begin{tcolorbox}[colback=accentOrange!10, colframe=accentOrange,
         fonttitle=\bfseries, title={\faUsers\ Interactive Moment},
-        rounded corners, boxrule=1.5pt, left=4pt, right=4pt, top=4pt, bottom=4pt]
+        rounded corners, boxrule=1pt, left=3pt, right=3pt, top=3pt, bottom=3pt]
         \centering
         {\large ``The cat sat on the \rule{1.5cm}{0.4pt}''}
 
@@ -948,11 +954,11 @@
         rounded corners, boxrule=0.8pt, left=3pt, right=3pt, top=2pt, bottom=2pt]
         \scriptsize
         \textbf{Boole} (1854) --- Logic as algebra.\\
-        True/false $=$ 1/0. Son of a shoemaker.\\[3pt]
+        True/false $=$ 1/0. Son of a shoemaker.\\[2pt]
         \textbf{Turing} (1936) --- Universal machine.\\
-        Can compute anything computable.\\[3pt]
+        Can compute anything computable.\\[2pt]
         \textbf{Von Neumann} (1945) --- Stored program.\\
-        The architecture of every computer.\\[3pt]
+        The architecture of every computer.\\[2pt]
         \textbf{NVIDIA CUDA} (2007) --- GPUs.\\
         Billions of parallel operations.
       \end{tcolorbox}
@@ -976,26 +982,26 @@
       % The paradox
       \begin{tcolorbox}[colback=aiViolet!8, colframe=aiViolet,
         fonttitle=\bfseries\small, title={The Paradox},
-        rounded corners, boxrule=1pt, left=4pt, right=4pt, top=4pt, bottom=4pt]
+        rounded corners, boxrule=0.8pt, left=3pt, right=3pt, top=2pt, bottom=2pt]
         \small
         G\"odel and Turing proved that no formal system can capture all truth.
 
-        \vspace{0.3em}
+        \vspace{0.15em}
         Yet neural networks --- running on the hardware that logic built ---
         learned to do things formal logic cannot:
 
-        \vspace{0.2em}
+        \vspace{0.1em}
         \centering
         \textbf{translate, write poetry, reason by analogy.}
 
-        \vspace{0.3em}
+        \vspace{0.15em}
         \raggedright
         \scriptsize The machines that logic built transcended the limitations
         that logic discovered.
       \end{tcolorbox}
 
-      \vspace{0.3em}
-      {\scriptsize\itshape ``Boole was a self-taught son of a shoemaker who reduced
+      \vspace{0.1em}
+      {\tiny\itshape ``Boole was a self-taught son of a shoemaker who reduced
        logic to algebra. Turing imagined a machine that could compute anything
        computable. Their ideas ARE the hardware your AI runs on.''}
     \end{column}
@@ -1021,11 +1027,11 @@
     \begin{column}{0.5\textwidth}
       \convergencebar{6}
 
-      \vspace{0.2em}
+      \vspace{0.1em}
       % Fourier series plot
       \begin{tikzpicture}
         \begin{axis}[
-          width=5.5cm, height=3.5cm,
+          width=5cm, height=2.8cm,
           domain=-3.14:3.14, samples=80,
           axis lines=middle,
           xlabel={$x$}, ylabel={},
@@ -1049,32 +1055,31 @@
              + sin(deg(13*x))/13)};
           \addlegendentry{$N{=}7$}
         \end{axis}
-      \end{tikzpicture}
-
+      \end{tikzpicture}%
       {\scriptsize\centering Any function $=$ sum of waves. \emph{Fourier, 1807.}\par}
     \end{column}
 
     \begin{column}{0.47\textwidth}
       \begin{tcolorbox}[colback=approxGreen!5, colframe=approxGreen,
         fonttitle=\bfseries\small, title={The Chain of Guarantees},
-        rounded corners, boxrule=0.8pt, left=3pt, right=3pt, top=2pt, bottom=2pt]
+        rounded corners, boxrule=0.8pt, left=3pt, right=3pt, top=1pt, bottom=1pt]
         \scriptsize
         \textbf{Fourier} (1807)\\
-        Any function as a sum of sines.\\[3pt]
+        Any function as a sum of sines.\\[2pt]
         \textbf{Weierstrass} (1885)\\
-        Polynomials can approximate anything.\\[3pt]
+        Polynomials can approximate anything.\\[2pt]
         \textbf{Cybenko} (1989)\\
         Neural networks can approximate \emph{any} continuous function.
       \end{tcolorbox}
 
-      \vspace{0.3em}
+      \vspace{0.1em}
       \begin{tcolorbox}[colback=aiViolet!8,colframe=aiViolet!60,
-        boxrule=0.5pt,rounded corners,left=3pt,right=3pt,top=2pt,bottom=2pt]
+        boxrule=0.5pt,rounded corners,left=3pt,right=3pt,top=1pt,bottom=1pt]
         \small A neural network \textbf{can} learn any continuous function.
         This is not an analogy. It is a \emph{mathematical theorem}.
       \end{tcolorbox}
 
-      \vspace{0.2em}
+      \vspace{0.1em}
       {\small\itshape Six nodes lit. We know they CAN learn anything.\\
        But what IS a neural network?}
     \end{column}
@@ -1413,8 +1418,8 @@
       \end{insightbox}
 
       \vspace{0.3em}
-      {\small\itshape Seven nodes lit.\\[4pt]
-       We can build neurons, stack them deep, and train them.\\[4pt]
+      {\small\itshape Seven nodes lit.\\[3pt]
+       We can build neurons, stack them deep, and train them.\\[3pt]
        But how do you process a \textbf{sequence}?}
     \end{column}
   \end{columns}
@@ -1632,7 +1637,7 @@
         \textbf{V} (Value): What information do I carry?
       \end{tcolorbox}
 
-      \vspace{0.2em}
+      \vspace{0.1em}
       % Step by step with back-refs
       \begin{tcolorbox}[colback=gray!5, colframe=gray!50,
         fonttitle=\bfseries\small, title={Self-Attention Steps},
@@ -1644,7 +1649,7 @@
         4.\ Multiply by $V$ \hfill {\tiny\textcolor{linalgTeal}{(Cayley, slide 4)}}
       \end{tcolorbox}
 
-      \vspace{0.2em}
+      \vspace{0.1em}
       % Formula
       \begin{center}
         $\text{Attention}(Q,K,V) = \text{softmax}\!\left(\dfrac{QK^T}{\sqrt{d}}\right)\!V$
@@ -1771,34 +1776,34 @@
 
   \begin{columns}[T]
     \begin{column}{0.52\textwidth}
-      \begin{tikzpicture}[
-        comp/.style={rounded corners=2pt, minimum width=5cm,
+      \begin{tikzpicture}[scale=0.97, every node/.style={transform shape},
+        comp/.style={rounded corners=2pt, minimum width=4cm,
           minimum height=0.42cm, font=\scriptsize},
         >=Stealth
       ]
         \node[comp, draw=linalgTeal, fill=linalgTeal!10] (emb) at (0,0)
           {Input Embedding};
-        \node[font=\tiny, text=linalgTeal, right] at (2.8,0)
+        \node[font=\tiny, text=linalgTeal, right] at (2.3,0)
           {Grassmann 1844};
 
         \node[comp, draw=approxGreen, fill=approxGreen!10] (pos) at (0,0.75)
           {Positional Encoding};
-        \node[font=\tiny, text=approxGreen, right] at (2.8,0.75)
+        \node[font=\tiny, text=approxGreen, right] at (2.3,0.75)
           {Fourier 1807};
 
         \node[comp, draw=aiViolet, fill=aiViolet!10] (sa) at (0,1.5)
           {Self-Attention (Q$\cdot$K$^T$/V)};
-        \node[font=\tiny, text=aiViolet, right] at (2.8,1.5)
+        \node[font=\tiny, text=aiViolet, right] at (2.3,1.5)
           {Gibbs + Boltzmann};
 
         \node[comp, draw=neuronPink, fill=neuronPink!10] (an1) at (0,2.15)
           {Add \& Norm};
-        \node[font=\tiny, text=neuronPink, right] at (2.8,2.15)
+        \node[font=\tiny, text=neuronPink, right] at (2.3,2.15)
           {He 2015, Ba 2016};
 
         \node[comp, draw=approxGreen, fill=approxGreen!10] (ffn) at (0,2.85)
           {FFN + GELU};
-        \node[font=\tiny, text=approxGreen, right] at (2.8,2.85)
+        \node[font=\tiny, text=approxGreen, right] at (2.3,2.85)
           {Cybenko 1989};
 
         \node[comp, draw=neuronPink, fill=neuronPink!10] (an2) at (0,3.5)
@@ -1806,7 +1811,7 @@
 
         \node[comp, draw=probBlue, fill=probBlue!10] (soft) at (0,4.2)
           {Output Softmax};
-        \node[font=\tiny, text=probBlue, right] at (2.8,4.2)
+        \node[font=\tiny, text=probBlue, right] at (2.3,4.2)
           {Boltzmann 1870s};
 
         % Arrows
@@ -1829,7 +1834,7 @@
       % Interactive moment
       \begin{tcolorbox}[colback=accentOrange!10, colframe=accentOrange,
         fonttitle=\bfseries, title={\faUsers\ Interactive Moment},
-        rounded corners, boxrule=1.5pt, left=4pt, right=4pt, top=4pt, bottom=4pt]
+        rounded corners, boxrule=1pt, left=3pt, right=3pt, top=2pt, bottom=2pt]
         \centering\small
         Count the building blocks.\\[6pt]
         How many of the 10 sections\\
@@ -1838,7 +1843,7 @@
          someone you just met.}
       \end{tcolorbox}
 
-      \vspace{0.5em}
+      \vspace{0.2em}
       \begin{tcolorbox}[colback=aiViolet!8, colframe=aiViolet,
         boxrule=1pt, rounded corners, left=4pt, right=4pt, top=4pt, bottom=4pt]
         \centering\small
@@ -1894,7 +1899,7 @@
       % Positional encoding waves
       \begin{tikzpicture}
         \begin{axis}[
-          width=5.5cm, height=2.5cm,
+          width=5.5cm, height=2.2cm,
           domain=0:30, samples=60,
           axis lines=left,
           xlabel={\tiny Position},
@@ -1915,7 +1920,7 @@
     \begin{column}{0.45\textwidth}
       \convergencebar{9}
 
-      \vspace{0.3em}
+      \vspace{0.15em}
       {\small\bfseries Nine nodes lit. One to go.}
 
       \vspace{0.3em}
@@ -1928,7 +1933,7 @@
         Fourier's sine waves, repurposed.
       \end{insightbox}
 
-      \vspace{0.3em}
+      \vspace{0.15em}
       {\small\itshape The architecture is ready.\\Now: scale it up.}
     \end{column}
   \end{columns}
@@ -2196,7 +2201,7 @@
     \fill[aiViolet] (current page.south west) rectangle (current page.north east);
   \end{tikzpicture}
 
-  \vspace{0.5cm}
+  \vspace{0.3cm}
   \begin{columns}[T]
     \begin{column}{0.45\textwidth}
       \begin{center}
@@ -2220,17 +2225,17 @@
     \end{column}
   \end{columns}
 
-  \vspace{1.5em}
+  \vspace{1em}
   \begin{center}
     {\Huge\bfseries\textcolor{white}{The math your generation will create}}\\[0.4em]
     {\Huge\bfseries\textcolor{accentOrange}{is not written yet.}}
   \end{center}
 
-  \vspace{1.5em}
+  \vspace{1em}
   {\small\centering\textcolor{white!60}{2,000+ Years of Mathematics.
    One Machine. \textbf{Your Turn.}}\par}
 
-  \vspace{0.5em}
+  \vspace{0.3em}
   {\footnotesize\centering\textcolor{white!40}{Prof.\ J.\ Osterrieder
    \hspace{2em} 2026}\par}
 
