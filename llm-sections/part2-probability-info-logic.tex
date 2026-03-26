@@ -540,11 +540,35 @@
 
   \begin{columns}[T]
     \begin{column}{0.45\textwidth}
-      % Convergence diagram placeholder
-      \visualplaceholder[5cm]{Convergence diagram: Sections 1--2 lit
-        (Linear Algebra in blue, Calculus in green). Section~3
-        ``Probability \& Statistics'' now lights up in orange/violet.
-        Label: ``Softmax = next-token prediction.''}
+      % Convergence diagram -- variant 3: sections 1-3 lit
+      \begin{tikzpicture}[scale=0.52,
+        cnode/.style={rounded corners=2pt, font=\tiny, inner sep=2pt,
+          minimum width=1.1cm, minimum height=0.4cm, align=center, draw}
+      ]
+        % Center node
+        \node[circle, draw=aiViolet, fill=aiViolet!15, font=\small\bfseries,
+          minimum size=0.9cm] (ctr) at (0,0) {?};
+        % Section nodes -- semicircle from 170 to 10 degrees, radius 3.2cm
+        % Lit nodes (1-3)
+        \node[cnode, fill=linalgTeal!25, draw=linalgTeal] (n1) at (170:3.2) {Linear\\Algebra};
+        \node[cnode, fill=calculusRed!25, draw=calculusRed] (n2) at (152:3.2) {Calculus};
+        \node[cnode, fill=probBlue!25, draw=probBlue] (n3) at (134:3.2) {Probability};
+        % Unlit nodes (4-10)
+        \node[cnode, fill=gray!10, draw=gray!40, text=gray] (n4) at (116:3.2) {Info\\Theory};
+        \node[cnode, fill=gray!10, draw=gray!40, text=gray] (n5) at (98:3.2) {Logic};
+        \node[cnode, fill=gray!10, draw=gray!40, text=gray] (n6) at (80:3.2) {Function\\Approx};
+        \node[cnode, fill=gray!10, draw=gray!40, text=gray] (n7) at (62:3.2) {Neuron};
+        \node[cnode, fill=gray!10, draw=gray!40, text=gray] (n8) at (44:3.2) {Sequence};
+        \node[cnode, fill=gray!10, draw=gray!40, text=gray] (n9) at (26:3.2) {Trans-\\former};
+        \node[cnode, fill=gray!10, draw=gray!40, text=gray] (n10) at (10:3.2) {Scaling};
+        % Arrows from lit nodes to center
+        \draw[->, linalgTeal, thick] (n1) -- (ctr);
+        \draw[->, calculusRed, thick] (n2) -- (ctr);
+        \draw[->, probBlue, thick] (n3) -- (ctr);
+        % Caption
+        \node[font=\tiny\itshape, text=probBlue, text width=4cm, align=center]
+          at (0,-1.4) {Softmax = next-token prediction};
+      \end{tikzpicture}
     \end{column}
 
     \begin{column}{0.52\textwidth}
@@ -633,7 +657,25 @@
         fonttitle=\bfseries\scriptsize, title={Clausius (1865)},
         rounded corners, boxrule=0.5pt, left=2pt, right=2pt, top=2pt, bottom=2pt]
         \scriptsize
-        \visualplaceholder[3cm]{Steam engine diagram}
+        % Mini steam engine / heat flow diagram
+        \begin{tikzpicture}[scale=0.6]
+          % Cylinder
+          \draw[thick, aiViolet!60] (0,0) rectangle (1.5,1.8);
+          \draw[thick, aiViolet!60] (0.3,1.8) rectangle (1.2,2.3);
+          % Piston
+          \fill[aiViolet!20] (0.05,0.9) rectangle (1.45,1.1);
+          % Heat in (bottom)
+          \draw[->, red!70, thick] (-0.6,0.3) -- (0,0.3);
+          \node[font=\tiny, red!70, left] at (-0.6,0.3) {$Q_{\text{in}}$};
+          % Heat out (top)
+          \draw[->, blue!50, thick] (1.5,1.5) -- (2.1,1.5);
+          \node[font=\tiny, blue!50, right] at (2.1,1.5) {$Q_{\text{out}}$};
+          % Steam wiggles
+          \draw[decorate, decoration={snake, amplitude=1pt, segment length=4pt},
+            aiViolet!40] (0.5,2.3) -- (0.5,2.8);
+          \draw[decorate, decoration={snake, amplitude=1pt, segment length=4pt},
+            aiViolet!40] (1.0,2.3) -- (1.0,2.8);
+        \end{tikzpicture}\\[2pt]
         Entropy as ``energy unavailable for work.''
         Named from Greek \emph{entropia} (transformation).
       \end{tcolorbox}
@@ -645,8 +687,25 @@
         fonttitle=\bfseries\scriptsize, title={Boltzmann (1870s)},
         rounded corners, boxrule=0.5pt, left=2pt, right=2pt, top=2pt, bottom=2pt]
         \scriptsize
-        \visualplaceholder[3cm]{Gas molecules in a box; Boltzmann's
-          tombstone with $S = k \log W$}
+        % Gas molecules in a box
+        \begin{tikzpicture}[scale=0.6]
+          % Box
+          \draw[thick, aiViolet!60] (0,0) rectangle (2.2,1.8);
+          % Scattered molecules (explicit dots)
+          \fill[aiViolet!70] (0.3,0.4) circle (2pt);
+          \fill[aiViolet!70] (1.0,1.4) circle (2pt);
+          \fill[aiViolet!70] (1.8,0.7) circle (2pt);
+          \fill[aiViolet!70] (0.6,1.1) circle (2pt);
+          \fill[aiViolet!70] (1.5,0.3) circle (2pt);
+          \fill[aiViolet!70] (0.4,1.5) circle (2pt);
+          \fill[aiViolet!70] (1.3,1.0) circle (2pt);
+          \fill[aiViolet!70] (1.9,1.5) circle (2pt);
+          \fill[aiViolet!70] (0.8,0.2) circle (2pt);
+          \fill[aiViolet!70] (1.6,1.3) circle (2pt);
+          % Tombstone inscription
+          \node[font=\tiny\itshape, text=aiViolet!80] at (1.1,-0.3)
+            {Tombstone: $S = k \log W$};
+        \end{tikzpicture}\\[2pt]
         Entropy as ``number of arrangements.''
         \[S = k \log W\]
       \end{tcolorbox}
@@ -658,8 +717,23 @@
         fonttitle=\bfseries\scriptsize, title={Shannon (1948)},
         rounded corners, boxrule=0.5pt, left=2pt, right=2pt, top=2pt, bottom=2pt]
         \scriptsize
-        \visualplaceholder[3cm]{Fair coin vs loaded coin; entropy
-          formula diagram}
+        % Fair coin vs loaded coin bar chart
+        \begin{tikzpicture}[scale=0.6]
+          % Fair coin (left pair)
+          \fill[aiViolet!50] (0,0) rectangle (0.4,1.2);
+          \fill[aiViolet!50] (0.5,0) rectangle (0.9,1.2);
+          \node[font=\tiny] at (0.2,-0.25) {H};
+          \node[font=\tiny] at (0.7,-0.25) {T};
+          \node[font=\tiny\bfseries, aiViolet] at (0.45,1.5) {50/50};
+          \node[font=\tiny\itshape, text=aiViolet!70] at (0.45,-0.6) {High $H$};
+          % Loaded coin (right pair)
+          \fill[aiViolet!50] (1.6,0) rectangle (2.0,2.0);
+          \fill[aiViolet!50] (2.1,0) rectangle (2.5,0.25);
+          \node[font=\tiny] at (1.8,-0.25) {H};
+          \node[font=\tiny] at (2.3,-0.25) {T};
+          \node[font=\tiny\bfseries, aiViolet] at (2.05,2.3) {90/10};
+          \node[font=\tiny\itshape, text=aiViolet!70] at (2.05,-0.6) {Low $H$};
+        \end{tikzpicture}\\[2pt]
         Entropy as ``average surprise.''
         \[H = -\!\sum_i p_i \log p_i\]
         {\tiny $\sum$ = ``add up for every outcome $i$''}
@@ -1032,11 +1106,35 @@
 
   \begin{columns}[T]
     \begin{column}{0.45\textwidth}
-      % Convergence diagram placeholder
-      \visualplaceholder[5cm]{Convergence diagram: Sections 1--3 lit
-        (Linear Algebra, Calculus, Probability). Section~4
-        ``Information Theory'' now lights up in red.
-        Label: ``Cross-entropy = the loss function.''}
+      % Convergence diagram -- variant 4: sections 1-4 lit
+      \begin{tikzpicture}[scale=0.52,
+        cnode/.style={rounded corners=2pt, font=\tiny, inner sep=2pt,
+          minimum width=1.1cm, minimum height=0.4cm, align=center, draw}
+      ]
+        % Center node
+        \node[circle, draw=aiViolet, fill=aiViolet!15, font=\small\bfseries,
+          minimum size=0.9cm] (ctr) at (0,0) {?};
+        % Lit nodes (1-4)
+        \node[cnode, fill=linalgTeal!25, draw=linalgTeal] (n1) at (170:3.2) {Linear\\Algebra};
+        \node[cnode, fill=calculusRed!25, draw=calculusRed] (n2) at (152:3.2) {Calculus};
+        \node[cnode, fill=probBlue!25, draw=probBlue] (n3) at (134:3.2) {Probability};
+        \node[cnode, fill=infoAmber!25, draw=infoAmber] (n4) at (116:3.2) {Info\\Theory};
+        % Unlit nodes (5-10)
+        \node[cnode, fill=gray!10, draw=gray!40, text=gray] (n5) at (98:3.2) {Logic};
+        \node[cnode, fill=gray!10, draw=gray!40, text=gray] (n6) at (80:3.2) {Function\\Approx};
+        \node[cnode, fill=gray!10, draw=gray!40, text=gray] (n7) at (62:3.2) {Neuron};
+        \node[cnode, fill=gray!10, draw=gray!40, text=gray] (n8) at (44:3.2) {Sequence};
+        \node[cnode, fill=gray!10, draw=gray!40, text=gray] (n9) at (26:3.2) {Trans-\\former};
+        \node[cnode, fill=gray!10, draw=gray!40, text=gray] (n10) at (10:3.2) {Scaling};
+        % Arrows from lit nodes to center
+        \draw[->, linalgTeal, thick] (n1) -- (ctr);
+        \draw[->, calculusRed, thick] (n2) -- (ctr);
+        \draw[->, probBlue, thick] (n3) -- (ctr);
+        \draw[->, infoAmber, thick] (n4) -- (ctr);
+        % Caption
+        \node[font=\tiny\itshape, text=infoAmber, text width=4cm, align=center]
+          at (0,-1.4) {Cross-entropy = the loss function};
+      \end{tikzpicture}
     \end{column}
 
     \begin{column}{0.52\textwidth}
@@ -1451,7 +1549,37 @@
     \end{column}
 
     \begin{column}{0.5\textwidth}
-      \visualplaceholder[5cm]{CPU vs GPU comparison:\\CPU: 4--16 powerful cores\\GPU: 5,000--16,000 simple cores\\Neural networks = parallel matrix math = perfect for GPU}
+      % CPU vs GPU comparison diagram
+      \begin{tikzpicture}[>=Stealth]
+        % CPU side
+        \node[font=\small\bfseries, logicGray] at (-1.8, 2.8) {CPU};
+        % 4 large cores
+        \fill[logicGray!30] (-3.0,0.8) rectangle (-2.2,1.6);
+        \fill[logicGray!30] (-2.0,0.8) rectangle (-1.2,1.6);
+        \fill[logicGray!30] (-3.0,1.8) rectangle (-2.2,2.6);
+        \fill[logicGray!30] (-2.0,1.8) rectangle (-1.2,2.6);
+        \draw[thick, logicGray] (-3.2,0.6) rectangle (-1.0,2.8);
+        \node[font=\tiny, text=logicGray] at (-2.1, 0.3) {4--16 powerful cores};
+
+        % GPU side
+        \node[font=\small\bfseries, logicGray] at (2.0, 2.8) {GPU};
+        % 5x5 grid of small cores (representative)
+        \fill[logicGray!20] (0.5,0.8) rectangle (3.5,2.6);
+        \draw[thick, logicGray] (0.3,0.6) rectangle (3.7,2.8);
+        % Grid lines (suggesting many cores)
+        \draw[logicGray!40, thin] (1.1,0.8) -- (1.1,2.6);
+        \draw[logicGray!40, thin] (1.7,0.8) -- (1.7,2.6);
+        \draw[logicGray!40, thin] (2.3,0.8) -- (2.3,2.6);
+        \draw[logicGray!40, thin] (2.9,0.8) -- (2.9,2.6);
+        \draw[logicGray!40, thin] (0.5,1.16) -- (3.5,1.16);
+        \draw[logicGray!40, thin] (0.5,1.52) -- (3.5,1.52);
+        \draw[logicGray!40, thin] (0.5,1.88) -- (3.5,1.88);
+        \draw[logicGray!40, thin] (0.5,2.24) -- (3.5,2.24);
+        \node[font=\tiny, text=logicGray] at (2.0, 0.3) {5,000--16,000 simple cores};
+
+        % vs label
+        \node[font=\footnotesize\bfseries, text=logicGray!60] at (0.0, 1.7) {vs};
+      \end{tikzpicture}
 
       \vspace{0.3em}
       {\small\centering Neural network training: millions of
@@ -1482,11 +1610,36 @@
 
   \begin{columns}[T]
     \begin{column}{0.45\textwidth}
-      % Convergence diagram placeholder
-      \visualplaceholder[5cm]{Convergence diagram: Sections 1--4 lit
-        (Linear Algebra, Calculus, Probability, Information Theory).
-        Section~5 ``Logic \& Computation'' now lights up in gray/steel.
-        Label: ``GPUs = the hardware.''}
+      % Convergence diagram -- variant 5: sections 1-5 lit
+      \begin{tikzpicture}[scale=0.52,
+        cnode/.style={rounded corners=2pt, font=\tiny, inner sep=2pt,
+          minimum width=1.1cm, minimum height=0.4cm, align=center, draw}
+      ]
+        % Center node
+        \node[circle, draw=aiViolet, fill=aiViolet!15, font=\small\bfseries,
+          minimum size=0.9cm] (ctr) at (0,0) {?};
+        % Lit nodes (1-5)
+        \node[cnode, fill=linalgTeal!25, draw=linalgTeal] (n1) at (170:3.2) {Linear\\Algebra};
+        \node[cnode, fill=calculusRed!25, draw=calculusRed] (n2) at (152:3.2) {Calculus};
+        \node[cnode, fill=probBlue!25, draw=probBlue] (n3) at (134:3.2) {Probability};
+        \node[cnode, fill=infoAmber!25, draw=infoAmber] (n4) at (116:3.2) {Info\\Theory};
+        \node[cnode, fill=logicGray!25, draw=logicGray] (n5) at (98:3.2) {Logic};
+        % Unlit nodes (6-10)
+        \node[cnode, fill=gray!10, draw=gray!40, text=gray] (n6) at (80:3.2) {Function\\Approx};
+        \node[cnode, fill=gray!10, draw=gray!40, text=gray] (n7) at (62:3.2) {Neuron};
+        \node[cnode, fill=gray!10, draw=gray!40, text=gray] (n8) at (44:3.2) {Sequence};
+        \node[cnode, fill=gray!10, draw=gray!40, text=gray] (n9) at (26:3.2) {Trans-\\former};
+        \node[cnode, fill=gray!10, draw=gray!40, text=gray] (n10) at (10:3.2) {Scaling};
+        % Arrows from lit nodes to center
+        \draw[->, linalgTeal, thick] (n1) -- (ctr);
+        \draw[->, calculusRed, thick] (n2) -- (ctr);
+        \draw[->, probBlue, thick] (n3) -- (ctr);
+        \draw[->, infoAmber, thick] (n4) -- (ctr);
+        \draw[->, logicGray, thick] (n5) -- (ctr);
+        % Caption
+        \node[font=\tiny\itshape, text=logicGray, text width=4cm, align=center]
+          at (0,-1.4) {GPUs = the hardware};
+      \end{tikzpicture}
 
       \vspace{0.3em}
       \begin{insightbox}

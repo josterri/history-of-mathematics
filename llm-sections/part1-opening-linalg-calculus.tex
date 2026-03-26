@@ -67,7 +67,34 @@
     \end{column}
 
     \begin{column}{0.52\textwidth}
-      \visualplaceholder[6cm]{Smartphone screen showing an AI chat. Floating labeled arrows point to different parts of the response: ``Linear Algebra,'' ``Calculus,'' ``Probability,'' ``Information Theory,'' ``Logic,'' ``Function Approximation''}
+      % -- Slide 2: Smartphone with math-topic arrows --
+      \begin{tikzpicture}[
+        every node/.style={font=\small\bfseries},
+        arr/.style={->,>=stealth,thick}
+      ]
+        % Smartphone outline
+        \draw[rounded corners=6pt, thick, fill=gray!10]
+          (0,0) rectangle (3,4.5);
+        \draw[rounded corners=2pt, fill=white]
+          (0.2,0.4) rectangle (2.8,4.1);
+        % Chat bubble inside
+        \node[draw, rounded corners=3pt, fill=aiViolet!10,
+              text width=2cm, align=center, font=\scriptsize]
+          (chat) at (1.5,2.5) {AI Response};
+        % Six labeled arrows from outside pointing in
+        \node[text=linalgTeal] (la) at (-1.8,4.2) {Linear Algebra};
+        \draw[arr, linalgTeal] (la) -- (0.4,3.8);
+        \node[text=calculusRed] (ca) at (-1.8,3.0) {Calculus};
+        \draw[arr, calculusRed] (ca) -- (0.4,3.0);
+        \node[text=probBlue] (pr) at (-1.8,1.8) {Probability};
+        \draw[arr, probBlue] (pr) -- (0.4,2.2);
+        \node[text=infoAmber] (it) at (5.3,4.2) {Info.\ Theory};
+        \draw[arr, infoAmber] (it) -- (2.6,3.8);
+        \node[text=logicGray] (lo) at (5.3,3.0) {Logic};
+        \draw[arr, logicGray] (lo) -- (2.6,3.0);
+        \node[text=approxGreen] (fa) at (5.3,1.8) {Func.\ Approx.};
+        \draw[arr, approxGreen] (fa) -- (2.6,2.2);
+      \end{tikzpicture}
     \end{column}
   \end{columns}
 
@@ -85,19 +112,19 @@
 \begin{frame}{The Exploded Transformer --- What We Will Build Today}
 
   \begin{center}
-    \visualplaceholder[12cm]{EXPLODED TRANSFORMER DIAGRAM (full-slide).
-      Color-coded components:
-      Matrix multiplication layers (blue, Linear Algebra) ---
-      Dot product scores (blue) ---
-      Gradient descent arrows (green, Calculus) ---
-      Softmax probability bars (orange, Probability) ---
-      Cross-entropy loss (red, Information Theory) ---
-      Boolean gates / GPU chips (gray, Logic) ---
-      Activation function curves (purple, Function Approx.) ---
-      Neuron nodes (yellow, The Neuron) ---
-      Residual connections / skip arrows (yellow) ---
-      Layer normalization (yellow) ---
-      Attention arrows (teal, Sequence Modeling).
+    \visualplaceholder[12cm]{EXPLODED TRANSFORMER DIAGRAM (full-slide, to be generated as figures/exploded-transformer-base.pdf).
+      Components to show, color-coded by section:
+      (1) Embedding layer -- lookup table, word $\to$ vector [linalgTeal]
+      (2) Positional encoding -- sinusoidal waves added to embeddings [seqIndigo]
+      (3) Multi-head attention block -- Q/K/V projections, scaled dot-product, concat + linear [linalgTeal + probBlue]
+      (4) Add \& Norm (residual connection + layer normalization) [neuronPink]
+      (5) Feed-forward network -- two linear layers with activation [approxGreen + neuronPink]
+      (6) Second Add \& Norm [neuronPink]
+      (7) Repeat $\times N$ layers indicator [logicGray]
+      (8) Output linear projection + softmax [probBlue + infoAmber]
+      (9) Loss computation -- cross-entropy [infoAmber + calculusRed]
+      (10) Backpropagation arrows flowing backward through all layers [calculusRed]
+      Layout: vertical stack (input at bottom, output at top), each component a labeled rounded box.
       Intentionally overwhelming on first view.}
   \end{center}
 
@@ -120,21 +147,21 @@
 \begin{frame}{Our Roadmap --- The Convergence Diagram}
 
   \begin{center}
-    \visualplaceholder[12cm]{CONVERGENCE DIAGRAM -- INITIAL STATE.
-      Central node: large ``?'' (gray).
-      10 gray nodes in a semicircle around it, each labeled:
-      (1) Linear Algebra [1809--1900s],
-      (2) Calculus \& Optimization [c.\,250\,BCE--1986],
-      (3) Probability \& Statistics [1654--1933],
-      (4) Information Theory [1865--1948],
-      (5) Logic \& Computation [1854--1970s],
-      (6) Function Approximation [1807--1991],
-      (7) The Neuron \& Depth [1943--2016],
-      (8) Sequence Modeling [1906--2014],
-      (9) The Transformer [2017],
-      (10) Scaling to LLMs [2018--2026].
-      Gray arrows from each node toward center ``?'' node.
-      All nodes are dim/gray --- none lit up yet.}
+    \visualplaceholder[12cm]{CONVERGENCE DIAGRAM -- INITIAL STATE (to be generated as figures/convergence-0.pdf).
+      Layout: central large circle with ``?'' in gray.
+      10 satellite nodes in a semicircle (180\textdegree{} arc, evenly spaced), all in gray:
+      (1) Linear Algebra [1809--1900s]
+      (2) Calculus \& Optimization [c.\,250\,BCE--1986]
+      (3) Probability \& Statistics [1654--1933]
+      (4) Information Theory [1865--1948]
+      (5) Logic \& Computation [1854--1970s]
+      (6) Function Approximation [1807--1991]
+      (7) The Neuron \& Depth [1943--2016]
+      (8) Sequence Modeling [1906--2014]
+      (9) The Transformer [2017]
+      (10) Scaling to LLMs [2018--2026]
+      Gray dashed arrows from each satellite toward center.
+      All nodes dim/unlit. Target colors when lit: linalgTeal, calculusRed, probBlue, infoAmber, logicGray, approxGreen, neuronPink, seqIndigo, aiViolet, accentOrange.}
   \end{center}
 
   \note{
@@ -204,13 +231,45 @@
       A \textbf{vector} is a list of numbers that represents something.
 
       \vspace{0.5em}
-      \visualplaceholder[5cm]{Left: a 2D vector arrow. Middle: a 3D vector arrow.
-        Right: ``768-dimensional vector'' with fading dots.
-        Below: ``In an LLM, each word becomes a vector --- a list of 768+ numbers.''}
+      % -- Slide 6: 2D, 3D, and 768-dim vectors --
+      \begin{tikzpicture}[scale=0.7]
+        % 2D vector
+        \draw[->,gray,thin] (-0.3,0)--(2.2,0) node[below,font=\tiny]{$x$};
+        \draw[->,gray,thin] (0,-0.3)--(0,1.6) node[left,font=\tiny]{$y$};
+        \draw[->,thick,linalgTeal] (0,0)--(1.8,0.9)
+          node[right,font=\tiny]{$(2,1)$};
+        \node[below,font=\tiny\bfseries] at (1,-.6) {2D};
+        % 3D vector (pseudo-isometric)
+        \begin{scope}[xshift=3.5cm]
+          \draw[->,gray,thin] (-0.3,0)--(1.8,0) node[below,font=\tiny]{$x$};
+          \draw[->,gray,thin] (0,-0.3)--(0,1.6) node[left,font=\tiny]{$z$};
+          \draw[->,gray,thin] (0,0)--(-0.8,-0.6) node[below,font=\tiny]{$y$};
+          \draw[->,thick,linalgTeal] (0,0)--(1.2,1.1);
+          \node[below,font=\tiny\bfseries] at (0.6,-.6) {3D};
+        \end{scope}
+        % 768-dim column vector
+        \begin{scope}[xshift=6.8cm, yshift=0.3cm]
+          \node[font=\scriptsize,align=center] at (0,1.0) {$\begin{pmatrix}0.23\\-0.87\\0.44\\\vdots\\0.12\end{pmatrix}$};
+          \node[below,font=\tiny\bfseries] at (0,-0.7) {768 numbers};
+        \end{scope}
+      \end{tikzpicture}
+
+      \vspace{0.1em}
+      {\scriptsize In an LLM, each word becomes a vector --- a list of 768+ numbers.}
 
       \vspace{0.3em}
-      \visualplaceholder[5cm]{Plaque on Brougham Bridge showing Hamilton's quaternion
-        formula $i^2 = j^2 = k^2 = ijk = -1$}
+      % -- Slide 6: Brougham Bridge plaque recreation --
+      \begin{tikzpicture}
+        \node[draw=babylonBrown!70, fill=babylonBrown!8, rounded corners=2pt,
+              inner sep=6pt, text width=4.2cm, align=center,
+              font=\small] {
+          \textsc{Broom Bridge, Dublin}\\[3pt]
+          {\itshape Here, on 16th October 1843,}\\
+          {\itshape Sir William Rowan Hamilton}\\
+          {\itshape carved the formula:}\\[4pt]
+          $i^{2} = j^{2} = k^{2} = ijk = -1$
+        };
+      \end{tikzpicture}
     \end{column}
   \end{columns}
 
@@ -250,11 +309,32 @@
     \end{column}
 
     \begin{column}{0.47\textwidth}
-      \visualplaceholder[6cm]{Side-by-side comparison:
-        LEFT --- Hamilton's quaternion notation (complex, multi-line).
-        RIGHT --- Gibbs's vector notation for the same operation (clean, compact).
-        The simplification is visually obvious.
-        Caption: ``Same math. Simpler notation.''}
+      % -- Slide 7: Quaternion vs vector notation --
+      \begin{tikzpicture}
+        % Hamilton box
+        \node[draw=digitalBlue!60, fill=digitalBlue!5, rounded corners=2pt,
+              text width=2.5cm, align=center, inner sep=5pt,
+              font=\scriptsize] (ham) at (0,0) {
+          \textbf{Hamilton (1843)}\\[3pt]
+          $\mathbf{q}= a + bi + cj + dk$\\[2pt]
+          $\mathbf{q}\mathbf{q'} = \ldots$\\
+          {\tiny (12 terms)}
+        };
+        % Gibbs box
+        \node[draw=linalgTeal!60, fill=linalgTeal!5, rounded corners=2pt,
+              text width=2.5cm, align=center, inner sep=5pt,
+              font=\scriptsize] (gib) at (4.2,0) {
+          \textbf{Gibbs (1881)}\\[3pt]
+          $\vec{a} \cdot \vec{b} = a_1 b_1 + a_2 b_2 + a_3 b_3$\\[2pt]
+          {\tiny (3 terms)}
+        };
+        % Arrow between
+        \draw[->,>=stealth,thick,accentOrange] (ham) -- (gib)
+          node[midway,above,font=\tiny\bfseries] {simplify};
+        % Caption
+        \node[font=\scriptsize\itshape, text=gray] at (2.1,-1.3)
+          {Same math. Simpler notation.};
+      \end{tikzpicture}
     \end{column}
   \end{columns}
 
@@ -293,10 +373,35 @@
     \end{column}
 
     \begin{column}{0.47\textwidth}
-      \visualplaceholder[5.5cm]{TOP: A simple $3 \times 3$ matrix, annotated:
-        ``This is a matrix. Cayley (1858) made it a mathematical object.''
-        BOTTOM: A schematic LLM weight matrix (much larger, dots indicating millions
-        of entries): ``This is also a matrix. Millions of entries. Same math.''}
+      % -- Slide 8: Small matrix vs huge LLM matrix --
+      \begin{tikzpicture}
+        % Small 3x3 matrix
+        \node[font=\small, align=center] (small) at (0,1.5) {
+          $\begin{pmatrix}
+            2 & 0 & 1\\
+            3 & 1 & 4\\
+            7 & 5 & 2
+          \end{pmatrix}$
+        };
+        \node[font=\tiny\itshape, text=gray, below=1pt of small] {Cayley, 1858};
+        % Large LLM weight matrix suggestion
+        \node[draw=aiViolet!40, fill=aiViolet!5, minimum width=3.8cm,
+              minimum height=1.6cm, rounded corners=1pt] (big) at (0,-1.5) {};
+        \node[font=\tiny, text=gray] at (-1.4,-0.9) {0.02};
+        \node[font=\tiny, text=gray] at (-0.6,-0.9) {$-$0.7};
+        \node[font=\tiny, text=gray] at (0.2,-0.9) {0.31};
+        \node[font=\tiny, text=gray] at (0.9,-0.9) {$\cdots$};
+        \node[font=\tiny, text=gray] at (-1.4,-1.3) {1.04};
+        \node[font=\tiny, text=gray] at (-0.6,-1.3) {0.55};
+        \node[font=\tiny, text=gray] at (0.2,-1.3) {$\cdots$};
+        \node[font=\tiny, text=gray] at (-0.2,-1.7) {$\vdots$};
+        \node[font=\tiny, text=gray] at (0.9,-1.7) {$\ddots$};
+        \node[font=\tiny\itshape, text=aiViolet, below=1pt of big]
+          {175 billion entries. Same math.};
+        % Arrow
+        \draw[->,>=stealth,thick,gray!50] (small) -- (big)
+          node[midway,right,font=\tiny,text=gray] {scale up};
+      \end{tikzpicture}
     \end{column}
   \end{columns}
 
@@ -335,12 +440,50 @@
     \end{column}
 
     \begin{column}{0.50\textwidth}
-      \visualplaceholder[6cm]{TOP: Step-by-step diagram of matrix multiplication ---
-        a $3 \times 3$ matrix times a $3 \times 1$ vector, showing dot products
-        row by row.
-        BOTTOM: The SAME operation drawn as a neural network layer --- inputs on
-        the left, weights as connections, outputs on the right.
-        Caption: ``Same math. Different picture.''}
+      % -- Slide 9: Matrix multiply + neural net layer --
+      \begin{tikzpicture}[scale=0.85]
+        % --- TOP: Matrix times vector ---
+        \node[font=\scriptsize] at (0,3.8) {\textbf{Matrix $\times$ vector:}};
+        \node[font=\scriptsize] (mat) at (0,2.8) {
+          $\begin{pmatrix}
+            \textcolor{linalgTeal}{w_{11}} & \textcolor{linalgTeal}{w_{12}} & \textcolor{linalgTeal}{w_{13}}\\
+            w_{21} & w_{22} & w_{23}\\
+            w_{31} & w_{32} & w_{33}
+          \end{pmatrix}$};
+        \node[font=\scriptsize] at (2.4,2.8) {$\times$};
+        \node[font=\scriptsize] at (3.2,2.8) {
+          $\begin{pmatrix}x_1\\x_2\\x_3\end{pmatrix}$};
+        \node[font=\scriptsize] at (4.2,2.8) {$=$};
+        \node[font=\scriptsize] at (5.0,2.8) {
+          $\begin{pmatrix}\textcolor{linalgTeal}{y_1}\\y_2\\y_3\end{pmatrix}$};
+        % --- BOTTOM: Same as neural net ---
+        \node[font=\scriptsize] at (0,1.0) {\textbf{Same operation as a layer:}};
+        % Input nodes
+        \node[circle, draw, fill=gray!15, inner sep=1.5pt, font=\tiny]
+          (i1) at (0,0) {$x_1$};
+        \node[circle, draw, fill=gray!15, inner sep=1.5pt, font=\tiny]
+          (i2) at (0,-0.7) {$x_2$};
+        \node[circle, draw, fill=gray!15, inner sep=1.5pt, font=\tiny]
+          (i3) at (0,-1.4) {$x_3$};
+        % Output nodes
+        \node[circle, draw, fill=linalgTeal!20, inner sep=1.5pt, font=\tiny]
+          (o1) at (4,0) {$y_1$};
+        \node[circle, draw, fill=linalgTeal!20, inner sep=1.5pt, font=\tiny]
+          (o2) at (4,-0.7) {$y_2$};
+        \node[circle, draw, fill=linalgTeal!20, inner sep=1.5pt, font=\tiny]
+          (o3) at (4,-1.4) {$y_3$};
+        % Connections (weights)
+        \draw[thin,gray!60] (i1)--(o1); \draw[thin,gray!60] (i1)--(o2); \draw[thin,gray!60] (i1)--(o3);
+        \draw[thin,gray!60] (i2)--(o1); \draw[thin,gray!60] (i2)--(o2); \draw[thin,gray!60] (i2)--(o3);
+        \draw[thin,gray!60] (i3)--(o1); \draw[thin,gray!60] (i3)--(o2); \draw[thin,gray!60] (i3)--(o3);
+        % Highlight one row
+        \draw[thick,linalgTeal] (i1)--(o1);
+        \draw[thick,linalgTeal] (i2)--(o1);
+        \draw[thick,linalgTeal] (i3)--(o1);
+        \node[font=\tiny\itshape,text=linalgTeal] at (2,-0.05) {$w_{11},w_{12},w_{13}$};
+        % Caption
+        \node[font=\scriptsize\itshape,text=gray] at (2.5,-2.1) {Same math. Different picture.};
+      \end{tikzpicture}
     \end{column}
   \end{columns}
 
@@ -388,16 +531,47 @@
     \end{column}
 
     \begin{column}{0.50\textwidth}
-      \visualplaceholder[6cm]{Two 2D arrows in three configurations:
-        (1) pointing same direction $\to$ large positive dot product,
-        (2) perpendicular $\to$ zero,
-        (3) opposite $\to$ large negative.
-        Caption: ``The dot product measures how much two vectors agree.''}
+      % -- Slide 10: Dot product -- three configurations --
+      \begin{tikzpicture}[scale=0.75]
+        % (a) Same direction
+        \begin{scope}[xshift=0cm]
+          \draw[->,thick,linalgTeal] (0,0) -- (1.5,0.6);
+          \draw[->,thick,accentOrange] (0,0) -- (1.6,0.4);
+          \node[font=\tiny\bfseries,text=linalgTeal] at (0.8,-0.5) {large $+$};
+          \node[font=\tiny] at (0.8,-0.9) {(a) similar};
+        \end{scope}
+        % (b) Perpendicular
+        \begin{scope}[xshift=3cm]
+          \draw[->,thick,linalgTeal] (0,0) -- (1.5,0);
+          \draw[->,thick,accentOrange] (0,0) -- (0,1.2);
+          \node[font=\tiny\bfseries,text=gray] at (0.8,-0.5) {$\approx 0$};
+          \node[font=\tiny] at (0.8,-0.9) {(b) unrelated};
+        \end{scope}
+        % (c) Opposite
+        \begin{scope}[xshift=6cm]
+          \draw[->,thick,linalgTeal] (0,0) -- (1.5,0.3);
+          \draw[->,thick,accentOrange] (0,0) -- (-1.3,-0.3);
+          \node[font=\tiny\bfseries,text=calculusRed] at (0.2,-0.5) {large $-$};
+          \node[font=\tiny] at (0.2,-0.9) {(c) opposite};
+        \end{scope}
+      \end{tikzpicture}
+
+      \vspace{0.2em}
+      {\scriptsize\itshape The dot product measures how much two vectors agree.}
 
       \vspace{0.3em}
-      \visualplaceholder[6cm]{LLM context: ``The Query vector for `it' and the Key
-        vector for `cat' have a large dot product. The model attends `it' to `cat.'
-        This is how it figures out what `it' refers to.''}
+      % -- Slide 10: Attention dot-product "it" -> "cat" --
+      \begin{tikzpicture}
+        \node[draw, rounded corners=2pt, fill=probBlue!10, inner sep=4pt,
+              font=\small\bfseries] (it) at (0,0) {``it''};
+        \node[draw, rounded corners=2pt, fill=probBlue!10, inner sep=4pt,
+              font=\small\bfseries] (cat) at (4,0) {``cat''};
+        \draw[->,>=stealth, line width=2.5pt, probBlue] (it) -- (cat)
+          node[midway, above, font=\tiny] {large dot product};
+        \node[font=\scriptsize\itshape, text=gray, text width=4.5cm, align=center]
+          at (2,-0.9) {The model ``attends'' \textbf{it} to \textbf{cat}.\\
+          This is how it resolves what ``it'' refers to.};
+      \end{tikzpicture}
     \end{column}
   \end{columns}
 
@@ -443,11 +617,30 @@
     \end{column}
 
     \begin{column}{0.52\textwidth}
-      \visualplaceholder[6.5cm]{A 2D embedding space with word vectors as points.
-        ``King'' and ``queen'' are close (high cosine similarity).
-        ``King'' and ``banana'' are far apart (low cosine similarity).
-        Angle arcs drawn between vector pairs.
-        Caption: ``Cosine similarity = the angle between word vectors.''}
+      % -- Slide 11: Cosine similarity in embedding space --
+      \begin{tikzpicture}[scale=0.9]
+        % Axes
+        \draw[->,gray,thin] (-0.3,0)--(4.5,0);
+        \draw[->,gray,thin] (0,-0.3)--(0,3.5);
+        % King vector
+        \draw[->,thick,linalgTeal] (0,0) -- (3,2.6)
+          node[right,font=\scriptsize\bfseries] {king};
+        % Queen vector (close to king)
+        \draw[->,thick,probBlue] (0,0) -- (2.5,2.9)
+          node[above,font=\scriptsize\bfseries] {queen};
+        % Banana vector (far away)
+        \draw[->,thick,accentOrange] (0,0) -- (-0.3,2.2)
+          node[left,font=\scriptsize\bfseries] {banana};
+        % Small angle arc between king and queen
+        \draw[linalgTeal, thick] (1.0,0.87) arc[start angle=41, end angle=49, radius=1.33];
+        \node[font=\tiny,text=linalgTeal] at (1.8,1.9) {small $\theta$};
+        % Large angle arc between king and banana
+        \draw[calculusRed, thick] (0.3,1.0) arc[start angle=73, end angle=41, radius=1.05];
+        \node[font=\tiny,text=calculusRed] at (1.0,1.5) {large $\theta$};
+        % Caption
+        \node[font=\scriptsize\itshape, text=gray, text width=4cm, align=center]
+          at (2.2,-0.7) {Cosine similarity = the angle between word vectors.};
+      \end{tikzpicture}
     \end{column}
   \end{columns}
 
@@ -491,9 +684,38 @@
     \end{column}
 
     \begin{column}{0.47\textwidth}
-      \visualplaceholder[6cm]{A 2D linear transformation shown as arrows: most arrows
-        change direction, but the EIGENVECTOR arrows only stretch or shrink.
-        Caption: ``Eigenvectors are the directions a transformation doesn't rotate.''}
+      % -- Slide 12: Eigenvector visualization --
+      \begin{tikzpicture}[scale=0.75]
+        % Before transformation (left)
+        \node[font=\scriptsize\bfseries] at (1.2,2.8) {Before};
+        \draw[->,gray,thin] (-0.3,0)--(2.5,0);
+        \draw[->,gray,thin] (0,-0.3)--(0,2.5);
+        \draw[->,thin,gray!50] (0,0)--(1.5,1.5);
+        \draw[->,thin,gray!50] (0,0)--(0.5,1.8);
+        \draw[->,thin,gray!50] (0,0)--(1.8,0.5);
+        \draw[->,thick,linalgTeal] (0,0)--(2.0,0)
+          node[below,font=\tiny] {$\vec{e}_1$};
+        \draw[->,thick,accentOrange] (0,0)--(0,1.8)
+          node[left,font=\tiny] {$\vec{e}_2$};
+        % After transformation (right)
+        \begin{scope}[xshift=4.5cm]
+          \node[font=\scriptsize\bfseries] at (1.5,2.8) {After $A\vec{v}$};
+          \draw[->,gray,thin] (-0.5,0)--(3.0,0);
+          \draw[->,gray,thin] (0,-0.5)--(0,2.5);
+          % Rotated arrows (non-eigenvectors)
+          \draw[->,thin,gray!50] (0,0)--(2.0,0.8);
+          \draw[->,thin,gray!50] (0,0)--(1.2,1.5);
+          \draw[->,thin,gray!50] (0,0)--(2.2,-0.2);
+          % Eigenvectors: only stretched, not rotated
+          \draw[->,very thick,linalgTeal] (0,0)--(2.6,0)
+            node[below,font=\tiny] {$\lambda_1 \vec{e}_1$};
+          \draw[->,very thick,accentOrange] (0,0)--(0,1.0)
+            node[left,font=\tiny] {$\lambda_2 \vec{e}_2$};
+        \end{scope}
+        % Caption
+        \node[font=\scriptsize\itshape, text=gray, text width=6cm, align=center]
+          at (3.5,-0.9) {Eigenvectors: only stretch or shrink, never rotate.};
+      \end{tikzpicture}
 
       \vspace{0.3em}
       {\small\textbf{LLM connection:} Principal Component Analysis (PCA)
@@ -537,12 +759,33 @@
     \end{column}
 
     \begin{column}{0.49\textwidth}
-      \visualplaceholder[6cm]{2D scatter plot of word embeddings:
-        ``king,'' ``queen,'' ``man,'' ``woman'' as labeled points.
-        Arrow showing the famous analogy:
-        king $-$ man $+$ woman $=$ queen.
-        Caption: ``Projected from 768 dimensions down to 2.
-        In the full space, THOUSANDS of such relationships exist simultaneously.''}
+      % -- Slide 13: Word vector parallelogram --
+      \begin{tikzpicture}[scale=0.85]
+        % Word points
+        \node[circle, fill=linalgTeal, inner sep=2pt, label={[font=\scriptsize]right:king}]
+          (king) at (3.5,2.5) {};
+        \node[circle, fill=linalgTeal, inner sep=2pt, label={[font=\scriptsize]right:queen}]
+          (queen) at (3.8,3.8) {};
+        \node[circle, fill=probBlue, inner sep=2pt, label={[font=\scriptsize]left:man}]
+          (man) at (1.0,1.2) {};
+        \node[circle, fill=probBlue, inner sep=2pt, label={[font=\scriptsize]left:woman}]
+          (woman) at (1.3,2.5) {};
+        % Extra words
+        \node[circle, fill=gray!40, inner sep=1.5pt, label={[font=\tiny]right:dog}]
+          at (4.5,0.8) {};
+        \node[circle, fill=gray!40, inner sep=1.5pt, label={[font=\tiny]right:cat}]
+          at (4.2,1.2) {};
+        % Parallelogram arrows
+        \draw[->,thick,accentOrange] (man) -- (king)
+          node[midway,below right,font=\tiny] {royalty};
+        \draw[->,thick,accentOrange] (woman) -- (queen);
+        \draw[->,dashed,gray] (man) -- (woman)
+          node[midway,left,font=\tiny] {gender};
+        \draw[->,dashed,gray] (king) -- (queen);
+        % Caption
+        \node[font=\scriptsize\itshape, text=gray, text width=5cm, align=center]
+          at (2.5,-0.3) {Projected from 768 dims to 2.\\Mikolov et al., 2013};
+      \end{tikzpicture}
 
       \vspace{0.3em}
       {\small\textbf{Tomas Mikolov} et al.\ demonstrated this with
@@ -578,11 +821,33 @@
            \underset{\text{woman}}{\mathbf{v}} \;=\; ?$}
 
     \vspace{1.5em}
-    \visualplaceholder[8cm]{Space for student responses.
-      After reveal: show the embedding space diagram with the parallelogram
-      connecting king, man, woman, queen.
-      Large text: ``QUEEN'' with a checkmark.
-      Attribution: ``Mikolov et al., Word2Vec, 2013''}
+    % -- Slide 13i: Reveal -- parallelogram + QUEEN --
+    \begin{tikzpicture}[scale=0.9]
+      % Parallelogram
+      \node[circle, fill=linalgTeal, inner sep=2.5pt,
+            label={[font=\small]below left:man}]
+        (man) at (0,0) {};
+      \node[circle, fill=linalgTeal, inner sep=2.5pt,
+            label={[font=\small]above left:woman}]
+        (woman) at (0.4,2.0) {};
+      \node[circle, fill=accentOrange, inner sep=2.5pt,
+            label={[font=\small]below right:king}]
+        (king) at (3.5,0.3) {};
+      \node[circle, fill=accentOrange, inner sep=3pt,
+            label={[font=\large\bfseries,text=accentOrange]above right:QUEEN \checkmark}]
+        (queen) at (3.9,2.3) {};
+      % Arrows
+      \draw[->,thick,gray] (man) -- (king);
+      \draw[->,thick,gray] (woman) -- (queen);
+      \draw[->,thick,probBlue] (man) -- (woman);
+      \draw[->,thick,probBlue] (king) -- (queen);
+      % Dashed analogy arrow
+      \draw[->,dashed,thick,calculusRed] (king) -- (queen)
+        node[midway,right,font=\tiny]{$-$man $+$ woman};
+      % Attribution
+      \node[font=\scriptsize\itshape, text=gray] at (2,-1.0)
+        {Mikolov et al., Word2Vec, 2013};
+    \end{tikzpicture}
   \end{center}
 
   \note{
@@ -603,12 +868,37 @@
 \begin{frame}{From Words to Numbers --- The Embedding}
 
   \begin{center}
-    \visualplaceholder[12cm]{Step-by-step pipeline diagram (full-width):
-      Step 1: User types: ``The cat sat on the mat''
-      Step 2: Tokenizer splits it: [``The'', ``cat'', ``sat'', ``on'', ``the'', ``mat'']
-      Step 3: Each token becomes a vector: [0.23, $-$0.87, 0.44, \ldots] (768 numbers)
-      Step 4: The sentence becomes a MATRIX: 6 rows (tokens) $\times$ 768 columns (dimensions)
-      Final caption: ``Your sentence is now a matrix. Everything that follows is linear algebra.''}
+    % -- Slide 14: Embedding pipeline --
+    \begin{tikzpicture}[
+      bx/.style={draw, rounded corners=3pt, inner sep=4pt,
+                 font=\scriptsize, align=center, minimum height=0.8cm},
+      arr/.style={->,>=stealth,thick,gray}
+    ]
+      % Step 1: Sentence
+      \node[bx, fill=gray!10, text width=2.8cm] (sent) at (0,0)
+        {``The cat sat\\on the mat''};
+      \node[font=\tiny\bfseries, above=1pt of sent] {Sentence};
+      % Step 2: Tokens
+      \node[bx, fill=linalgTeal!10, text width=2.2cm] (tok) at (4,0)
+        {The\,|\,cat\,|\,sat\\on\,|\,the\,|\,mat};
+      \node[font=\tiny\bfseries, above=1pt of tok] {Tokens};
+      % Step 3: Vectors
+      \node[bx, fill=linalgTeal!20, text width=2.2cm] (vec) at (7.8,0)
+        {$\begin{pmatrix}0.23\\-0.87\\\vdots\end{pmatrix} \cdots$\\{\tiny 768 numbers each}};
+      \node[font=\tiny\bfseries, above=1pt of vec] {Vectors};
+      % Step 4: Matrix
+      \node[bx, fill=aiViolet!15, text width=2.0cm] (mat) at (11.2,0)
+        {$6 \times 768$\\matrix};
+      \node[font=\tiny\bfseries, above=1pt of mat] {Matrix};
+      % Arrows
+      \draw[arr] (sent) -- (tok) node[midway,above,font=\tiny] {tokenize};
+      \draw[arr] (tok) -- (vec) node[midway,above,font=\tiny] {embed};
+      \draw[arr] (vec) -- (mat) node[midway,above,font=\tiny] {stack};
+    \end{tikzpicture}
+
+    \vspace{0.3em}
+    {\small\bfseries\textcolor{aiViolet}{Your sentence is now a matrix.}
+    Everything that follows is linear algebra.}
   \end{center}
 
   \vspace{0.3em}
@@ -661,10 +951,41 @@
     \end{column}
 
     \begin{column}{0.42\textwidth}
-      \visualplaceholder[5.5cm]{Simplified attention diagram showing the pipeline:
-        $X \to W_Q \to Q$, $X \to W_K \to K$, $X \to W_V \to V$,
-        then $Q \cdot K^T \to$ scores $\to$ softmax $\to \times V \to$ output.
-        Each step labeled with its mathematical origin and section reference.}
+      % -- Slide 15: Attention Q,K,V pipeline --
+      \begin{tikzpicture}[
+        bx/.style={draw, rounded corners=2pt, inner sep=3pt,
+                   font=\tiny, minimum width=0.7cm, minimum height=0.5cm},
+        arr/.style={->,>=stealth,thin}
+      ]
+        % Input X
+        \node[bx, fill=gray!15, font=\tiny\bfseries] (X) at (0,1.5) {$X$};
+        % Three parallel paths
+        \node[bx, fill=linalgTeal!15] (wq) at (1.5,2.8) {$W_Q$};
+        \node[bx, fill=linalgTeal!15] (wk) at (1.5,1.5) {$W_K$};
+        \node[bx, fill=linalgTeal!15] (wv) at (1.5,0.2) {$W_V$};
+        \node[bx, fill=linalgTeal!25] (Q) at (3.0,2.8) {$Q$};
+        \node[bx, fill=linalgTeal!25] (K) at (3.0,1.5) {$K$};
+        \node[bx, fill=linalgTeal!25] (V) at (3.0,0.2) {$V$};
+        % Arrows: X to W matrices
+        \draw[arr] (X) |- (wq);
+        \draw[arr] (X) -- (wk);
+        \draw[arr] (X) |- (wv);
+        % Arrows: W to Q,K,V
+        \draw[arr] (wq) -- (Q);
+        \draw[arr] (wk) -- (K);
+        \draw[arr] (wv) -- (V);
+        % Dot product
+        \node[bx, fill=probBlue!15] (scores) at (4.5,2.1) {\scriptsize $QK^T$};
+        \draw[arr] (Q) -| (scores);
+        \draw[arr] (K) -| (scores);
+        % Softmax
+        \node[bx, fill=accentOrange!15] (sm) at (4.5,0.9) {\tiny softmax};
+        \draw[arr] (scores) -- (sm);
+        % Times V
+        \node[bx, fill=aiViolet!15, font=\tiny\bfseries] (out) at (4.5,-0.2) {Out};
+        \draw[arr] (sm) -- (out);
+        \draw[arr] (V) -- (out);
+      \end{tikzpicture}
     \end{column}
   \end{columns}
 
@@ -688,11 +1009,11 @@
   \begin{columns}[T]
     \begin{column}{0.55\textwidth}
       \begin{center}
-        \visualplaceholder[6.5cm]{CONVERGENCE DIAGRAM UPDATE:
-          The ``Linear Algebra'' node now lights up in BLUE.
-          Label appears: ``Matrix multiplication = neural network layers.''
-          All other 9 nodes remain gray.
-          Central node still ``?''}
+        \visualplaceholder[6.5cm]{CONVERGENCE DIAGRAM -- VARIANT 1 (figures/convergence-1.pdf).
+          Node (1) ``Linear Algebra'' lit in linalgTeal with solid arrow to center.
+          Label: ``Matrix multiplication = neural network layers.''
+          Nodes (2)--(10) remain gray with dashed arrows.
+          Central node still ``?'' in gray.}
       \end{center}
     \end{column}
 
@@ -786,10 +1107,40 @@
     \end{column}
 
     \begin{column}{0.47\textwidth}
-      \visualplaceholder[6cm]{Archimedes' method of exhaustion: a circle with inscribed
-        polygons (4 sides, 8 sides, 16 sides, 32 sides), visually converging
-        to the circle's area.
-        Caption: ``Approximate, refine, repeat. This is what calculus does.''}
+      % -- Slide 18: Method of exhaustion --
+      \begin{tikzpicture}[scale=0.65]
+        % Circle 1: inscribed square
+        \begin{scope}[xshift=0cm]
+          \draw[thick,gray] (0,0) circle(1.2);
+          \draw[thick,calculusRed] (1.2,0)--(0,1.2)--(-1.2,0)--(0,-1.2)--cycle;
+          \node[font=\tiny,below] at (0,-1.5) {4 sides};
+        \end{scope}
+        % Circle 2: inscribed octagon
+        \begin{scope}[xshift=3cm]
+          \draw[thick,gray] (0,0) circle(1.2);
+          \draw[thick,calculusRed]
+            (1.2,0)--(0.85,0.85)--(0,1.2)--(-0.85,0.85)
+            --(-1.2,0)--(-0.85,-0.85)--(0,-1.2)--(0.85,-0.85)--cycle;
+          \node[font=\tiny,below] at (0,-1.5) {8 sides};
+        \end{scope}
+        % Circle 3: inscribed 16-gon (approximate with smoother polygon)
+        \begin{scope}[xshift=6cm]
+          \draw[thick,gray] (0,0) circle(1.2);
+          \draw[thick,calculusRed]
+            (1.2,0)--(1.11,0.46)--(0.85,0.85)--(0.46,1.11)
+            --(0,1.2)--(-0.46,1.11)--(-0.85,0.85)--(-1.11,0.46)
+            --(-1.2,0)--(-1.11,-0.46)--(-0.85,-0.85)--(-0.46,-1.11)
+            --(0,-1.2)--(0.46,-1.11)--(0.85,-0.85)--(1.11,-0.46)--cycle;
+          \node[font=\tiny,below] at (0,-1.5) {16 sides};
+        \end{scope}
+        % Ellipsis
+        \node[font=\large] at (8.3,0) {$\cdots$};
+        % Arrow
+        \node[font=\scriptsize,right] at (9,0) {$= \pi r^2$};
+        % Caption
+        \node[font=\scriptsize\itshape, text=gray, text width=5cm, align=center]
+          at (4.5,-2.3) {Approximate, refine, repeat.\\This is what calculus does.};
+      \end{tikzpicture}
     \end{column}
   \end{columns}
 
@@ -835,14 +1186,51 @@
     \end{column}
 
     \begin{column}{0.49\textwidth}
-      \visualplaceholder[6cm]{TOP: Three notations side by side --- Fermat's tangent method
-        (geometric), Newton's fluxion dot notation, Leibniz's $dy/dx$.
-        Three different notations for the same idea.}
+      % -- Slide 19: Three derivative notations --
+      \begin{tikzpicture}
+        \node[draw=enlightenmentTeal!50, fill=enlightenmentTeal!5,
+              rounded corners=2pt, inner sep=5pt, text width=1.4cm,
+              align=center, font=\scriptsize]
+          (fer) at (0,0) {\textbf{Fermat}\\[2pt]$\frac{f(x+e)-f(x)}{e}$\\[1pt]{\tiny $e\to 0$}};
+        \node[draw=enlightenmentTeal!50, fill=enlightenmentTeal!5,
+              rounded corners=2pt, inner sep=5pt, text width=1.4cm,
+              align=center, font=\scriptsize]
+          (new) at (2.3,0) {\textbf{Newton}\\[2pt]$\dot{y}$\\[1pt]{\tiny fluxion}};
+        \node[draw=enlightenmentTeal!50, fill=enlightenmentTeal!5,
+              rounded corners=2pt, inner sep=5pt, text width=1.4cm,
+              align=center, font=\scriptsize]
+          (lei) at (4.6,0) {\textbf{Leibniz}\\[2pt]$\dfrac{dy}{dx}$\\[1pt]{\tiny still used}};
+        % Equals signs
+        \node[font=\small] at (1.15,0) {$=$};
+        \node[font=\small] at (3.45,0) {$=$};
+        % Caption
+        \node[font=\scriptsize\itshape, text=gray] at (2.3,-1.2)
+          {Three notations, one idea: rate of change.};
+      \end{tikzpicture}
 
       \vspace{0.3em}
-      \visualplaceholder[6cm]{A simple curve with a tangent line.
-        Label: ``The derivative = the slope of this line
-        = how fast things are changing.''}
+      % -- Slide 19: Curve with tangent line --
+      \begin{tikzpicture}[scale=0.8]
+        \begin{axis}[
+          width=5.5cm, height=4cm,
+          axis lines=middle,
+          ticks=none,
+          xmin=-0.5, xmax=3.2, ymin=-0.3, ymax=4.5,
+          clip=false
+        ]
+          % Curve f(x) = x^2/2
+          \addplot[domain=0:3, smooth, thick, calculusRed, samples=40] {x*x/2};
+          % Tangent line at x=1.5: f(1.5)=1.125, f'(1.5)=1.5
+          \addplot[domain=0.3:2.7, thick, linalgTeal, dashed] {1.5*(x-1.5)+1.125};
+          % Point of tangency
+          \addplot[only marks, mark=*, mark size=2pt, calculusRed] coordinates {(1.5,1.125)};
+          % Label
+          \node[font=\tiny, text=linalgTeal] at (axis cs:2.5,2.8) {slope $= \frac{dy}{dx}$};
+        \end{axis}
+      \end{tikzpicture}
+
+      \vspace{0.1em}
+      {\scriptsize\itshape The derivative = the slope of this line.}
 
       \vspace{0.3em}
       {\small\textbf{LLM connection:} Training means computing
@@ -892,13 +1280,41 @@
     \end{column}
 
     \begin{column}{0.50\textwidth}
-      \visualplaceholder[6.5cm]{Pipeline diagram:
-        TOP: $x \to$ [function $f$] $\to u \to$ [function $g$] $\to y$
-        with arrows. Below: ``If the error changes $y$, how much did $x$ contribute?
-        Multiply along the chain.''
-        BOTTOM: Same diagram relabeled as a neural network:
-        ``Input $\to$ Layer 1 $\to$ Hidden $\to$ Layer 2 $\to$ Output.''
-        Red backward arrows labeled ``chain rule'' at each step.}
+      % -- Slide 20: Chain rule -- math + neural net --
+      \begin{tikzpicture}[
+        bx/.style={draw, rounded corners=2pt, inner sep=3pt,
+                   font=\scriptsize, minimum width=0.8cm, minimum height=0.5cm},
+        arr/.style={->,>=stealth,thick}
+      ]
+        % TOP ROW: Math version
+        \node[font=\tiny\bfseries] at (0,3.2) {Math:};
+        \node[bx, fill=gray!15] (x1) at (0,2.5) {$x$};
+        \node[bx, fill=enlightenmentTeal!15] (f) at (1.8,2.5) {$f$};
+        \node[bx, fill=gray!15] (u) at (3.2,2.5) {$u$};
+        \node[bx, fill=enlightenmentTeal!15] (g) at (4.6,2.5) {$g$};
+        \node[bx, fill=gray!15] (y1) at (6.0,2.5) {$y$};
+        \draw[arr,probBlue] (x1)--(f);
+        \draw[arr,probBlue] (f)--(u);
+        \draw[arr,probBlue] (u)--(g);
+        \draw[arr,probBlue] (g)--(y1);
+        % BOTTOM ROW: Neural net version
+        \node[font=\tiny\bfseries] at (0,1.0) {NN:};
+        \node[bx, fill=gray!15] (xi) at (0,0.3) {Input};
+        \node[bx, fill=linalgTeal!15] (l1) at (1.8,0.3) {Layer 1};
+        \node[bx, fill=gray!15] (h) at (3.2,0.3) {Hidden};
+        \node[bx, fill=linalgTeal!15] (l2) at (4.6,0.3) {Layer 2};
+        \node[bx, fill=gray!15] (o) at (6.0,0.3) {Output};
+        % Forward arrows (blue)
+        \draw[arr,probBlue] (xi)--(l1);
+        \draw[arr,probBlue] (l1)--(h);
+        \draw[arr,probBlue] (h)--(l2);
+        \draw[arr,probBlue] (l2)--(o);
+        % Backward arrows (red)
+        \draw[arr,calculusRed,dashed] (o.south) to[bend right=25] node[below,font=\tiny,text=calculusRed]{chain rule} (l2.south);
+        \draw[arr,calculusRed,dashed] (l2.south) to[bend right=25] (h.south);
+        \draw[arr,calculusRed,dashed] (h.south) to[bend right=25] (l1.south);
+        \draw[arr,calculusRed,dashed] (l1.south) to[bend right=25] (xi.south);
+      \end{tikzpicture}
     \end{column}
   \end{columns}
 
@@ -942,11 +1358,28 @@
     \end{column}
 
     \begin{column}{0.52\textwidth}
-      \visualplaceholder[6.5cm]{A 3D ``loss surface'' landscape with contour lines.
-        A ball sits at a high point. Arrows show the gradient direction (steepest uphill).
-        The ball moves in the OPPOSITE direction (steepest downhill).
-        Multiple steps shown as a zigzagging path toward a valley.
-        Caption: ``Gradient descent: always walk downhill. Cauchy, 1847.''}
+      % -- Slide 21: Gradient descent as 2D contour map --
+      \begin{tikzpicture}[scale=0.8]
+        % Contour ellipses (loss landscape top-down view)
+        \draw[gray!30, thick] (2.5,1.5) ellipse(2.8 and 2.0);
+        \draw[gray!40, thick] (2.5,1.5) ellipse(2.2 and 1.5);
+        \draw[gray!50, thick] (2.5,1.5) ellipse(1.5 and 1.0);
+        \draw[gray!60, thick] (2.5,1.5) ellipse(0.8 and 0.5);
+        % Minimum label
+        \node[circle, fill=calculusRed, inner sep=1.5pt] (min) at (2.5,1.5) {};
+        \node[font=\tiny, below right, text=calculusRed] at (2.5,1.5) {minimum};
+        % Gradient descent path (zigzag)
+        \draw[->,thick,calculusRed]
+          (0.2,3.3) -- (1.0,2.8) -- (1.8,2.5) -- (2.0,1.9) -- (2.3,1.7) -- (2.45,1.55);
+        \node[circle, fill=gray, inner sep=1.5pt] at (0.2,3.3) {};
+        \node[font=\tiny, above, text=gray] at (0.2,3.3) {start};
+        % Labels
+        \node[font=\tiny, text=gray] at (4.8,3.2) {high loss};
+        \node[font=\tiny, text=calculusRed] at (3.5,1.0) {low loss};
+        % Caption
+        \node[font=\scriptsize\itshape, text=gray, text width=5cm, align=center]
+          at (2.5,-0.8) {Gradient descent: always walk downhill.\\Cauchy, 1847.};
+      \end{tikzpicture}
     \end{column}
   \end{columns}
 
@@ -989,10 +1422,44 @@
     \end{column}
 
     \begin{column}{0.47\textwidth}
-      \visualplaceholder[6cm]{Multi-layer network diagram.
-        Forward pass: blue arrows left to right.
-        Backward pass: red arrows right to left,
-        labeled ``chain rule'' at each step.}
+      % -- Slide 22: Backpropagation network --
+      \begin{tikzpicture}[
+        neuron/.style={circle, draw, minimum size=10pt, inner sep=0pt, font=\tiny},
+        scale=0.8
+      ]
+        % Input layer (3 nodes)
+        \node[neuron, fill=gray!20] (i1) at (0,2.0) {};
+        \node[neuron, fill=gray!20] (i2) at (0,1.0) {};
+        \node[neuron, fill=gray!20] (i3) at (0,0.0) {};
+        \node[font=\tiny,left] at (-0.3,1.0) {Input};
+        % Hidden layer (4 nodes)
+        \node[neuron, fill=linalgTeal!20] (h1) at (2,2.5) {};
+        \node[neuron, fill=linalgTeal!20] (h2) at (2,1.5) {};
+        \node[neuron, fill=linalgTeal!20] (h3) at (2,0.5) {};
+        \node[neuron, fill=linalgTeal!20] (h4) at (2,-0.5) {};
+        \node[font=\tiny] at (2,-1.1) {Hidden};
+        % Output layer (2 nodes)
+        \node[neuron, fill=accentOrange!20] (o1) at (4,1.5) {};
+        \node[neuron, fill=accentOrange!20] (o2) at (4,0.5) {};
+        \node[font=\tiny,right] at (4.3,1.0) {Output};
+        % Forward connections (blue, thin)
+        \draw[->,thin,probBlue!60] (i1)--(h1); \draw[->,thin,probBlue!60] (i1)--(h2);
+        \draw[->,thin,probBlue!60] (i1)--(h3); \draw[->,thin,probBlue!60] (i1)--(h4);
+        \draw[->,thin,probBlue!60] (i2)--(h1); \draw[->,thin,probBlue!60] (i2)--(h2);
+        \draw[->,thin,probBlue!60] (i2)--(h3); \draw[->,thin,probBlue!60] (i2)--(h4);
+        \draw[->,thin,probBlue!60] (i3)--(h1); \draw[->,thin,probBlue!60] (i3)--(h2);
+        \draw[->,thin,probBlue!60] (i3)--(h3); \draw[->,thin,probBlue!60] (i3)--(h4);
+        \draw[->,thin,probBlue!60] (h1)--(o1); \draw[->,thin,probBlue!60] (h1)--(o2);
+        \draw[->,thin,probBlue!60] (h2)--(o1); \draw[->,thin,probBlue!60] (h2)--(o2);
+        \draw[->,thin,probBlue!60] (h3)--(o1); \draw[->,thin,probBlue!60] (h3)--(o2);
+        \draw[->,thin,probBlue!60] (h4)--(o1); \draw[->,thin,probBlue!60] (h4)--(o2);
+        % Forward label
+        \draw[->,thick,probBlue] (0.5,3.0) -- (3.5,3.0)
+          node[midway,above,font=\tiny\bfseries] {Forward pass};
+        % Backward label
+        \draw[->,thick,calculusRed,dashed] (3.5,-1.5) -- (0.5,-1.5)
+          node[midway,below,font=\tiny\bfseries] {Backward pass (chain rule)};
+      \end{tikzpicture}
 
       \vspace{0.3em}
       {\small\textbf{Timeline:}}
@@ -1046,12 +1513,39 @@
     \end{column}
 
     \begin{column}{0.52\textwidth}
-      \visualplaceholder[6.5cm]{Comparison diagram, side by side:
-        LEFT: ``Full gradient descent'' --- smooth downhill path.
-        Label: ``Must look at ALL data for each step. Too slow.''
-        RIGHT: ``Stochastic gradient descent'' --- noisy, zigzagging path
-        that still reaches the bottom.
-        Label: ``Look at a random sample each step. Much faster.''}
+      % -- Slide 23: Full GD vs SGD comparison --
+      \begin{tikzpicture}[scale=0.7]
+        % LEFT: Full GD
+        \begin{scope}[xshift=0cm]
+          \node[font=\scriptsize\bfseries] at (2,3.5) {Full GD};
+          % Contours
+          \draw[gray!40] (2,1.5) ellipse(2.0 and 1.5);
+          \draw[gray!50] (2,1.5) ellipse(1.3 and 0.9);
+          \draw[gray!60] (2,1.5) ellipse(0.5 and 0.3);
+          % Smooth path
+          \draw[->,thick,probBlue] (0.3,3.0) -- (1.0,2.5) -- (1.5,2.0) -- (1.9,1.6);
+          \node[circle,fill=gray,inner sep=1pt] at (0.3,3.0) {};
+          \node[circle,fill=calculusRed,inner sep=1.5pt] at (2,1.5) {};
+          \node[font=\tiny\itshape, text=gray, text width=2.5cm, align=center]
+            at (2,-0.5) {ALL data per step.\\Smooth but slow.};
+        \end{scope}
+        % RIGHT: SGD
+        \begin{scope}[xshift=5.5cm]
+          \node[font=\scriptsize\bfseries] at (2,3.5) {SGD};
+          % Contours
+          \draw[gray!40] (2,1.5) ellipse(2.0 and 1.5);
+          \draw[gray!50] (2,1.5) ellipse(1.3 and 0.9);
+          \draw[gray!60] (2,1.5) ellipse(0.5 and 0.3);
+          % Noisy zigzag path
+          \draw[->,thick,calculusRed]
+            (0.3,3.0) -- (1.2,2.3) -- (0.8,2.6) -- (1.5,2.0)
+            -- (1.2,1.8) -- (1.8,1.6) -- (1.6,1.7) -- (1.95,1.5);
+          \node[circle,fill=gray,inner sep=1pt] at (0.3,3.0) {};
+          \node[circle,fill=calculusRed,inner sep=1.5pt] at (2,1.5) {};
+          \node[font=\tiny\itshape, text=gray, text width=2.5cm, align=center]
+            at (2,-0.5) {Random sample per step.\\Noisy but fast.};
+        \end{scope}
+      \end{tikzpicture}
     \end{column}
   \end{columns}
 
@@ -1070,15 +1564,16 @@
 \begin{frame}{The Loss Landscape --- A Visual Tour}
 
   \begin{center}
-    \visualplaceholder[12cm]{FULL-SLIDE VISUAL: A 3D rendering of a neural network
-      loss landscape (in the style of Li et al., 2018,
-      ``Visualizing the Loss Landscape of Neural Nets'').
-      Labeled features:
-      --- ``Global minimum'' (the best the network can do)
-      --- ``Local minima'' (good but not the best)
-      --- ``Saddle points'' (flat regions that look like minima but aren't)
-      --- ``The path of SGD'' (a noisy trajectory from a random start to a good minimum)
-      Source: reconstructed from Li et al.\ 2018 or similar public-domain visualization.}
+    \visualplaceholder[12cm]{3D LOSS LANDSCAPE (to be generated as figures/loss-landscape.pdf via Python/matplotlib or pgfplots standalone).
+      Style: Li et al., 2018 ``Visualizing the Loss Landscape of Neural Nets.''
+      Surface: 3D plot of $f(x,y) = 0.5(x^2+y^2) + 3\exp(-2((x-1)^2+(y+1)^2)) - \exp(-3((x+1.5)^2+(y-0.5)^2))$
+      or similar multi-modal surface.
+      Labeled annotations:
+      (A) ``Global minimum'' -- deepest valley, green marker
+      (B) ``Local minimum'' -- secondary valley, yellow marker
+      (C) ``Saddle point'' -- flat ridge, gray marker
+      (D) ``SGD path'' -- noisy red trajectory from random start to global min
+      Colormap: viridis or coolwarm. View angle: 30\textdegree{} elevation.}
   \end{center}
 
   \vspace{-0.3em}
@@ -1105,12 +1600,12 @@
   \begin{columns}[T]
     \begin{column}{0.55\textwidth}
       \begin{center}
-        \visualplaceholder[6.5cm]{CONVERGENCE DIAGRAM UPDATE:
-          ``Linear Algebra'' node lit in blue (from last section).
-          ``Calculus \& Optimization'' node now lights up in GREEN.
+        \visualplaceholder[6.5cm]{CONVERGENCE DIAGRAM -- VARIANT 2 (figures/convergence-2.pdf).
+          Node (1) ``Linear Algebra'' lit in linalgTeal (from Section 1).
+          Node (2) ``Calculus \& Optimization'' now lit in calculusRed.
           Label: ``Gradient descent = how it learns.''
-          Remaining 8 nodes still gray.
-          Central node still ``?''}
+          Nodes (3)--(10) remain gray with dashed arrows.
+          Central node still ``?'' in gray.}
       \end{center}
     \end{column}
 

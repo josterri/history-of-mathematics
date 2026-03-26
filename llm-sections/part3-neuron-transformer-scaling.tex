@@ -66,10 +66,44 @@
     \end{column}
 
     \begin{column}{0.45\textwidth}
-      \visualplaceholder[5.5cm]{Fourier approximation of a square wave:
-      1~sine (rough), 3~sines (better), 10~sines (close),
-      100~sines (nearly perfect). Caption: ``Any function = a sum
-      of simple waves. Fourier, 1807.''}
+      \begin{tikzpicture}
+        \begin{axis}[
+          width=5.5cm, height=4cm,
+          domain=-3.14:3.14, samples=80,
+          axis lines=middle,
+          xlabel={$x$}, ylabel={$f(x)$},
+          ymin=-1.5, ymax=1.5,
+          xtick=\empty, ytick=\empty,
+          legend style={at={(0.02,0.98)},anchor=north west,
+            font=\tiny, draw=none, fill=none},
+          every axis plot/.append style={thick, no markers},
+          clip=false
+        ]
+        % N=1: single sine
+        \addplot[calculusRed!50, dashed]
+          {(4/3.14159)*sin(deg(x))};
+        \addlegendentry{$N{=}1$}
+        % N=3: three terms
+        \addplot[calculusRed!80]
+          {(4/3.14159)*(sin(deg(x))
+           + sin(deg(3*x))/3
+           + sin(deg(5*x))/5)};
+        \addlegendentry{$N{=}3$}
+        % N=7: seven terms
+        \addplot[approxGreen, thick]
+          {(4/3.14159)*(sin(deg(x))
+           + sin(deg(3*x))/3
+           + sin(deg(5*x))/5
+           + sin(deg(7*x))/7
+           + sin(deg(9*x))/9
+           + sin(deg(11*x))/11
+           + sin(deg(13*x))/13)};
+        \addlegendentry{$N{=}7$}
+        \end{axis}
+      \end{tikzpicture}
+      \par\vspace{2pt}
+      {\scriptsize\centering Any function $=$ a sum of simple waves.
+       \emph{Fourier, 1807.}\par}
     \end{column}
   \end{columns}
 
@@ -108,10 +142,36 @@
     \end{column}
 
     \begin{column}{0.45\textwidth}
-      \visualplaceholder[5.5cm]{A wiggly continuous function with polynomial
-      approximations of increasing degree overlaid. The polynomials get
-      closer and closer. Caption: ``Any continuous function can be
-      approximated as closely as you want by a polynomial.''}
+      \begin{tikzpicture}
+        \begin{axis}[
+          width=5.5cm, height=4cm,
+          domain=-2:2, samples=80,
+          axis lines=middle,
+          xlabel={$x$}, ylabel={},
+          ymin=-2, ymax=2.5,
+          xtick=\empty, ytick=\empty,
+          legend style={at={(0.02,0.98)},anchor=north west,
+            font=\tiny, draw=none, fill=none},
+          every axis plot/.append style={no markers},
+          clip=true
+        ]
+        % Target function
+        \addplot[black, very thick]
+          {sin(deg(2*x)) + 0.4*cos(deg(5*x))};
+        \addlegendentry{$f(x)$}
+        % Degree-3 approx (rough)
+        \addplot[approxGreen!50, dashed, thick]
+          {0.5*x - 0.3*x^2 + 0.1*x^3};
+        \addlegendentry{deg 3}
+        % Degree-7 approx (better)
+        \addplot[approxGreen!80, thick]
+          {1.4*x - 2.8*x^3/6 + 0.5*x^5/120 + 0.2*x^7/5040};
+        \addlegendentry{deg 7}
+        \end{axis}
+      \end{tikzpicture}
+      \par\vspace{2pt}
+      {\scriptsize\centering Any continuous function can be approximated\\
+       as closely as desired by a polynomial.\par}
     \end{column}
   \end{columns}
 
@@ -150,10 +210,36 @@
     \end{column}
 
     \begin{column}{0.42\textwidth}
-      \visualplaceholder[5cm]{A simple neural network with one hidden layer.
-      As hidden neurons increase (5, 20, 100, 1000), the function it
-      represents gets more complex and accurate.
-      Caption: ``More neurons = better approximation. Cybenko, 1989.''}
+      \begin{tikzpicture}
+        \begin{axis}[
+          width=5cm, height=3.5cm,
+          domain=-3:3, samples=80,
+          axis lines=middle,
+          xlabel={$x$}, ylabel={},
+          ymin=-0.3, ymax=1.5,
+          xtick=\empty, ytick=\empty,
+          legend style={at={(0.02,0.98)},anchor=north west,
+            font=\tiny, draw=none, fill=none},
+          every axis plot/.append style={no markers},
+          clip=true
+        ]
+        % Target: step-like function
+        \addplot[black, very thick]
+          {1/(1+exp(-8*(x+1))) - 1/(1+exp(-8*(x-1)))};
+        \addlegendentry{target}
+        % Few neurons (rough)
+        \addplot[neuronPink!50, dashed, thick]
+          {1/(1+exp(-2*(x+1))) - 1/(1+exp(-2*(x-1)))};
+        \addlegendentry{5 neurons}
+        % More neurons (better)
+        \addplot[neuronPink!80, thick]
+          {1/(1+exp(-5*(x+1))) - 1/(1+exp(-5*(x-1)))};
+        \addlegendentry{20 neurons}
+        \end{axis}
+      \end{tikzpicture}
+      \par\vspace{2pt}
+      {\scriptsize\centering More neurons $=$ better approximation.\\
+       \emph{Cybenko, 1989.}\par}
 
       \vspace{0.3em}
       \begin{tcolorbox}[colback=aiViolet!8,colframe=aiViolet!60,
@@ -184,9 +270,42 @@
 % ----------------------------------------------------------
 \begin{frame}{Convergence Diagram --- Function Approximation Lights Up}
 
-  \visualplaceholder[10cm]{Convergence diagram: ``Function Approximation''
-  node now lit in purple. 6 of 10 nodes active.
-  Label: ``Universal approximation = why it works.''}
+  \begin{center}
+  \begin{tikzpicture}[
+    every node/.style={font=\scriptsize, align=center, minimum height=0.55cm,
+      rounded corners=2pt, inner sep=2pt},
+    lit/.style={draw, thick, text=white},
+    dim/.style={draw=gray!40, fill=gray!10, text=gray!60}
+  ]
+    \node[lit, fill=linalgTeal, text width=1.6cm] (n1) at (-5,0) {Linear\\Algebra};
+    \node[lit, fill=calculusRed, text width=1.6cm] (n2) at (-3.5,1.2) {Calculus};
+    \node[lit, fill=probBlue, text width=1.6cm] (n3) at (-1.8,1.8) {Probability};
+    \node[lit, fill=infoAmber, text width=1.6cm] (n4) at (0,2) {Information\\Theory};
+    \node[lit, fill=logicGray, text width=1.6cm] (n5) at (1.8,1.8) {Logic};
+    \node[lit, fill=approxGreen, text width=1.8cm] (n6) at (3.5,1.2) {\textbf{Function}\\
+      \textbf{Approx}};
+    \node[dim, text width=1.6cm] (n7) at (5,0) {Neuron\\Depth};
+    \node[dim, text width=1.6cm] (n8) at (3.5,-1.2) {Sequence};
+    \node[dim, text width=1.6cm] (n9) at (1.2,-1.5) {Transformer};
+    \node[dim, text width=1.6cm] (n10) at (-1.2,-1.5) {Scaling};
+    % Center
+    \node[draw=aiViolet, fill=aiViolet!10, circle, minimum size=1.1cm,
+      font=\large\bfseries, text=aiViolet] (ctr) at (0,0) {?};
+    % Arrows from lit nodes
+    \draw[-{Stealth[length=3pt]}, linalgTeal, thick] (n1) -- (ctr);
+    \draw[-{Stealth[length=3pt]}, calculusRed, thick] (n2) -- (ctr);
+    \draw[-{Stealth[length=3pt]}, probBlue, thick] (n3) -- (ctr);
+    \draw[-{Stealth[length=3pt]}, infoAmber, thick] (n4) -- (ctr);
+    \draw[-{Stealth[length=3pt]}, logicGray, thick] (n5) -- (ctr);
+    \draw[-{Stealth[length=3pt]}, approxGreen, thick] (n6) -- (ctr);
+    \draw[-{Stealth[length=3pt]}, gray!30] (n7) -- (ctr);
+    \draw[-{Stealth[length=3pt]}, gray!30] (n8) -- (ctr);
+    \draw[-{Stealth[length=3pt]}, gray!30] (n9) -- (ctr);
+    \draw[-{Stealth[length=3pt]}, gray!30] (n10) -- (ctr);
+  \end{tikzpicture}
+  \end{center}
+  {\small\centering Universal approximation $=$ why it works.
+   \textbf{6 of 10 building blocks active.}\par}
 
   \vspace{0.3em}
   \begin{columns}[T]
@@ -283,11 +402,44 @@
     \end{column}
 
     \begin{column}{0.45\textwidth}
-      \visualplaceholder[5.5cm]{The McCulloch-Pitts neuron: inputs $x_1,
-      x_2, x_3$ with weights $w_1, w_2, w_3$. Sum $=
-      w_1 x_1 + w_2 x_2 + w_3 x_3$. If Sum $>$ threshold,
-      output $= 1$, else output $= 0$. Biological neuron shown alongside
-      for comparison.}
+      \begin{tikzpicture}[
+        >=Stealth, node distance=0.8cm,
+        input/.style={circle, draw=neuronPink, fill=neuronPink!15,
+          minimum size=0.5cm, font=\scriptsize},
+        neuron/.style={circle, draw=neuronPink, fill=neuronPink!25,
+          minimum size=0.9cm, font=\scriptsize, thick}
+      ]
+        % Inputs
+        \node[input] (x1) at (0,1.5) {$x_1$};
+        \node[input] (x2) at (0,0.5) {$x_2$};
+        \node[input] (x3) at (0,-0.5) {$x_3$};
+        % Summation neuron
+        \node[neuron] (sum) at (2.2,0.5) {$\Sigma$};
+        % Threshold box
+        \node[draw=neuronPink, fill=neuronPink!10, rounded corners,
+          minimum width=0.8cm, minimum height=0.6cm,
+          font=\scriptsize] (thr) at (3.8,0.5) {$\theta$};
+        % Output
+        \node[font=\scriptsize\bfseries, neuronPink] (out) at (5.2,0.5) {0/1};
+        % Weighted arrows
+        \draw[->, thick, neuronPink!70] (x1) -- node[above, font=\tiny] {$w_1$} (sum);
+        \draw[->, thick, neuronPink!70] (x2) -- node[above, font=\tiny] {$w_2$} (sum);
+        \draw[->, thick, neuronPink!70] (x3) -- node[below, font=\tiny] {$w_3$} (sum);
+        \draw[->, thick, neuronPink] (sum) -- (thr);
+        \draw[->, thick, neuronPink] (thr) -- (out);
+        % Formula below
+        \node[font=\tiny, text=gray, align=center] at (2.5,-0.8)
+          {If $\sum w_i x_i > \theta$: output $= 1$\\
+           Otherwise: output $= 0$};
+        % Bio neuron sketch (right side, very simple)
+        \node[font=\tiny\bfseries, text=gray] at (2.5,-1.7) {Biological analogy:};
+        \node[circle, draw=gray!50, fill=gray!10, minimum size=0.6cm,
+          font=\tiny] (cell) at (2.5,-2.4) {cell};
+        \draw[gray!50, thick] (0.8,-2.2) -- (cell) node[midway, above, font=\tiny] {dendrites};
+        \draw[gray!50, thick] (1.0,-2.6) -- (cell);
+        \draw[->, gray!50, thick] (cell) -- (4.2,-2.4)
+          node[midway, above, font=\tiny] {axon};
+      \end{tikzpicture}
     \end{column}
   \end{columns}
 
@@ -326,10 +478,30 @@
     \end{column}
 
     \begin{column}{0.45\textwidth}
-      \visualplaceholder[5.5cm]{Photo of the Mark I Perceptron hardware:
-      a large machine with photocells. Below: the perceptron learning
-      algorithm --- present an example, compare output to desired output,
-      adjust weights.}
+      \begin{tcolorbox}[colback=neuronPink!5,colframe=neuronPink!60,
+        fonttitle=\bfseries\small,title={Mark~I Perceptron (1958)},
+        rounded corners,boxrule=0.8pt,left=3pt,right=3pt,top=3pt,bottom=3pt]
+        \scriptsize
+        A room-sized machine with 400 photocells connected
+        to artificial neurons. Weights adjusted by electric motors.
+        It could learn to recognise simple visual patterns.
+      \end{tcolorbox}
+      \vspace{0.3em}
+      % Learning algorithm as flow
+      \begin{tikzpicture}[>=Stealth, node distance=0.5cm,
+        box/.style={draw=neuronPink!70, fill=neuronPink!8,
+          rounded corners, font=\tiny, minimum width=1.8cm,
+          minimum height=0.5cm, align=center}
+      ]
+        \node[box] (p) at (0,0) {Present\\example};
+        \node[box] (c) at (2.3,0) {Compare\\output};
+        \node[box] (a) at (4.6,0) {Adjust\\weights};
+        \draw[->, thick, neuronPink!70] (p) -- (c);
+        \draw[->, thick, neuronPink!70] (c) -- (a);
+        \draw[->, thick, neuronPink!50, rounded corners]
+          (a.south) -- ++(0,-0.35) -| (p.south);
+        \node[font=\tiny, text=gray] at (2.3,-0.65) {repeat until correct};
+      \end{tikzpicture}
     \end{column}
   \end{columns}
 
@@ -370,10 +542,40 @@
     \end{column}
 
     \begin{column}{0.45\textwidth}
-      \visualplaceholder[5.5cm]{Top: XOR truth table and scatter plot showing
-      XOR is not linearly separable. ``A single line cannot separate the 1s
-      from the 0s. A perceptron can only draw a single line.''
-      Bottom: Timeline of the AI Winter, 1969--1986.}
+      % XOR scatter plot
+      \begin{tikzpicture}[>=Stealth]
+        % Axes
+        \draw[->] (-0.3,0) -- (2.5,0) node[right, font=\tiny] {$x_1$};
+        \draw[->] (0,-0.3) -- (0,2.5) node[above, font=\tiny] {$x_2$};
+        % Points: class 0 (blue circles)
+        \node[circle, fill=probBlue, minimum size=6pt, inner sep=0pt,
+          label={[font=\tiny]below:0}] at (0.3,0.3) {};
+        \node[circle, fill=probBlue, minimum size=6pt, inner sep=0pt,
+          label={[font=\tiny]above:0}] at (1.8,1.8) {};
+        % Points: class 1 (red circles)
+        \node[circle, fill=calculusRed, minimum size=6pt, inner sep=0pt,
+          label={[font=\tiny]right:1}] at (1.8,0.3) {};
+        \node[circle, fill=calculusRed, minimum size=6pt, inner sep=0pt,
+          label={[font=\tiny]left:1}] at (0.3,1.8) {};
+        % Dashed line showing failure
+        \draw[dashed, thick, gray] (-0.1,2.3) -- (2.3,-0.1);
+        \node[font=\tiny, text=red!70, align=center] at (1.1,-0.7)
+          {No single line\\separates 0s from 1s};
+      \end{tikzpicture}
+
+      \vspace{0.3em}
+      % AI Winter timeline
+      \begin{tikzpicture}[>=Stealth, node distance=0.5cm]
+        \draw[->, thick, gray] (0,0) -- (5,0);
+        \node[fill=green!20, rounded corners, inner sep=2pt, font=\tiny,
+          above] at (0.3,0.05) {1958};
+        \node[fill=red!20, rounded corners, inner sep=2pt, font=\tiny,
+          above] at (2,0.05) {1969};
+        \node[fill=gray!20, rounded corners, inner sep=2pt, font=\tiny,
+          above] at (3.5,0.05) {1986};
+        \node[font=\tiny, text=red!60] at (2.7,-0.35) {\textbf{AI Winter}};
+        \draw[red!40, very thick] (2,0) -- (3.5,0);
+      \end{tikzpicture}
     \end{column}
   \end{columns}
 
@@ -415,10 +617,37 @@
     \end{column}
 
     \begin{column}{0.42\textwidth}
-      \visualplaceholder[5cm]{A multi-layer network solving XOR:
-      input layer $\to$ hidden layer $\to$ output layer.
-      The hidden layer creates a nonlinear boundary.
-      Caption: ``Two layers CAN separate XOR.''}
+      \begin{tikzpicture}[
+        >=Stealth, node distance=1.2cm,
+        nn/.style={circle, draw=neuronPink, thick,
+          minimum size=0.55cm, font=\scriptsize, inner sep=1pt}
+      ]
+        % Input layer
+        \node[nn, fill=neuronPink!10] (i1) at (0,1) {$x_1$};
+        \node[nn, fill=neuronPink!10] (i2) at (0,0) {$x_2$};
+        % Hidden layer
+        \node[nn, fill=neuronPink!20] (h1) at (1.6,1.4) {$h_1$};
+        \node[nn, fill=neuronPink!20] (h2) at (1.6,0.5) {$h_2$};
+        \node[nn, fill=neuronPink!20] (h3) at (1.6,-0.4) {$h_3$};
+        % Output
+        \node[nn, fill=neuronPink!30] (o1) at (3.2,0.5) {$y$};
+        % Connections
+        \draw[->, neuronPink!60] (i1) -- (h1);
+        \draw[->, neuronPink!60] (i1) -- (h2);
+        \draw[->, neuronPink!60] (i1) -- (h3);
+        \draw[->, neuronPink!60] (i2) -- (h1);
+        \draw[->, neuronPink!60] (i2) -- (h2);
+        \draw[->, neuronPink!60] (i2) -- (h3);
+        \draw[->, neuronPink!80] (h1) -- (o1);
+        \draw[->, neuronPink!80] (h2) -- (o1);
+        \draw[->, neuronPink!80] (h3) -- (o1);
+        % Layer labels
+        \node[font=\tiny, text=gray] at (0,-1) {Input};
+        \node[font=\tiny, text=gray] at (1.6,-1) {Hidden};
+        \node[font=\tiny, text=gray] at (3.2,-1) {Output};
+      \end{tikzpicture}
+      \par\vspace{2pt}
+      {\scriptsize\centering Two layers \textbf{CAN} separate XOR.\par}
 
       \vspace{0.3em}
 
@@ -490,12 +719,37 @@
     \end{column}
 
     \begin{column}{0.42\textwidth}
-      \visualplaceholder[5cm]{Three activation function curves plotted
-      side by side: Sigmoid (smooth S-curve, labelled ``1980s--2000s''),
-      ReLU (hockey stick, labelled ``2010s''), GELU (smooth ReLU,
-      labelled ``2016--present, used in GPT'').
-      Caption: ``These simple curves make neural networks nonlinear
-      --- and therefore powerful.''}
+      \begin{tikzpicture}
+        \begin{axis}[
+          width=5cm, height=4cm,
+          domain=-3.5:3.5, samples=60,
+          axis lines=middle,
+          xlabel={$x$}, ylabel={},
+          ymin=-0.8, ymax=3.5,
+          xtick=\empty, ytick=\empty,
+          legend style={at={(0.02,0.98)},anchor=north west,
+            font=\tiny, draw=none, fill=none,
+            row sep=-2pt},
+          every axis plot/.append style={thick, no markers},
+          clip=true
+        ]
+        % Sigmoid
+        \addplot[neuronPink!70, dashed]
+          {1/(1+exp(-x))};
+        \addlegendentry{Sigmoid}
+        % ReLU
+        \addplot[calculusRed]
+          {max(0,x)};
+        \addlegendentry{ReLU}
+        % GELU approximation
+        \addplot[aiViolet, thick]
+          {x * 0.5 * (1 + tanh(deg(0.7978845608*(x + 0.044715*x*x*x))/57.2958))};
+        \addlegendentry{GELU}
+        \end{axis}
+      \end{tikzpicture}
+      \par\vspace{2pt}
+      {\scriptsize\centering These curves make neural networks
+       \emph{nonlinear} --- and therefore powerful.\par}
     \end{column}
   \end{columns}
 
@@ -539,12 +793,45 @@
     \end{column}
 
     \begin{column}{0.45\textwidth}
-      \visualplaceholder[5.5cm]{Side-by-side comparison: Left --- standard
-      deep network with signal fading layer by layer (fading colour).
-      Right --- ResNet with skip connections; an arrow skips over each block,
-      carrying the original signal forward.
-      Below: residual formula as diagram: input $\to$ [layer] $\to$
-      ADD input back $\to$ output.}
+      \begin{tikzpicture}[>=Stealth,
+        layer/.style={draw, rounded corners, minimum width=1.2cm,
+          minimum height=0.4cm, font=\tiny, thick}
+      ]
+        % LEFT: Standard network (fading)
+        \node[font=\tiny\bfseries, text=gray] at (0.6,3.5) {Standard};
+        \node[layer, fill=neuronPink!60] (s1) at (0.6,3) {Layer 1};
+        \node[layer, fill=neuronPink!40] (s2) at (0.6,2.2) {Layer 2};
+        \node[layer, fill=neuronPink!25] (s3) at (0.6,1.4) {Layer 3};
+        \node[layer, fill=neuronPink!12] (s4) at (0.6,0.6) {Layer 4};
+        \node[layer, fill=neuronPink!5] (s5) at (0.6,-0.2) {Layer 5};
+        \draw[->, neuronPink!50] (s1) -- (s2);
+        \draw[->, neuronPink!35] (s2) -- (s3);
+        \draw[->, neuronPink!20] (s3) -- (s4);
+        \draw[->, neuronPink!10] (s4) -- (s5);
+        \node[font=\tiny, text=red!60] at (0.6,-0.7) {Signal fades};
+
+        % RIGHT: ResNet (consistent + skip)
+        \node[font=\tiny\bfseries, text=approxGreen!80!black] at (3.4,3.5) {ResNet};
+        \node[layer, fill=approxGreen!30, draw=approxGreen] (r1) at (3.4,3) {Layer 1};
+        \node[layer, fill=approxGreen!30, draw=approxGreen] (r2) at (3.4,2.2) {Layer 2};
+        \node[layer, fill=approxGreen!30, draw=approxGreen] (r3) at (3.4,1.4) {Layer 3};
+        \node[layer, fill=approxGreen!30, draw=approxGreen] (r4) at (3.4,0.6) {Layer 4};
+        \node[layer, fill=approxGreen!30, draw=approxGreen] (r5) at (3.4,-0.2) {Layer 5};
+        \draw[->, approxGreen!70] (r1) -- (r2);
+        \draw[->, approxGreen!70] (r2) -- (r3);
+        \draw[->, approxGreen!70] (r3) -- (r4);
+        \draw[->, approxGreen!70] (r4) -- (r5);
+        % Skip connections
+        \draw[->, approxGreen, thick, rounded corners]
+          (r1.east) -- ++(0.4,0) |- (r3.east);
+        \draw[->, approxGreen, thick, rounded corners]
+          (r3.east) -- ++(0.4,0) |- (r5.east);
+        \node[font=\tiny, text=approxGreen!70!black] at (3.4,-0.7) {Signal preserved};
+
+        % Formula below
+        \node[font=\tiny, text=gray, align=center] at (2.0,-1.3)
+          {$\text{output} = \text{input} + \text{layer}(\text{input})$};
+      \end{tikzpicture}
     \end{column}
   \end{columns}
 
@@ -588,11 +875,52 @@
     \end{column}
 
     \begin{column}{0.45\textwidth}
-      \visualplaceholder[5.5cm]{Top: Layer normalisation --- a row of neuron
-      activations before (wildly varying) and after normalisation (centred,
-      consistent). Caption: ``Layer Norm = rescale so nothing explodes.''
-      Bottom: Dropout --- a network with some neurons crossed out.
-      Caption: ``Dropout = randomly disable neurons during training.''}
+      % Layer Norm visualisation
+      \begin{tikzpicture}[>=Stealth]
+        \node[font=\tiny\bfseries] at (0.8,2.4) {Before Norm};
+        % Wild bars
+        \fill[neuronPink!40] (0,0) rectangle (0.25,2.1);
+        \fill[neuronPink!40] (0.35,0) rectangle (0.6,0.3);
+        \fill[neuronPink!40] (0.7,0) rectangle (0.95,1.6);
+        \fill[neuronPink!40] (1.05,0) rectangle (1.3,0.1);
+        \fill[neuronPink!40] (1.4,0) rectangle (1.65,1.9);
+
+        \draw[->, thick, gray] (1.9,1) -- (2.4,1);
+
+        \node[font=\tiny\bfseries] at (3.6,2.4) {After Norm};
+        % Normalised bars
+        \fill[approxGreen!50] (2.6,0) rectangle (2.85,1.1);
+        \fill[approxGreen!50] (2.95,0) rectangle (3.2,0.8);
+        \fill[approxGreen!50] (3.3,0) rectangle (3.55,1.0);
+        \fill[approxGreen!50] (3.65,0) rectangle (3.9,0.85);
+        \fill[approxGreen!50] (4.0,0) rectangle (4.25,1.05);
+        % Mean line
+        \draw[dashed, gray] (2.6,0.96) -- (4.25,0.96);
+        \node[font=\tiny, text=gray] at (2.2,-0.3) {Layer Norm $=$ rescale};
+      \end{tikzpicture}
+
+      \vspace{0.4em}
+      % Dropout visualisation
+      \begin{tikzpicture}[
+        nn/.style={circle, draw=seqIndigo!60, minimum size=0.35cm,
+          inner sep=0pt, font=\tiny},
+        dead/.style={circle, draw=red!40, fill=red!10, minimum size=0.35cm,
+          inner sep=0pt, font=\tiny}
+      ]
+        \node[nn, fill=seqIndigo!15] (a1) at (0,0.8) {};
+        \node[dead] (a2) at (0,0) {\color{red!60}$\times$};
+        \node[nn, fill=seqIndigo!15] (a3) at (0,-0.8) {};
+        \node[nn, fill=seqIndigo!15] (b1) at (1.3,0.8) {};
+        \node[nn, fill=seqIndigo!15] (b2) at (1.3,0) {};
+        \node[dead] (b3) at (1.3,-0.8) {\color{red!60}$\times$};
+        \node[nn, fill=seqIndigo!15] (c1) at (2.6,0.4) {};
+        \node[nn, fill=seqIndigo!15] (c2) at (2.6,-0.4) {};
+        \draw[seqIndigo!40] (a1) -- (b1); \draw[seqIndigo!40] (a1) -- (b2);
+        \draw[seqIndigo!40] (a3) -- (b1); \draw[seqIndigo!40] (a3) -- (b2);
+        \draw[seqIndigo!40] (b1) -- (c1); \draw[seqIndigo!40] (b1) -- (c2);
+        \draw[seqIndigo!40] (b2) -- (c1); \draw[seqIndigo!40] (b2) -- (c2);
+        \node[font=\tiny, text=gray] at (1.3,-1.3) {Dropout $=$ randomly disable};
+      \end{tikzpicture}
 
       \vspace{0.3em}
       \begin{tcolorbox}[colback=aiViolet!5,colframe=aiViolet!60,
@@ -620,9 +948,42 @@
 % ----------------------------------------------------------
 \begin{frame}{Convergence Diagram --- The Neuron \& Depth Lights Up}
 
-  \visualplaceholder[10cm]{Convergence diagram: ``The Neuron \& Depth'' node
-  now lit in yellow/gold. 7 of 10 nodes active.
-  Label: ``Activation + normalisation + residuals = deep networks.''}
+  \begin{center}
+  \begin{tikzpicture}[
+    every node/.style={font=\scriptsize, align=center, minimum height=0.55cm,
+      rounded corners=2pt, inner sep=2pt},
+    lit/.style={draw, thick, text=white},
+    dim/.style={draw=gray!40, fill=gray!10, text=gray!60}
+  ]
+    \node[lit, fill=linalgTeal, text width=1.6cm] (n1) at (-5,0) {Linear\\Algebra};
+    \node[lit, fill=calculusRed, text width=1.6cm] (n2) at (-3.5,1.2) {Calculus};
+    \node[lit, fill=probBlue, text width=1.6cm] (n3) at (-1.8,1.8) {Probability};
+    \node[lit, fill=infoAmber, text width=1.6cm] (n4) at (0,2) {Information\\Theory};
+    \node[lit, fill=logicGray, text width=1.6cm] (n5) at (1.8,1.8) {Logic};
+    \node[lit, fill=approxGreen, text width=1.6cm] (n6) at (3.5,1.2) {Function\\Approx};
+    \node[lit, fill=neuronPink, text width=1.8cm] (n7) at (5,0) {\textbf{Neuron}\\
+      \textbf{\& Depth}};
+    \node[dim, text width=1.6cm] (n8) at (3.5,-1.2) {Sequence};
+    \node[dim, text width=1.6cm] (n9) at (1.2,-1.5) {Transformer};
+    \node[dim, text width=1.6cm] (n10) at (-1.2,-1.5) {Scaling};
+    % Center
+    \node[draw=aiViolet, fill=aiViolet!10, circle, minimum size=1.1cm,
+      font=\large\bfseries, text=aiViolet] (ctr) at (0,0) {?};
+    % Arrows
+    \draw[-{Stealth[length=3pt]}, linalgTeal, thick] (n1) -- (ctr);
+    \draw[-{Stealth[length=3pt]}, calculusRed, thick] (n2) -- (ctr);
+    \draw[-{Stealth[length=3pt]}, probBlue, thick] (n3) -- (ctr);
+    \draw[-{Stealth[length=3pt]}, infoAmber, thick] (n4) -- (ctr);
+    \draw[-{Stealth[length=3pt]}, logicGray, thick] (n5) -- (ctr);
+    \draw[-{Stealth[length=3pt]}, approxGreen, thick] (n6) -- (ctr);
+    \draw[-{Stealth[length=3pt]}, neuronPink, thick] (n7) -- (ctr);
+    \draw[-{Stealth[length=3pt]}, gray!30] (n8) -- (ctr);
+    \draw[-{Stealth[length=3pt]}, gray!30] (n9) -- (ctr);
+    \draw[-{Stealth[length=3pt]}, gray!30] (n10) -- (ctr);
+  \end{tikzpicture}
+  \end{center}
+  {\small\centering Activation $+$ normalisation $+$ residuals $=$ deep networks.
+   \textbf{7 of 10 building blocks active.}\par}
 
   \vspace{0.3em}
   \begin{columns}[T]
@@ -726,11 +1087,34 @@
     \end{column}
 
     \begin{column}{0.45\textwidth}
-      \visualplaceholder[5.5cm]{Top: State diagram --- states are words
-      (``the'', ``cat'', ``sat'', ``on''), arrows labelled with
-      transition probabilities.
-      Bottom: Text generated by a Markov chain vs.\ text from an LLM.
-      Markov text is grammatical locally but incoherent globally.}
+      % Markov chain state diagram
+      \begin{tikzpicture}[>=Stealth,
+        state/.style={circle, draw=seqIndigo, fill=seqIndigo!15,
+          minimum size=0.8cm, font=\scriptsize\bfseries, thick}
+      ]
+        \node[state] (the) at (0,1.5) {the};
+        \node[state] (cat) at (2.5,1.5) {cat};
+        \node[state] (sat) at (2.5,0) {sat};
+        \node[state] (on)  at (0,0) {on};
+        % Transition arrows with probabilities
+        \draw[->, thick, seqIndigo!80] (the) -- node[above, font=\tiny] {0.6} (cat);
+        \draw[->, thick, seqIndigo!60] (cat) -- node[right, font=\tiny] {0.8} (sat);
+        \draw[->, thick, seqIndigo!60] (sat) -- node[below, font=\tiny] {0.7} (on);
+        \draw[->, thick, seqIndigo!80] (on) -- node[left, font=\tiny] {0.9} (the);
+        % Diagonal transitions
+        \draw[->, thick, seqIndigo!40, bend left=20] (the) to
+          node[right, font=\tiny, pos=0.4] {0.3} (sat);
+        \draw[->, thick, seqIndigo!40, bend left=20] (sat) to
+          node[left, font=\tiny, pos=0.4] {0.2} (the);
+      \end{tikzpicture}
+
+      \vspace{0.3em}
+      % Comparison boxes
+      \begin{tcolorbox}[colback=seqIndigo!5,colframe=seqIndigo!50,
+        boxrule=0.5pt,rounded corners,left=2pt,right=2pt,top=2pt,bottom=2pt]
+        \tiny\textbf{Markov:} ``the cat sat on the cat sat on the\ldots''\\
+        \textbf{LLM:} ``The cat sat on the warm mat, purring softly.''
+      \end{tcolorbox}
     \end{column}
   \end{columns}
 
@@ -771,11 +1155,34 @@
     \end{column}
 
     \begin{column}{0.45\textwidth}
-      \visualplaceholder[5.5cm]{HMM diagram: hidden states on top (connected
-      by transition arrows), observed outputs below (connected to hidden
-      states by emission arrows).
-      Caption: ``The hidden states cannot be seen directly --- they must
-      be inferred from observations.''}
+      \begin{tikzpicture}[>=Stealth,
+        hidden/.style={circle, draw=seqIndigo, fill=seqIndigo!20,
+          minimum size=0.7cm, font=\scriptsize, thick},
+        observed/.style={rectangle, draw=accentOrange, fill=accentOrange!15,
+          minimum width=0.7cm, minimum height=0.5cm, font=\scriptsize, thick}
+      ]
+        % Hidden states
+        \node[font=\tiny\bfseries, text=seqIndigo] at (-0.8,1.5) {Hidden:};
+        \node[hidden] (h1) at (0.5,1.5) {$h_1$};
+        \node[hidden] (h2) at (2.0,1.5) {$h_2$};
+        \node[hidden] (h3) at (3.5,1.5) {$h_3$};
+        % Transition arrows
+        \draw[->, thick, seqIndigo!70] (h1) -- (h2);
+        \draw[->, thick, seqIndigo!70] (h2) -- (h3);
+
+        % Observed outputs
+        \node[font=\tiny\bfseries, text=accentOrange] at (-0.8,0) {Observed:};
+        \node[observed] (o1) at (0.5,0) {$o_1$};
+        \node[observed] (o2) at (2.0,0) {$o_2$};
+        \node[observed] (o3) at (3.5,0) {$o_3$};
+        % Emission arrows
+        \draw[->, dashed, thick, gray] (h1) -- (o1);
+        \draw[->, dashed, thick, gray] (h2) -- (o2);
+        \draw[->, dashed, thick, gray] (h3) -- (o3);
+        % Caption
+        \node[font=\tiny, text=gray, align=center] at (2.0,-0.8)
+          {Hidden states inferred from observations};
+      \end{tikzpicture}
     \end{column}
   \end{columns}
 
@@ -819,11 +1226,43 @@
     \end{column}
 
     \begin{column}{0.45\textwidth}
-      \visualplaceholder[5.5cm]{An RNN unrolled across time steps: the same
-      network processing word 1, then word 2, then word 3, with the
-      hidden state carried forward like a ``memory'' arrow.
-      Caption: ``The hidden state is the RNN's memory. But it is a
-      very leaky memory.''}
+      \begin{tikzpicture}[>=Stealth,
+        rnn/.style={draw=seqIndigo, fill=seqIndigo!15, thick,
+          minimum width=0.8cm, minimum height=0.7cm,
+          rounded corners=2pt, font=\scriptsize}
+      ]
+        % RNN blocks
+        \node[rnn] (r1) at (0,0) {RNN};
+        \node[rnn] (r2) at (1.5,0) {RNN};
+        \node[rnn] (r3) at (3.0,0) {RNN};
+        \node[rnn] (r4) at (4.5,0) {RNN};
+        % Inputs below
+        \node[font=\tiny, text=seqIndigo!80] (w1) at (0,-1) {word 1};
+        \node[font=\tiny, text=seqIndigo!80] (w2) at (1.5,-1) {word 2};
+        \node[font=\tiny, text=seqIndigo!80] (w3) at (3.0,-1) {word 3};
+        \node[font=\tiny, text=seqIndigo!80] (w4) at (4.5,-1) {word 4};
+        % Input arrows
+        \draw[->, seqIndigo!60] (w1) -- (r1);
+        \draw[->, seqIndigo!60] (w2) -- (r2);
+        \draw[->, seqIndigo!60] (w3) -- (r3);
+        \draw[->, seqIndigo!60] (w4) -- (r4);
+        % Outputs above
+        \node[font=\tiny, text=gray] (o1) at (0,1) {$y_1$};
+        \node[font=\tiny, text=gray] (o2) at (1.5,1) {$y_2$};
+        \node[font=\tiny, text=gray] (o3) at (3.0,1) {$y_3$};
+        \node[font=\tiny, text=gray] (o4) at (4.5,1) {$y_4$};
+        \draw[->, gray] (r1) -- (o1);
+        \draw[->, gray] (r2) -- (o2);
+        \draw[->, gray] (r3) -- (o3);
+        \draw[->, gray] (r4) -- (o4);
+        % Hidden state arrows (fading)
+        \draw[->, very thick, seqIndigo!80] (r1) -- node[above, font=\tiny] {$h$} (r2);
+        \draw[->, very thick, seqIndigo!55] (r2) -- node[above, font=\tiny] {$h$} (r3);
+        \draw[->, very thick, seqIndigo!30] (r3) -- node[above, font=\tiny] {$h$} (r4);
+        % Caption
+        \node[font=\tiny, text=red!60, align=center] at (2.25,-1.7)
+          {Hidden state $=$ memory. But it fades fast.};
+      \end{tikzpicture}
     \end{column}
   \end{columns}
 
@@ -864,10 +1303,40 @@
     \end{column}
 
     \begin{column}{0.45\textwidth}
-      \visualplaceholder[5.5cm]{Simplified LSTM cell: input gate, forget
-      gate, output gate, cell state. Caption: ``The forget gate decides
-      what to remember. The input gate decides what is new. The output
-      gate decides what to reveal.''}
+      \begin{tikzpicture}[>=Stealth,
+        gate/.style={draw=seqIndigo, rounded corners,
+          minimum width=1.1cm, minimum height=0.45cm,
+          font=\tiny\bfseries, thick}
+      ]
+        % Cell state line
+        \draw[very thick, seqIndigo!50, ->] (-0.5,1.5) -- (4.8,1.5)
+          node[right, font=\tiny] {cell state};
+        % Gates
+        \node[gate, fill=red!15] (fg) at (1.0,0.5) {Forget};
+        \node[gate, fill=approxGreen!15] (ig) at (2.5,0.5) {Input};
+        \node[gate, fill=probBlue!15] (og) at (4.0,0.5) {Output};
+        % Gate connections to cell state
+        \draw[->, thick, red!50] (fg) -- (1.0,1.5);
+        \draw[->, thick, approxGreen!50] (ig) -- (2.5,1.5);
+        \draw[->, thick, probBlue!50] (og) -- (4.0,1.5);
+        % Input from below
+        \draw[->, seqIndigo!60] (2.5,-0.5) -- (ig.south)
+          node[below, font=\tiny, pos=0] {input};
+        \draw[->, seqIndigo!40] (1.0,-0.5) -- (fg.south);
+        \draw[->, seqIndigo!40] (4.0,-0.5) -- (og.south);
+        % Output above
+        \draw[->, thick, seqIndigo] (4.0,1.5) -- (4.0,2.3)
+          node[above, font=\tiny] {output};
+        % Symbols on cell state line
+        \node[circle, draw=red!50, fill=white, inner sep=1pt,
+          font=\tiny] at (1.0,1.5) {$\times$};
+        \node[circle, draw=approxGreen!50, fill=white, inner sep=1pt,
+          font=\tiny] at (2.5,1.5) {$+$};
+        % Caption
+        \node[font=\tiny, text=gray, align=center] at (2.25,-1.0)
+          {Forget: what to discard. Input: what is new.\\
+           Output: what to reveal.};
+      \end{tikzpicture}
     \end{column}
   \end{columns}
 
@@ -913,13 +1382,44 @@
     \end{column}
 
     \begin{column}{0.45\textwidth}
-      \visualplaceholder[5.5cm]{Top: Attention diagram --- translating
-      ``Le chat est sur le tapis.'' When generating ``cat,'' the model
-      attends strongly to ``chat.'' When generating ``mat,'' it attends
-      to ``tapis.'' Colour-coded attention weights shown as lines of
-      varying thickness.
-      Bottom: Comparison --- RNN (compresses everything into one vector)
-      vs.\ Attention (can look back at everything).}
+      % Attention diagram: French -> English
+      \begin{tikzpicture}[>=Stealth]
+        % French words (left)
+        \node[font=\tiny, text=seqIndigo!80] (f1) at (0, 2.0) {Le};
+        \node[font=\tiny, text=seqIndigo!80] (f2) at (0, 1.5) {chat};
+        \node[font=\tiny, text=seqIndigo!80] (f3) at (0, 1.0) {est};
+        \node[font=\tiny, text=seqIndigo!80] (f4) at (0, 0.5) {sur};
+        \node[font=\tiny, text=seqIndigo!80] (f5) at (0, 0.0) {le};
+        \node[font=\tiny, text=seqIndigo!80] (f6) at (0,-0.5) {tapis};
+        % English words (right)
+        \node[font=\tiny\bfseries, text=aiViolet] (e1) at (3.5,2.0) {The};
+        \node[font=\tiny\bfseries, text=aiViolet] (e2) at (3.5,1.5) {cat};
+        \node[font=\tiny\bfseries, text=aiViolet] (e3) at (3.5,1.0) {is};
+        \node[font=\tiny\bfseries, text=aiViolet] (e4) at (3.5,0.5) {on};
+        \node[font=\tiny\bfseries, text=aiViolet] (e5) at (3.5,0.0) {the};
+        \node[font=\tiny\bfseries, text=aiViolet] (e6) at (3.5,-0.5) {mat};
+        % Strong attention lines
+        \draw[aiViolet, line width=2pt, opacity=0.7] (f2) -- (e2);
+        \draw[aiViolet, line width=2pt, opacity=0.7] (f6) -- (e6);
+        \draw[aiViolet, line width=1.2pt, opacity=0.5] (f1) -- (e1);
+        \draw[aiViolet, line width=1.2pt, opacity=0.5] (f5) -- (e5);
+        % Weak attention lines
+        \draw[gray, line width=0.3pt, opacity=0.3] (f3) -- (e3);
+        \draw[gray, line width=0.3pt, opacity=0.3] (f4) -- (e4);
+        % Labels
+        \node[font=\tiny\bfseries, text=seqIndigo] at (0,2.5) {Source};
+        \node[font=\tiny\bfseries, text=aiViolet] at (3.5,2.5) {Target};
+        \node[font=\tiny, text=gray] at (1.75,2.5) {attention};
+      \end{tikzpicture}
+
+      \vspace{0.3em}
+      % RNN vs Attention comparison
+      \begin{tcolorbox}[colback=seqIndigo!5,colframe=seqIndigo!50,
+        boxrule=0.5pt,rounded corners,left=2pt,right=2pt,top=2pt,bottom=2pt]
+        \tiny
+        \textbf{RNN:} compress all into one vector $\to$ bottleneck\\
+        \textbf{Attention:} look back at \emph{everything} $\to$ no bottleneck
+      \end{tcolorbox}
     \end{column}
   \end{columns}
 
@@ -1004,10 +1504,28 @@
     \end{column}
 
     \begin{column}{0.42\textwidth}
-      \visualplaceholder[5cm]{Top: The first page of ``Attention Is All You
-      Need'' with title highlighted.
-      Bottom: Stylised portraits or photos of the eight authors.
-      Caption: ``Eight researchers. One paper. One architecture.''}
+      \begin{tcolorbox}[colback=aiViolet!5,colframe=aiViolet,
+        fonttitle=\bfseries\small,
+        title={arXiv:1706.03762 (2017)},
+        rounded corners,boxrule=1pt,left=3pt,right=3pt,top=3pt,bottom=3pt]
+        {\large\bfseries\centering Attention Is All You Need\par}
+        \vspace{4pt}
+        {\scriptsize\centering
+        Vaswani, Shazeer, Parmar, Uszkoreit,\\
+        Jones, Gomez, Kaiser, Polosukhin\par}
+        \vspace{4pt}
+        {\scriptsize\centering\textit{NeurIPS 2017}\par}
+      \end{tcolorbox}
+      \vspace{0.3em}
+      % Eight author silhouettes
+      \begin{center}
+      \begin{tikzpicture}
+        \node[font=\small, text=aiViolet!60] at (0, 0.3)
+          {\faUser\ \faUser\ \faUser\ \faUser\ \faUser\ \faUser\ \faUser\ \faUser};
+        \node[font=\tiny, text=gray, align=center] at (0,-0.3)
+          {Eight researchers. One paper. One architecture.};
+      \end{tikzpicture}
+      \end{center}
     \end{column}
   \end{columns}
 
@@ -1109,11 +1627,52 @@
     \end{column}
 
     \begin{column}{0.45\textwidth}
-      \visualplaceholder[5.5cm]{A single transformer block, annotated:
-      Multi-Head Attention sub-block $\to$ Add \& Norm
-      (residual + layer norm, Slides 60--61) $\to$
-      Feed-Forward Network sub-block $\to$ Add \& Norm.
-      Every component labelled with its origin section.}
+      \begin{tikzpicture}[>=Stealth,
+        block/.style={rounded corners,
+          minimum width=3.5cm, minimum height=0.55cm,
+          font=\tiny, thick, align=center}
+      ]
+        % Input
+        \node[font=\tiny\bfseries, text=gray] (inp) at (0,-0.3) {Input};
+        % Multi-Head Attention
+        \node[block, draw=seqIndigo, fill=seqIndigo!12] (mha) at (0,0.5)
+          {Multi-Head Self-Attention};
+        \node[font=\tiny, text=seqIndigo!60, right] at (1.8,0.5)
+          {\emph{Bahdanau '14}};
+        % Add & Norm 1
+        \node[block, draw=neuronPink, fill=neuronPink!12] (an1) at (0,1.3)
+          {Add \& Norm};
+        \node[font=\tiny, text=neuronPink!60, right] at (1.8,1.3)
+          {\emph{He '15 + Ba '16}};
+        % FFN
+        \node[block, draw=approxGreen, fill=approxGreen!12] (ffn) at (0,2.1)
+          {Feed-Forward Network};
+        \node[font=\tiny, text=approxGreen!60, right] at (1.8,2.1)
+          {\emph{Cybenko '89}};
+        % Add & Norm 2
+        \node[block, draw=neuronPink, fill=neuronPink!12] (an2) at (0,2.9)
+          {Add \& Norm};
+        \node[font=\tiny, text=neuronPink!60, right] at (1.8,2.9)
+          {\emph{He '15 + Ba '16}};
+        % Output
+        \node[font=\tiny\bfseries, text=gray] (out) at (0,3.5) {Output};
+        % Through arrows
+        \draw[->, thick, gray] (inp) -- (mha);
+        \draw[->, thick, gray] (mha) -- (an1);
+        \draw[->, thick, gray] (an1) -- (ffn);
+        \draw[->, thick, gray] (ffn) -- (an2);
+        \draw[->, thick, gray] (an2) -- (out);
+        % Skip connections
+        \draw[->, thick, neuronPink!60, rounded corners]
+          (mha.west) -- ++(-0.5,0) |- (an1.west);
+        \draw[->, thick, neuronPink!60, rounded corners]
+          (ffn.west) -- ++(-0.5,0) |- (an2.west);
+        % Bracket
+        \draw[decorate, decoration={brace, amplitude=4pt, mirror},
+          thick, aiViolet] (2.0,-0.1) -- (2.0,3.3)
+          node[midway, right=5pt, font=\tiny, text=aiViolet,
+            align=left] {$\times\,96$\\layers};
+      \end{tikzpicture}
     \end{column}
   \end{columns}
 
@@ -1130,28 +1689,66 @@
 \begin{frame}{The Full Transformer --- Annotated with 2,000+ Years of Math}
 
   % Large placeholder -- THIS IS THE LECTURE'S CLIMAX
-  \visualplaceholder[13cm]{%
-    \textbf{CLIMAX DIAGRAM --- Full decoder-only transformer architecture}\\[4pt]
-    Annotated components (back-references to earlier slides):\\
-    \textbullet\ \textbf{Input Embedding:} Words $\to$ Vectors
-      (Grassmann 1844, Mikolov 2013, Slide~14)\\
-    \textbullet\ \textbf{Positional Encoding:} Sine/cosine
-      (Fourier 1807, Slide~50)\\
-    \textbullet\ \textbf{Multi-Head Self-Attention:} Dot product + softmax
-      + matrix mult.\ (Gibbs 1880s Slide~10, Boltzmann 1870s Slide~33,
-      Cayley 1858 Slide~9, Bahdanau 2014 Slide~68)\\
-    \textbullet\ \textbf{Add \& Norm:} Residual + Layer Norm
-      (He 2015 Slide~60, Ba 2016 Slide~61)\\
-    \textbullet\ \textbf{FFN:} Matrix mult.\ + GELU
-      (Cybenko 1989 Slide~52, Hendrycks 2016 Slide~59)\\
-    \textbullet\ \textbf{Dropout:} (Srivastava/Hinton 2014 Slide~61)\\
-    \textbullet\ \textbf{Output Softmax:} Probability over vocabulary
-      (Fisher 1922, Boltzmann/Luce Slide~33)\\
-    \textbullet\ \textbf{Training:} Cross-entropy + backprop + SGD
-      (Shannon 1948, Cauchy 1847, Linnainmaa 1970)\\
-    \textbullet\ \textbf{Hardware:} GPU arrays
-      (NVIDIA CUDA 2007, AlexNet 2012 Slide~47)%
-  }
+  % CLIMAX: Full annotated transformer as structured vertical pipeline
+  \begin{center}
+  \begin{tikzpicture}[>=Stealth,
+    comp/.style={rounded corners=3pt,
+      minimum width=10cm, minimum height=0.55cm,
+      font=\small, thick, align=center}
+  ]
+    % Input
+    \node[comp, draw=linalgTeal, fill=linalgTeal!10] (emb) at (0,0)
+      {\textbf{Input Embedding:} Words $\to$ Vectors
+       \hfill{\scriptsize\color{gray} Grassmann 1844, Mikolov 2013 -- Slide~14}};
+    % Positional Encoding
+    \node[comp, draw=approxGreen, fill=approxGreen!10] (pe) at (0,0.8)
+      {\textbf{Positional Encoding:} Sine/Cosine
+       \hfill{\scriptsize\color{gray} Fourier 1807 -- Slide~50}};
+    % Multi-Head Self-Attention
+    \node[comp, draw=seqIndigo, fill=seqIndigo!10] (mha) at (0,1.7)
+      {\textbf{Multi-Head Self-Attention:} $QK^\top / \sqrt{d}$, Softmax, $\times V$
+       \hfill{\scriptsize\color{gray} Slides 9, 10, 33, 68}};
+    % Add & Norm 1
+    \node[comp, draw=neuronPink, fill=neuronPink!10] (an1) at (0,2.5)
+      {\textbf{Add \& Norm} (Residual + Layer Norm)
+       \hfill{\scriptsize\color{gray} He 2015 -- Slide~60, Ba 2016 -- Slide~61}};
+    % FFN
+    \node[comp, draw=approxGreen!80!black, fill=approxGreen!8] (ffn) at (0,3.3)
+      {\textbf{Feed-Forward Network:} Matrix mult + GELU
+       \hfill{\scriptsize\color{gray} Cybenko 1989 -- Slide~52, GELU -- Slide~59}};
+    % Add & Norm 2
+    \node[comp, draw=neuronPink, fill=neuronPink!10] (an2) at (0,4.1)
+      {\textbf{Add \& Norm} (Residual + Layer Norm)
+       \hfill{\scriptsize\color{gray} He 2015, Ba 2016 -- Slides 60--61}};
+    % Output softmax
+    \node[comp, draw=probBlue, fill=probBlue!10] (soft) at (0,5.0)
+      {\textbf{Output Softmax:} Probability over vocabulary
+       \hfill{\scriptsize\color{gray} Boltzmann 1870s -- Slide~33}};
+    % Vertical arrows
+    \draw[->, thick, gray] (emb) -- (pe);
+    \draw[->, thick, gray] (pe) -- (mha);
+    \draw[->, thick, gray] (mha) -- (an1);
+    \draw[->, thick, gray] (an1) -- (ffn);
+    \draw[->, thick, gray] (ffn) -- (an2);
+    \draw[->, thick, gray] (an2) -- (soft);
+    % Skip connections
+    \draw[->, neuronPink!60, thick, rounded corners]
+      (mha.east) -- ++(0.3,0) |- (an1.east);
+    \draw[->, neuronPink!60, thick, rounded corners]
+      (ffn.east) -- ++(0.3,0) |- (an2.east);
+    % Repeat bracket
+    \draw[decorate, decoration={brace, amplitude=5pt, mirror},
+      very thick, aiViolet]
+      (-5.5,1.5) -- (-5.5,4.3)
+      node[midway, left=6pt, font=\small\bfseries, text=aiViolet,
+        align=right] {$\times\,N$\\layers};
+    % Training + Hardware note below
+    \node[font=\scriptsize, text=gray, align=center] at (0,-0.6)
+      {\textbf{Training:} Cross-entropy (Shannon '48) $+$ Backprop (Linnainmaa '70)
+       $+$ SGD (Cauchy 1847) \quad
+       \textbf{Hardware:} GPU (Slide~47)};
+  \end{tikzpicture}
+  \end{center}
 
   \vspace{0.3em}
   \begin{tcolorbox}[colback=accentOrange!10,colframe=accentOrange,
@@ -1219,11 +1816,39 @@
     \end{column}
 
     \begin{column}{0.45\textwidth}
-      \visualplaceholder[5.5cm]{Heatmap of positional encodings:
-      rows = positions (1st word, 2nd word, \ldots, 100th word),
-      columns = dimensions. Clear sinusoidal wave patterns visible.
-      Caption: ``Fourier's sine and cosine waves, used to tell
-      the transformer which word is which.''}
+      % Positional encoding: show waves at different frequencies
+      \begin{tikzpicture}
+        \begin{axis}[
+          width=5.5cm, height=4cm,
+          domain=0:30, samples=60,
+          axis lines=left,
+          xlabel={\tiny position}, ylabel={\tiny value},
+          ymin=-1.3, ymax=1.3,
+          xtick=\empty, ytick=\empty,
+          legend style={at={(0.98,0.98)},anchor=north east,
+            font=\tiny, draw=none, fill=none,
+            row sep=-2pt},
+          every axis plot/.append style={thick, no markers},
+          clip=true
+        ]
+        % Slow frequency (low dimension)
+        \addplot[approxGreen!70]
+          {sin(deg(x/5))};
+        \addlegendentry{dim 0 (slow)}
+        % Medium frequency
+        \addplot[seqIndigo!70]
+          {sin(deg(x/2))};
+        \addlegendentry{dim 4}
+        % Fast frequency (high dimension)
+        \addplot[aiViolet!70]
+          {sin(deg(x*1.2))};
+        \addlegendentry{dim 16 (fast)}
+        \end{axis}
+      \end{tikzpicture}
+      \par\vspace{2pt}
+      {\scriptsize\centering Fourier's sine waves tell the transformer
+       which word is which. Each position gets a unique
+       ``fingerprint'' of wave values.\par}
 
       \vspace{0.3em}
       \begin{insightbox}
@@ -1288,13 +1913,53 @@
     \end{column}
 
     \begin{column}{0.45\textwidth}
-      \visualplaceholder[5.5cm]{Top: Log-log plot of parameter count vs.\
-      year: GPT-1 (2018) $\to$ GPT-2 (2019) $\to$ GPT-3 (2020) $\to$
-      PaLM (2022) $\to$ GPT-4 (2023) $\to$ frontier models (2025--26).
-      Exponential growth visible.
-      Bottom: Timeline of key milestones: RLHF (2017), InstructGPT (2022),
-      ChatGPT (Nov 2022), GPT-4 (Mar 2023), Claude~3 (2024), open-source
-      explosion (Llama, Mistral).}
+      % Scaling: parameter count vs year (semilog)
+      \begin{tikzpicture}
+        \begin{semilogyaxis}[
+          width=5.5cm, height=3.8cm,
+          xlabel={\tiny Year},
+          ylabel={\tiny Parameters},
+          xmin=2017.5, xmax=2025.5,
+          ymin=5e7, ymax=2e12,
+          xtick={2018,2019,2020,2022,2023,2025},
+          xticklabels={18,19,20,22,23,25},
+          xticklabel style={font=\tiny},
+          yticklabel style={font=\tiny},
+          grid=major,
+          grid style={gray!20},
+          every axis plot/.append style={thick}
+        ]
+        \addplot[only marks, mark=*, mark size=2pt, accentOrange]
+          coordinates {
+            (2018, 1.17e8)
+            (2019, 1.5e9)
+            (2020, 1.75e11)
+            (2022, 5.4e11)
+            (2023, 1.8e12)
+          };
+        % Labels
+        \node[font=\tiny, anchor=west] at (axis cs:2018.1,1.17e8) {GPT-1};
+        \node[font=\tiny, anchor=west] at (axis cs:2019.1,1.5e9) {GPT-2};
+        \node[font=\tiny, anchor=east] at (axis cs:2019.9,1.75e11) {GPT-3};
+        \node[font=\tiny, anchor=east] at (axis cs:2021.9,5.4e11) {PaLM};
+        \node[font=\tiny, anchor=west] at (axis cs:2023.1,1.8e12) {GPT-4};
+        \end{semilogyaxis}
+      \end{tikzpicture}
+
+      \vspace{0.2em}
+      % Timeline
+      \begin{tikzpicture}[>=Stealth]
+        \draw[->, thick, gray] (0,0) -- (5.2,0);
+        \node[fill=accentOrange!15, rounded corners, inner sep=1.5pt,
+          font=\tiny, above] at (0.5,0.05) {RLHF '17};
+        \node[fill=accentOrange!15, rounded corners, inner sep=1.5pt,
+          font=\tiny, above] at (2.0,0.05) {ChatGPT};
+        \node[fill=accentOrange!25, rounded corners, inner sep=1.5pt,
+          font=\tiny, above] at (3.2,0.05) {GPT-4};
+        \node[fill=aiViolet!15, rounded corners, inner sep=1.5pt,
+          font=\tiny, above] at (4.3,0.05) {Claude~3};
+        \node[font=\tiny, text=gray] at (2.5,-0.3) {\emph{Exponential scaling}};
+      \end{tikzpicture}
     \end{column}
   \end{columns}
 
@@ -1316,26 +1981,39 @@
 % ----------------------------------------------------------
 \begin{frame}{Return to the Exploded Diagram --- Now You Understand Every Piece}
 
-  \visualplaceholder[13cm]{%
-    \textbf{The SAME exploded transformer diagram from Slide~3},
-    now with every label including the mathematician's name, date,
-    AND slide number:\\[3pt]
-    \textbullet\ Matrix multiplication (Cayley, 1858 --- Slide~9)
-    \textbullet\ Dot product (Gibbs, 1880s --- Slide~10)\\
-    \textbullet\ Gradient descent (Cauchy, 1847 --- Slide~21)
-    \textbullet\ Softmax (Boltzmann, 1870s --- Slide~33)\\
-    \textbullet\ Cross-entropy (Shannon, 1948 --- Slide~37)
-    \textbullet\ Backpropagation (Linnainmaa 1970, Rumelhart/Hinton/Williams
-    1986 --- Slide~22)\\
-    \textbullet\ Activation functions (Verhulst 1838, Nair/Hinton 2010
-    --- Slide~59)\\
-    \textbullet\ Residual connections (He et al.\ 2015 --- Slide~60)
-    \textbullet\ Layer norm (Ba et al.\ 2016 --- Slide~61)\\
-    \textbullet\ Self-attention (Bahdanau 2014, Vaswani 2017
-    --- Slides~68, 71)\\
-    \textbullet\ Positional encoding (Fourier 1807 --- Slide~74)
-    \textbullet\ GPU computing (NVIDIA CUDA 2007 --- Slide~47)%
-  }
+  % Annotated component inventory -- the same pipeline with full attribution
+  \begin{tcolorbox}[colback=aiViolet!3,colframe=aiViolet,
+    fonttitle=\bfseries,
+    title={Every Piece --- Now You Know the History},
+    rounded corners,boxrule=1pt,left=4pt,right=4pt,top=4pt,bottom=4pt]
+    \small
+    \begin{tabular}{@{}p{3.8cm}p{7.5cm}@{}}
+      \textcolor{linalgTeal}{\textbf{Embedding}} (Slide~14)
+        & Grassmann 1844, Mikolov 2013 \\[2pt]
+      \textcolor{approxGreen}{\textbf{Positional Encoding}} (Slide~50)
+        & Fourier 1807 --- sine/cosine waves \\[2pt]
+      \textcolor{seqIndigo}{\textbf{Self-Attention}} (Slides~68, 71)
+        & Bahdanau 2014, Vaswani 2017 \\[2pt]
+      \quad\textcolor{gray}{Dot product (Slide~10)}
+        & Gibbs, 1880s \\
+      \quad\textcolor{gray}{Softmax (Slide~33)}
+        & Boltzmann, 1870s \\
+      \quad\textcolor{gray}{Matrix mult (Slide~9)}
+        & Cayley, 1858 \\[2pt]
+      \textcolor{neuronPink}{\textbf{Add \& Norm}} (Slides~60--61)
+        & He 2015 (residual) + Ba 2016 (layer norm) \\[2pt]
+      \textcolor{approxGreen!80!black}{\textbf{FFN + GELU}} (Slides~52, 59)
+        & Cybenko 1989, Hendrycks 2016 \\[2pt]
+      \textcolor{probBlue}{\textbf{Output Softmax}} (Slide~33)
+        & Boltzmann/Luce \\[2pt]
+      \textcolor{calculusRed}{\textbf{Training}} (Slides~21, 22, 37)
+        & Cauchy 1847 (GD), Linnainmaa 1970, Shannon 1948 \\[2pt]
+      \textcolor{logicGray}{\textbf{Hardware}} (Slide~47)
+        & GPU computing, NVIDIA CUDA 2007 \\
+    \end{tabular}
+  \end{tcolorbox}
+  {\small\centering\itshape You now know the history of every piece
+   of this machine.\par}
 
   \note{
     ``At the start of this lecture, this diagram was overwhelming.
@@ -1352,19 +2030,49 @@
 % ----------------------------------------------------------
 \begin{frame}{Convergence Diagram --- Final State}
 
-  \visualplaceholder[10cm]{The completed convergence diagram. All 10 nodes
-  lit. Central ``TRANSFORMER'' node glowing. Each node label includes its
-  cumulative date range:\\
-  1.\ Linear Algebra (1809--2013) --- blue\\
-  2.\ Calculus \& Optimisation (c.\,250 BCE--1986) --- green\\
-  3.\ Probability \& Statistics (1654--1959) --- orange\\
-  4.\ Information Theory (1865--2016) --- red\\
-  5.\ Logic \& Computation (1854--2012) --- grey\\
-  6.\ Function Approximation (1807--1991) --- purple\\
-  7.\ The Neuron \& Depth (1943--2016) --- yellow\\
-  8.\ Sequence Modeling (1906--2014) --- teal\\
-  9.\ The Transformer (2017) --- multicolour\\
-  10.\ Scaling to LLMs (2018--2026) --- gradient}
+  \begin{center}
+  \begin{tikzpicture}[
+    every node/.style={font=\scriptsize, align=center, minimum height=0.55cm,
+      rounded corners=2pt, inner sep=2pt},
+    lit/.style={draw, thick, text=white}
+  ]
+    \node[lit, fill=linalgTeal, text width=1.7cm] (n1) at (-5,0)
+      {Linear\\Algebra};
+    \node[lit, fill=calculusRed, text width=1.7cm] (n2) at (-3.5,1.4)
+      {Calculus};
+    \node[lit, fill=probBlue, text width=1.7cm] (n3) at (-1.8,2.1)
+      {Probability};
+    \node[lit, fill=infoAmber, text width=1.7cm] (n4) at (0,2.4)
+      {Information\\Theory};
+    \node[lit, fill=logicGray, text width=1.7cm] (n5) at (1.8,2.1)
+      {Logic};
+    \node[lit, fill=approxGreen, text width=1.7cm] (n6) at (3.5,1.4)
+      {Function\\Approx};
+    \node[lit, fill=neuronPink, text width=1.7cm] (n7) at (5,0)
+      {Neuron\\\& Depth};
+    \node[lit, fill=seqIndigo, text width=1.7cm] (n8) at (3.5,-1.4)
+      {Sequence};
+    \node[lit, fill=aiViolet, text width=1.7cm] (n9) at (1.2,-1.8)
+      {Transformer};
+    \node[lit, fill=accentOrange, text width=1.7cm] (n10) at (-1.2,-1.8)
+      {Scaling};
+    % Center: TRANSFORMER
+    \node[draw=aiViolet, fill=aiViolet!20, circle, minimum size=1.5cm,
+      font=\normalsize\bfseries, text=aiViolet, very thick] (ctr) at (0,0)
+      {\footnotesize TRANS-\\\footnotesize FORMER};
+    % All arrows
+    \draw[-{Stealth[length=3pt]}, linalgTeal, thick] (n1) -- (ctr);
+    \draw[-{Stealth[length=3pt]}, calculusRed, thick] (n2) -- (ctr);
+    \draw[-{Stealth[length=3pt]}, probBlue, thick] (n3) -- (ctr);
+    \draw[-{Stealth[length=3pt]}, infoAmber, thick] (n4) -- (ctr);
+    \draw[-{Stealth[length=3pt]}, logicGray, thick] (n5) -- (ctr);
+    \draw[-{Stealth[length=3pt]}, approxGreen, thick] (n6) -- (ctr);
+    \draw[-{Stealth[length=3pt]}, neuronPink, thick] (n7) -- (ctr);
+    \draw[-{Stealth[length=3pt]}, seqIndigo, thick] (n8) -- (ctr);
+    \draw[-{Stealth[length=3pt]}, aiViolet, thick] (n9) -- (ctr);
+    \draw[-{Stealth[length=3pt]}, accentOrange, thick] (n10) -- (ctr);
+  \end{tikzpicture}
+  \end{center}
 
   \vspace{0.3em}
   \begin{center}
@@ -1412,9 +2120,38 @@
   \end{tcolorbox}
 
   \vspace{0.3em}
-  \visualplaceholder[10cm]{Reprise of the completed convergence diagram
-  from Slide~77 / Exploded diagram from Slide~3.
-  Below: ``2,000+ years of mathematics. One machine. Your turn.''}
+  \begin{center}
+  \begin{tikzpicture}[
+    every node/.style={font=\tiny, align=center, minimum height=0.4cm,
+      rounded corners=2pt, inner sep=1.5pt},
+    lit/.style={draw, thick, text=white}
+  ]
+    \node[lit, fill=linalgTeal, text width=1.1cm] (n1) at (-3.5,0) {LinAlg};
+    \node[lit, fill=calculusRed, text width=1.1cm] (n2) at (-2.5,1) {Calc};
+    \node[lit, fill=probBlue, text width=1.1cm] (n3) at (-1.2,1.5) {Prob};
+    \node[lit, fill=infoAmber, text width=1.1cm] (n4) at (0,1.7) {Info};
+    \node[lit, fill=logicGray, text width=1.1cm] (n5) at (1.2,1.5) {Logic};
+    \node[lit, fill=approxGreen, text width=1.1cm] (n6) at (2.5,1) {Approx};
+    \node[lit, fill=neuronPink, text width=1.1cm] (n7) at (3.5,0) {Neuron};
+    \node[lit, fill=seqIndigo, text width=1.1cm] (n8) at (2.5,-1) {Seq};
+    \node[lit, fill=aiViolet, text width=1.1cm] (n9) at (0.8,-1.3) {Transf};
+    \node[lit, fill=accentOrange, text width=1.1cm] (n10) at (-0.8,-1.3) {Scale};
+    \node[draw=aiViolet, fill=aiViolet!20, circle, minimum size=1cm,
+      font=\scriptsize\bfseries, text=aiViolet, thick] (ctr) at (0,0) {LLM};
+    \draw[-{Stealth[length=2pt]}, linalgTeal] (n1) -- (ctr);
+    \draw[-{Stealth[length=2pt]}, calculusRed] (n2) -- (ctr);
+    \draw[-{Stealth[length=2pt]}, probBlue] (n3) -- (ctr);
+    \draw[-{Stealth[length=2pt]}, infoAmber] (n4) -- (ctr);
+    \draw[-{Stealth[length=2pt]}, logicGray] (n5) -- (ctr);
+    \draw[-{Stealth[length=2pt]}, approxGreen] (n6) -- (ctr);
+    \draw[-{Stealth[length=2pt]}, neuronPink] (n7) -- (ctr);
+    \draw[-{Stealth[length=2pt]}, seqIndigo] (n8) -- (ctr);
+    \draw[-{Stealth[length=2pt]}, aiViolet] (n9) -- (ctr);
+    \draw[-{Stealth[length=2pt]}, accentOrange] (n10) -- (ctr);
+  \end{tikzpicture}
+  \end{center}
+  {\centering\textbf{\large 2,000+ years of mathematics. One machine.
+   Your turn.}\par}
 
   \note{
     ``When you talk to an AI, you are talking to the accumulated genius
