@@ -1,0 +1,173 @@
+% ============================================================
+% The Building Blocks of LLMs: A Mathematical History
+% From Archimedes to Attention: 2,000+ Years of Mathematics Inside Your AI
+% Target Audience: High School Seniors (Mathematics)
+% Duration: ~93 minutes (3 sessions recommended)
+% Companion lecture to "The Story of Mathematics: 5,000 Years of Human Genius"
+% ============================================================
+\documentclass[aspectratio=169,12pt]{beamer}
+
+% ---- Theme & Colors ----
+\usetheme{Madrid}
+\usecolortheme{whale}
+
+% Custom color palette (shared with main lecture)
+\definecolor{babylonBrown}{RGB}{139,90,43}
+\definecolor{greekBlue}{RGB}{0,71,171}
+\definecolor{indianSaffron}{RGB}{204,119,34}
+\definecolor{chineseRed}{RGB}{170,56,30}
+\definecolor{islamicGreen}{RGB}{0,128,55}
+\definecolor{medievalPurple}{RGB}{102,51,153}
+\definecolor{renaissanceGold}{RGB}{184,134,11}
+\definecolor{enlightenmentTeal}{RGB}{0,128,128}
+\definecolor{modernSteel}{RGB}{70,130,180}
+\definecolor{digitalBlue}{RGB}{30,80,162}
+\definecolor{aiViolet}{RGB}{106,13,173}
+\definecolor{accentOrange}{RGB}{230,126,34}
+\definecolor{darkBg}{RGB}{30,30,30}
+
+% LLM-specific section colors
+\definecolor{linalgTeal}{RGB}{0,150,136}
+\definecolor{calculusRed}{RGB}{211,47,47}
+\definecolor{probBlue}{RGB}{25,118,210}
+\definecolor{infoAmber}{RGB}{255,160,0}
+\definecolor{logicGray}{RGB}{97,97,97}
+\definecolor{approxGreen}{RGB}{56,142,60}
+\definecolor{neuronPink}{RGB}{194,24,91}
+\definecolor{seqIndigo}{RGB}{63,81,181}
+
+% Set main beamer colors - aiViolet as primary for this lecture
+\setbeamercolor{palette primary}{bg=aiViolet,fg=white}
+\setbeamercolor{palette secondary}{bg=aiViolet!80,fg=white}
+\setbeamercolor{palette tertiary}{bg=aiViolet!60,fg=white}
+\setbeamercolor{frametitle}{bg=aiViolet,fg=white}
+\setbeamercolor{title}{bg=aiViolet,fg=white}
+\setbeamercolor{section in toc}{fg=aiViolet}
+\setbeamercolor{block title}{bg=aiViolet,fg=white}
+\setbeamercolor{block body}{bg=aiViolet!5}
+\setbeamercolor{item}{fg=aiViolet}
+
+% ---- Fonts ----
+\usefonttheme{professionalfonts}
+\setbeamerfont{title}{size=\Large,series=\bfseries}
+\setbeamerfont{frametitle}{size=\large,series=\bfseries}
+\setbeamerfont{framesubtitle}{size=\normalsize,series=\mdseries}
+
+% ---- Packages ----
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows.meta,positioning,calc,decorations.pathmorphing,backgrounds,fit}
+\usepackage{booktabs}
+\usepackage{multicol}
+\usepackage{hyperref}
+\usepackage{fontawesome5}
+\usepackage{xcolor}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+
+% ---- Custom Commands ----
+
+% Person info box
+\newtcolorbox{personbox}[2][]{%
+  colback=#2!5,
+  colframe=#2,
+  fonttitle=\bfseries,
+  title=#1,
+  rounded corners,
+  boxrule=1pt,
+  left=4pt,right=4pt,top=4pt,bottom=4pt
+}
+
+% Key insight callout
+\newtcolorbox{insightbox}{%
+  colback=accentOrange!10,
+  colframe=accentOrange,
+  fonttitle=\bfseries,
+  title={\faLightbulb\ Key Insight},
+  rounded corners,
+  boxrule=1pt,
+  left=4pt,right=4pt,top=4pt,bottom=4pt
+}
+
+% Connection to LLM callout
+\newtcolorbox{llmconnection}{%
+  colback=aiViolet!8,
+  colframe=aiViolet,
+  fonttitle=\bfseries,
+  title={\faRobot\ Inside the LLM},
+  rounded corners,
+  boxrule=1pt,
+  left=4pt,right=4pt,top=4pt,bottom=4pt
+}
+
+% Visual placeholder
+\newcommand{\visualplaceholder}[2][6cm]{%
+  \begin{center}
+  \fbox{\parbox[c][3cm]{\dimexpr#1-1cm\relax}{\centering\small\itshape\color{gray}\faImage\ #2}}
+  \end{center}
+}
+
+% Verify tag (for speaker notes)
+\newcommand{\verifytag}[1]{\textcolor{red!70}{\textbf{[VERIFY:} \textit{#1}\textbf{]}}}
+
+% Session break slide
+\newcommand{\sessionbreak}[2]{%
+  \begin{frame}[plain]
+    \begin{tikzpicture}[remember picture,overlay]
+      \fill[aiViolet] (current page.south west) rectangle (current page.north east);
+      \node[text=white,font=\Huge\bfseries] at (current page.center) {#1};
+      \node[text=white!80,font=\large,below=1cm of current page.center] {#2};
+    \end{tikzpicture}
+  \end{frame}
+}
+
+% Slide counter in footline
+\setbeamertemplate{footline}{%
+  \leavevmode%
+  \hbox{%
+    \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+      \usebeamerfont{author in head/foot}\insertshortauthor
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+      \usebeamerfont{title in head/foot}\insertshorttitle
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+      \usebeamerfont{date in head/foot}\insertframenumber{} / \inserttotalframenumber\hspace*{2ex}
+    \end{beamercolorbox}}%
+  \vskip0pt%
+}
+
+% Remove navigation symbols
+\setbeamertemplate{navigation symbols}{}
+
+% ---- Document Info ----
+\title[Building Blocks of LLMs]{The Building Blocks of LLMs\\[0.3em]{\large From Archimedes to Attention}}
+\subtitle{2,000+ Years of Mathematics Inside Your AI}
+\author{Prof.\ J.\ Osterrieder}
+\date{2026}
+\institute{}
+
+% ============================================================
+\begin{document}
+
+% ---- Part 1: Opening + Linear Algebra + Calculus & Optimization ----
+\input{llm-sections/part1-opening-linalg-calculus}
+
+% --- SESSION 1 BREAK (after Slide 25) ---
+\sessionbreak{Session 1 Complete}{``We know the skeleton and how it learns. Next: how does it handle uncertainty?''}
+
+% ---- Part 2: Probability + Information Theory + Logic & Computation ----
+\input{llm-sections/part2-probability-info-logic}
+
+% --- SESSION 2 BREAK (after Slide 48) ---
+\sessionbreak{Session 2 Complete}{``We have the math and the hardware. But can we actually build a brain?''}
+
+% ---- Part 3: Function Approximation + Neuron + Sequence + Transformer + Scaling ----
+\input{llm-sections/part3-neuron-transformer-scaling}
+
+\end{document}

@@ -1,0 +1,1429 @@
+% ============================================================
+% Part 3: Function Approximation, The Neuron & Depth,
+%         Sequence Modeling, The Transformer, Scaling to LLMs
+% Sections 6--10 (Slides 49--78)
+% Session 3 -- The Payoff: Everything Converges
+% ============================================================
+
+
+% ============================================================
+% SECTION 6: FUNCTION APPROXIMATION (Slides 49--53)
+% "Why Neural Networks Work at All"
+% Timeline: 1807--1991
+% ============================================================
+\section{Function Approximation}
+
+% ----------------------------------------------------------
+% Slide 49: Section Divider
+% ----------------------------------------------------------
+{
+\setbeamercolor{background canvas}{bg=aiViolet}
+\begin{frame}[plain]
+  \centering
+  \vspace{1.8cm}
+  \textcolor{white}{\Huge\bfseries Function Approximation}\\[0.5em]
+  \textcolor{white}{\Large Why Neural Networks Work at All}\\[1em]
+  \textcolor{white!80}{\large 1807--1991}\\[1.5em]
+  \textcolor{white!60}{\normalsize Fourier \(\cdot\) Weierstrass \(\cdot\) Cybenko \(\cdot\) Hornik}\\[1em]
+  \textcolor{white!50}{\small A neural network can approximate \emph{any} function.\\
+  Here is why that is remarkable.}
+
+  \note{
+    Session 3 opens here. Recap: ``We have the math (Sections 1--4) and the
+    hardware (Section 5). But here is a deep question: WHY should a pile of
+    matrix multiplications be able to learn ANYTHING? For the answer, we need
+    the theory of function approximation.''
+
+    Convergence diagram: Section 6 node pulsing.
+  }
+\end{frame}
+}
+
+% ----------------------------------------------------------
+% Slide 50: Fourier Series
+% ----------------------------------------------------------
+\begin{frame}{Joseph Fourier --- Any Function as a Sum of Waves}
+
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
+      \begin{personbox}[Jean-Baptiste Joseph Fourier (1768--1830)]{aiViolet}
+        \textbf{Origin:} Auxerre, France\\[3pt]
+        \textbf{Key work:} \emph{Th\'eorie analytique de la chaleur}
+        (1822, based on work from 1807). To solve the heat equation,
+        Fourier claimed that \alert{any function} could be decomposed
+        into sines and cosines.\\[3pt]
+        Lagrange objected. The claim was initially controversial ---
+        and proved enormously fertile.
+      \end{personbox}
+
+      \vspace{0.4em}
+      \begin{insightbox}
+        \textbf{LLM preview:} Positional encoding in the transformer
+        uses sine and cosine functions at different frequencies ---
+        directly inspired by Fourier's idea. We will see this in
+        Section~9.
+      \end{insightbox}
+    \end{column}
+
+    \begin{column}{0.45\textwidth}
+      \visualplaceholder[5.5cm]{Fourier approximation of a square wave:
+      1~sine (rough), 3~sines (better), 10~sines (close),
+      100~sines (nearly perfect). Caption: ``Any function = a sum
+      of simple waves. Fourier, 1807.''}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``Fourier wanted to solve the heat equation. To do it, he made a claim
+    so bold that other mathematicians did not believe him: any function can
+    be written as a sum of sines. He was essentially right, and the idea
+    became one of the most powerful tools in all of mathematics.''
+
+    This slide previews positional encoding (Slide 74). Plant the seed now.
+    \verifytag{Fourier's 1807 memoir date vs.\ 1822 publication date.}
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 51: Weierstrass Approximation [EXTENDED]
+% ----------------------------------------------------------
+\begin{frame}{Karl Weierstrass --- Polynomials Can Do It Too \hfill\small\textcolor{gray}{[EXTENDED]}}
+
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
+      \begin{personbox}[Karl Weierstrass (1815--1897)]{aiViolet}
+        \textbf{Origin:} Ostenfelde, Westphalia, Germany\\[3pt]
+        \textbf{Key result (1885):} For any continuous function $f$ on
+        a closed interval and any desired accuracy $\varepsilon > 0$,
+        there exists a polynomial $P$ that stays within $\varepsilon$
+        of $f$ everywhere on that interval.
+      \end{personbox}
+
+      \vspace{0.4em}
+      \begin{insightbox}
+        Polynomials are \textbf{universal approximators} for continuous
+        functions. A century later, Cybenko would prove the same thing
+        for \emph{neural networks}.
+      \end{insightbox}
+    \end{column}
+
+    \begin{column}{0.45\textwidth}
+      \visualplaceholder[5.5cm]{A wiggly continuous function with polynomial
+      approximations of increasing degree overlaid. The polynomials get
+      closer and closer. Caption: ``Any continuous function can be
+      approximated as closely as you want by a polynomial.''}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``Weierstrass proved that polynomials are universal approximators for
+    continuous functions. A century later, Cybenko would prove the same
+    thing for neural networks.''
+
+    This slide is marked EXTENDED and can be cut if short on time.
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 52: Universal Approximation Theorem
+% ----------------------------------------------------------
+\begin{frame}{The Universal Approximation Theorem}
+
+  \begin{columns}[T]
+    \begin{column}{0.55\textwidth}
+      \begin{personbox}[{George Cybenko (b.\,c.\,1952)}]{aiViolet}
+        \textbf{Origin:} Canada/USA\\[3pt]
+        \textbf{Key result (1989):} A feedforward network with a single
+        hidden layer of sigmoidal neurons can approximate \emph{any}
+        continuous function to any desired accuracy.\\[3pt]
+        \emph{``Approximation by Superpositions of a Sigmoidal Function''}
+      \end{personbox}
+
+      \vspace{0.3em}
+
+      \begin{personbox}[{Kurt Hornik (b.\,c.\,1963)}]{aiViolet}
+        \textbf{Origin:} Austria\\[3pt]
+        \textbf{Key result (1991):} Generalized Cybenko's theorem to a
+        wider class of activation functions. The universality is not
+        about sigmoid --- it is about the \emph{architecture}.
+      \end{personbox}
+    \end{column}
+
+    \begin{column}{0.42\textwidth}
+      \visualplaceholder[5cm]{A simple neural network with one hidden layer.
+      As hidden neurons increase (5, 20, 100, 1000), the function it
+      represents gets more complex and accurate.
+      Caption: ``More neurons = better approximation. Cybenko, 1989.''}
+
+      \vspace{0.3em}
+      \begin{tcolorbox}[colback=aiViolet!8,colframe=aiViolet!60,
+        boxrule=0.5pt,rounded corners,left=3pt,right=3pt,top=2pt,bottom=2pt]
+        \small A neural network \textbf{can} learn any continuous function,
+        given enough neurons. This is not an analogy. It is a
+        \emph{mathematical theorem}.
+      \end{tcolorbox}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``This theorem is why people bet on neural networks. It is not that
+    they are the BEST approximators --- it is that they are GUARANTEED
+    to work, at least in principle. The practical challenge is training
+    them, which is where all the other building blocks come in.''
+
+    Be clear: the theorem says a network CAN approximate any function,
+    not that gradient descent will FIND the right weights. The gap between
+    existence and constructive algorithm is important.
+
+    \verifytag{Cybenko birth year c.\,1952. Hornik birth year c.\,1963.}
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 53: Convergence Diagram Update -- Function Approximation
+% ----------------------------------------------------------
+\begin{frame}{Convergence Diagram --- Function Approximation Lights Up}
+
+  \visualplaceholder[10cm]{Convergence diagram: ``Function Approximation''
+  node now lit in purple. 6 of 10 nodes active.
+  Label: ``Universal approximation = why it works.''}
+
+  \vspace{0.3em}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{tcolorbox}[colback=aiViolet!5,colframe=aiViolet,
+        fonttitle=\bfseries\small,title={Section 6 Summary},
+        rounded corners,boxrule=0.8pt,left=3pt,right=3pt,top=3pt,bottom=3pt]
+        \scriptsize
+        \begin{tabular}{@{}ll@{}}
+          Fourier (1807/1822) & Any function as waves\\
+          Weierstrass (1885)  & Polynomial approximation\\
+          Cybenko (1989)      & Neural net universality\\
+          Hornik (1991)       & Generalized activation
+        \end{tabular}
+      \end{tcolorbox}
+    \end{column}
+
+    \begin{column}{0.48\textwidth}
+      \begin{tcolorbox}[colback=accentOrange!8,colframe=accentOrange,
+        fonttitle=\bfseries\small,
+        title={\faArrowRight\ Connection to the Transformer},
+        rounded corners,boxrule=0.8pt,left=3pt,right=3pt,top=3pt,bottom=3pt]
+        \scriptsize
+        The universal approximation theorem guarantees that neural networks
+        can represent any continuous function. The LLM's ability to model
+        language is a specific case.
+      \end{tcolorbox}
+    \end{column}
+  \end{columns}
+
+  \note{
+    Transition: ``We know neural networks CAN learn anything. But what IS
+    a `neural network'? Where did the idea come from?''
+  }
+\end{frame}
+
+
+% ============================================================
+% SECTION 7: THE NEURON & DEPTH (Slides 54--62)
+% "From Biology to Mathematics to Deep Networks"
+% Timeline: 1943--2016
+% ============================================================
+\section{The Neuron \& Depth}
+
+% ----------------------------------------------------------
+% Slide 54: Section Divider
+% ----------------------------------------------------------
+{
+\setbeamercolor{background canvas}{bg=aiViolet}
+\begin{frame}[plain]
+  \centering
+  \vspace{1.8cm}
+  \textcolor{white}{\Huge\bfseries The Neuron \& Depth}\\[0.5em]
+  \textcolor{white}{\Large From Biology to Deep Networks}\\[1em]
+  \textcolor{white!80}{\large 1943--2016}\\[1.5em]
+  \textcolor{white!60}{\normalsize McCulloch \& Pitts \(\cdot\) Rosenblatt
+    \(\cdot\) Minsky \(\cdot\) Hinton \(\cdot\) He}\\[1em]
+  \textcolor{white!50}{\small A real neuron fires or does not.
+  A mathematical neuron does the same thing,\\with an equation.
+  But stacking them deep required more invention.}
+
+  \note{
+    This section contains the most dramatic narrative arc: Perceptron hype
+    $\to$ XOR crash $\to$ AI winter $\to$ backprop comeback $\to$ deep
+    learning breakthroughs. Build the drama.
+
+    Convergence diagram: Section 7 node pulsing.
+  }
+\end{frame}
+}
+
+% ----------------------------------------------------------
+% Slide 55: The McCulloch-Pitts Neuron
+% ----------------------------------------------------------
+\begin{frame}{McCulloch \& Pitts --- The First Mathematical Brain Cell}
+
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
+      \begin{personbox}[Warren McCulloch (1898--1969)]{aiViolet}
+        \textbf{Origin:} Orange, New Jersey, USA\\[3pt]
+        Neurophysiologist who sought to understand the brain
+        in logical terms.
+      \end{personbox}
+
+      \vspace{0.3em}
+
+      \begin{personbox}[Walter Pitts (1923--1969)]{aiViolet}
+        \textbf{Origin:} Detroit, Michigan, USA\\[3pt]
+        Self-taught logician. A troubled prodigy who ran away from
+        home and ended up working with McCulloch.\\[3pt]
+        Together they published \emph{``A Logical Calculus of the Ideas
+        Immanent in Nervous Activity''} (1943).
+      \end{personbox}
+    \end{column}
+
+    \begin{column}{0.45\textwidth}
+      \visualplaceholder[5.5cm]{The McCulloch-Pitts neuron: inputs $x_1,
+      x_2, x_3$ with weights $w_1, w_2, w_3$. Sum $=
+      w_1 x_1 + w_2 x_2 + w_3 x_3$. If Sum $>$ threshold,
+      output $= 1$, else output $= 0$. Biological neuron shown alongside
+      for comparison.}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``A neurophysiologist and a teenage runaway created the mathematical
+    neuron. McCulloch was in his 40s; Pitts was about 20 and had no degree.
+    Their paper launched neural network research.''
+
+    \verifytag{Pitts ``ran away at 15'' --- commonly stated but details vary.}
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 56: The Perceptron -- HYPE
+% ----------------------------------------------------------
+\begin{frame}{Frank Rosenblatt --- The Perceptron: A Machine That Learns}
+
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
+      \begin{personbox}[Frank Rosenblatt (1928--1971)]{aiViolet}
+        \textbf{Origin:} New Rochelle, New York, USA\\[3pt]
+        Built the \textbf{Mark~I Perceptron} (1957--1958) at the
+        Cornell Aeronautical Laboratory. A physical machine (not a
+        simulation) that could learn to classify images.\\[3pt]
+        The \emph{New York Times} reported it as a machine that could
+        ``walk, talk, see, write, reproduce itself, and be conscious
+        of its existence.''
+      \end{personbox}
+
+      \vspace{0.3em}
+      \begin{insightbox}
+        The perceptron learning algorithm is gradient descent
+        on a single neuron. Rosenblatt's machine could \emph{learn}.
+        The hype was enormous.
+      \end{insightbox}
+    \end{column}
+
+    \begin{column}{0.45\textwidth}
+      \visualplaceholder[5.5cm]{Photo of the Mark I Perceptron hardware:
+      a large machine with photocells. Below: the perceptron learning
+      algorithm --- present an example, compare output to desired output,
+      adjust weights.}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``The press said it would think like a human. Then came the crash.''
+
+    Build anticipation here. The next slide is the fall.
+
+    \verifytag{Exact NYT quote and date --- commonly cited as a 1958 article.}
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 57: The XOR Problem and AI Winter
+% ----------------------------------------------------------
+\begin{frame}{The XOR Problem --- The Crash That Froze AI}
+
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
+      \begin{personbox}[Minsky (1927--2016) \& Papert (1928--2016)]{aiViolet}
+        \textbf{Marvin Minsky:} New York City, USA\\
+        \textbf{Seymour Papert:} Pretoria, South Africa / USA\\[3pt]
+        Published \emph{Perceptrons} (1969): a rigorous mathematical
+        analysis proving that a single-layer perceptron
+        \alert{cannot learn XOR}.\\[3pt]
+        The math was correct. But the field interpreted it as:
+        neural networks are a dead end.
+      \end{personbox}
+
+      \vspace{0.3em}
+      \begin{tcolorbox}[colback=red!5,colframe=red!70,
+        fonttitle=\bfseries\small,title={The AI Winter (\raisebox{0pt}{\small$\sim$}1969--1986)},
+        rounded corners,boxrule=0.8pt,left=3pt,right=3pt,top=3pt,bottom=3pt]
+        \small Funding dried up. Neural network research became
+        unfashionable. Nearly two decades of stagnation.
+        \emph{The solution was right there: add more layers.}
+      \end{tcolorbox}
+    \end{column}
+
+    \begin{column}{0.45\textwidth}
+      \visualplaceholder[5.5cm]{Top: XOR truth table and scatter plot showing
+      XOR is not linearly separable. ``A single line cannot separate the 1s
+      from the 0s. A perceptron can only draw a single line.''
+      Bottom: Timeline of the AI Winter, 1969--1986.}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``Minsky and Papert's math was correct. But the conclusion the field
+    drew --- that neural networks are a dead end --- was WRONG.
+    The solution was right there: add more layers.''
+
+    This is the dramatic low point. Pause before the next slide (the comeback).
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 58: Multi-Layer Networks -- The Comeback
+% ----------------------------------------------------------
+\begin{frame}{Multi-Layer Networks --- The Comeback}
+
+  \begin{columns}[T]
+    \begin{column}{0.55\textwidth}
+
+      % The key point
+      \begin{tcolorbox}[colback=green!5,colframe=green!60!black,
+        fonttitle=\bfseries,title={1986: The Revival},
+        rounded corners,boxrule=1pt,left=4pt,right=4pt,top=4pt,bottom=4pt]
+        \textbf{Rumelhart, Hinton \& Williams} (Slide~22) demonstrated
+        that \alert{backpropagation} could train multi-layer networks.
+
+        \medskip
+        Multi-layer perceptrons CAN learn XOR --- and much more.
+        A hidden layer creates a \emph{nonlinear} decision boundary.
+      \end{tcolorbox}
+
+      \vspace{0.3em}
+      \begin{insightbox}
+        It took \textbf{17~years} for the field to recover from
+        \emph{Perceptrons}. The AI winter was caused by stopping
+        \textbf{one layer too soon}.
+      \end{insightbox}
+    \end{column}
+
+    \begin{column}{0.42\textwidth}
+      \visualplaceholder[5cm]{A multi-layer network solving XOR:
+      input layer $\to$ hidden layer $\to$ output layer.
+      The hidden layer creates a nonlinear boundary.
+      Caption: ``Two layers CAN separate XOR.''}
+
+      \vspace{0.3em}
+
+      % Simple timeline of the drama arc
+      \begin{tikzpicture}[font=\tiny, node distance=0.6cm]
+        \node[fill=green!20, rounded corners, inner sep=2pt]
+          (hype) {1958: Perceptron hype};
+        \node[fill=red!20, rounded corners, inner sep=2pt, below=of hype]
+          (crash) {1969: XOR crash};
+        \node[fill=gray!20, rounded corners, inner sep=2pt, below=of crash]
+          (winter) {1969--86: AI Winter};
+        \node[fill=green!30, rounded corners, inner sep=2pt, below=of winter]
+          (back) {1986: Backprop revival};
+        \draw[-{Stealth[length=3pt]}, thick, green!60!black]
+          (hype) -- (crash);
+        \draw[-{Stealth[length=3pt]}, thick, red!60]
+          (crash) -- (winter);
+        \draw[-{Stealth[length=3pt]}, thick, green!60!black]
+          (winter) -- (back);
+      \end{tikzpicture}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``When backpropagation showed that multi-layer networks could learn,
+    neural networks came roaring back.''
+
+    The Rumelhart/Hinton/Williams 1986 paper was already covered in Slide~22
+    (Section~2, Calculus). Cross-reference explicitly: ``Remember the chain
+    rule? This is where it saved an entire field.''
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 59: Activation Functions
+% ----------------------------------------------------------
+\begin{frame}{Activation Functions --- The Spice That Makes It Work}
+
+  \begin{columns}[T]
+    \begin{column}{0.55\textwidth}
+      \begin{insightbox}
+        Without a nonlinear activation function, a multi-layer network
+        collapses to a single layer. Activation functions give neural
+        networks their power.
+      \end{insightbox}
+
+      \vspace{0.2em}
+      {\small
+      \textbf{Sigmoid} --- $\displaystyle\frac{1}{1+e^{-x}}$\par
+      \begin{itemize}\setlength\itemsep{1pt}
+        \item Smooth S-curve, used 1980s--2000s
+        \item Related to the logistic function of
+              \textbf{Pierre Fran\c{c}ois Verhulst} (1804--1849,
+              Brussels), who modelled population growth (1838)
+      \end{itemize}
+
+      \textbf{ReLU} --- $\max(0, x)$\par
+      \begin{itemize}\setlength\itemsep{1pt}
+        \item Popularised by \textbf{Nair \& Hinton} (2010)
+        \item Simpler, faster, avoids vanishing gradients
+      \end{itemize}
+
+      \textbf{GELU} --- used in GPT and BERT\par
+      \begin{itemize}\setlength\itemsep{1pt}
+        \item Introduced by \textbf{Hendrycks \& Gimpel} (2016)
+        \item Smooth version of ReLU; used in modern transformers
+      \end{itemize}
+      }
+    \end{column}
+
+    \begin{column}{0.42\textwidth}
+      \visualplaceholder[5cm]{Three activation function curves plotted
+      side by side: Sigmoid (smooth S-curve, labelled ``1980s--2000s''),
+      ReLU (hockey stick, labelled ``2010s''), GELU (smooth ReLU,
+      labelled ``2016--present, used in GPT'').
+      Caption: ``These simple curves make neural networks nonlinear
+      --- and therefore powerful.''}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``Without activation functions, stacking 100 layers of matrix
+    multiplication would be the same as one layer. The activation function
+    adds the nonlinearity. It is a small thing that makes everything
+    else work.''
+
+    \verifytag{Verhulst logistic function dates --- 1838 or 1845 or both?}
+    \verifytag{Nair/Hinton 2010 ICML paper as key popularisation; ReLU-like
+    functions appeared earlier (Hahnloser et al.\ 2000).}
+    \verifytag{Hendrycks/Gimpel 2016 GELU paper.}
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 60: Residual Connections (ResNet)
+% ----------------------------------------------------------
+\begin{frame}{Residual Connections --- The Trick That Enabled Depth}
+
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
+      \begin{personbox}[{Kaiming He et al.\ (b.\,c.\,1984)}]{aiViolet}
+        \textbf{Origin:} China / USA\\[3pt]
+        \textbf{Key paper (2015):} \emph{``Deep Residual Learning for
+        Image Recognition''} (ResNet).\\[3pt]
+        Instead of each layer computing a completely new output,
+        it computes a \alert{change} to the input:
+        \[ \text{output} = \text{input} + \text{layer}(\text{input}) \]
+        This simple idea allowed networks to grow from
+        $\sim$20~layers to 152~layers --- and beyond.
+      \end{personbox}
+
+      \vspace{0.3em}
+      \begin{insightbox}
+        The ``\textbf{Add}'' in the transformer's ``Add \& Norm'' block
+        IS He's residual connection from 2015.
+        Without it, transformers could not be deep.
+      \end{insightbox}
+    \end{column}
+
+    \begin{column}{0.45\textwidth}
+      \visualplaceholder[5.5cm]{Side-by-side comparison: Left --- standard
+      deep network with signal fading layer by layer (fading colour).
+      Right --- ResNet with skip connections; an arrow skips over each block,
+      carrying the original signal forward.
+      Below: residual formula as diagram: input $\to$ [layer] $\to$
+      ADD input back $\to$ output.}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``He's insight was deceptively simple: instead of asking each layer to
+    compute the full answer, ask it to compute the DIFFERENCE from the
+    input. If a layer has nothing useful to add, it can output zero and
+    the input passes through unchanged.''
+
+    LLM connection: ``Every transformer block has a residual connection.''
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 61: Layer Normalization and Dropout
+% ----------------------------------------------------------
+\begin{frame}{Layer Normalization \& Dropout --- Stabilising Deep Networks}
+
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
+      \begin{personbox}[Ba/Kiros/Hinton -- Layer Norm (2016)]{aiViolet}
+        Adjusts the outputs of each layer so they have a consistent
+        mean and variance. Stabilises training and speeds convergence.
+      \end{personbox}
+
+      \vspace{0.3em}
+
+      \begin{personbox}[Srivastava/Hinton et al. -- Dropout (2014)]{aiViolet}
+        Randomly deactivates neurons during training, forcing the network
+        to learn robust features rather than memorising.\\[3pt]
+        \emph{Like studying for an exam by covering random notes --- you
+        learn the material, not the page layout.}
+      \end{personbox}
+
+      \vspace{0.3em}
+      {\small\textbf{Layer Norm recipe:}
+        (1)~Compute the average of all neuron outputs in a layer.
+        (2)~Compute how spread out they are.
+        (3)~Subtract the average and divide by the spread.
+        Now they are centred at zero with consistent scale.}
+    \end{column}
+
+    \begin{column}{0.45\textwidth}
+      \visualplaceholder[5.5cm]{Top: Layer normalisation --- a row of neuron
+      activations before (wildly varying) and after normalisation (centred,
+      consistent). Caption: ``Layer Norm = rescale so nothing explodes.''
+      Bottom: Dropout --- a network with some neurons crossed out.
+      Caption: ``Dropout = randomly disable neurons during training.''}
+
+      \vspace{0.3em}
+      \begin{tcolorbox}[colback=aiViolet!5,colframe=aiViolet!60,
+        boxrule=0.5pt,rounded corners,left=3pt,right=3pt,top=2pt,bottom=2pt]
+        \small In the transformer's ``Add \& Norm'':\\
+        \textbf{Add} = He's residual connection (Slide~60)\\
+        \textbf{Norm} = Ba's layer normalisation
+      \end{tcolorbox}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``Layer normalisation is the `Norm' in the transformer's `Add \& Norm.'
+    Dropout is used during training. Both are invisible to the user but
+    essential for making deep networks work.''
+
+    \verifytag{Ba et al.\ 2016 --- arXiv preprint, not initially peer-reviewed.}
+    \verifytag{Srivastava et al.\ 2014 JMLR as definitive paper; Hinton
+    proposed the idea earlier in 2012.}
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 62: Convergence Diagram Update -- The Neuron & Depth
+% ----------------------------------------------------------
+\begin{frame}{Convergence Diagram --- The Neuron \& Depth Lights Up}
+
+  \visualplaceholder[10cm]{Convergence diagram: ``The Neuron \& Depth'' node
+  now lit in yellow/gold. 7 of 10 nodes active.
+  Label: ``Activation + normalisation + residuals = deep networks.''}
+
+  \vspace{0.3em}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{tcolorbox}[colback=aiViolet!5,colframe=aiViolet,
+        fonttitle=\bfseries\small,title={Section 7 Summary},
+        rounded corners,boxrule=0.8pt,left=3pt,right=3pt,top=3pt,bottom=3pt]
+        \scriptsize
+        \begin{tabular}{@{}ll@{}}
+          McCulloch-Pitts (1943)    & First math neuron\\
+          Rosenblatt (1958)         & Perceptron learns\\
+          Minsky/Papert (1969)      & XOR, AI winter\\
+          Rumelhart/Hinton/W.\ (1986) & Multi-layer revival\\
+          Verhulst (1838) $\to$ Sigmoid & Population $\to$ activation\\
+          Nair/Hinton (2010)        & ReLU\\
+          Srivastava et al.\ (2014)  & Dropout\\
+          He et al.\ (2015)         & Residual connections\\
+          Ba et al.\ (2016)         & Layer normalisation\\
+          Hendrycks/Gimpel (2016)   & GELU
+        \end{tabular}
+      \end{tcolorbox}
+    \end{column}
+
+    \begin{column}{0.48\textwidth}
+      \begin{tcolorbox}[colback=accentOrange!8,colframe=accentOrange,
+        fonttitle=\bfseries\small,
+        title={\faArrowRight\ Connection to the Transformer},
+        rounded corners,boxrule=0.8pt,left=3pt,right=3pt,top=3pt,bottom=3pt]
+        \scriptsize
+        The artificial neuron, with its activation function, is the basic
+        unit. Residual connections, layer normalisation, and dropout allow
+        transformers to be DEEP. There are billions of neurons in GPT,
+        stacked 96+ layers.
+      \end{tcolorbox}
+    \end{column}
+  \end{columns}
+
+  \note{
+    Transition: ``We can build neurons, stack them into deep layers, and
+    train them. But language is SEQUENTIAL --- word order matters.
+    How do you process a sequence? That took another set of inventions.''
+  }
+\end{frame}
+
+
+% ============================================================
+% SECTION 8: SEQUENCE MODELING (Slides 63--68)
+% "The Path to Language"
+% Timeline: 1906--2014
+% ============================================================
+\section{Sequence Modeling}
+
+% ----------------------------------------------------------
+% Slide 63: Section Divider
+% ----------------------------------------------------------
+{
+\setbeamercolor{background canvas}{bg=aiViolet}
+\begin{frame}[plain]
+  \centering
+  \vspace{1.8cm}
+  \textcolor{white}{\Huge\bfseries Sequence Modeling}\\[0.5em]
+  \textcolor{white}{\Large The Path to Language}\\[1em]
+  \textcolor{white!80}{\large 1906--2014}\\[1.5em]
+  \textcolor{white!60}{\normalsize Markov \(\cdot\) Baum \(\cdot\) Elman
+    \(\cdot\) Hochreiter \& Schmidhuber \(\cdot\) Bahdanau}\\[1em]
+  \textcolor{white!50}{\small Language is a sequence.
+  Modeling sequences required 100 years of invention.}
+
+  \note{
+    Convergence diagram: Section 8 node pulsing.
+
+    ``Language is sequential --- word order matters. `Dog bites man' is
+    very different from `Man bites dog.' How do you process a sequence?''
+  }
+\end{frame}
+}
+
+% ----------------------------------------------------------
+% Slide 64: Markov Chains
+% ----------------------------------------------------------
+\begin{frame}{Andrey Markov --- The Simplest Language Model}
+
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
+      \begin{personbox}[Andrey Andreyevich Markov (1856--1922)]{aiViolet}
+        \textbf{Origin:} Ryazan, Russia\\[3pt]
+        Introduced \textbf{Markov chains} (1906) by analysing the
+        alternation of vowels and consonants in Pushkin's poem
+        \emph{Eugene Onegin}.\\[3pt]
+        He was \emph{not} studying language --- he was disproving a
+        claim that the law of large numbers required independence.
+        But his method became the foundation of all sequence modelling.
+      \end{personbox}
+
+      \vspace{0.3em}
+      \begin{insightbox}
+        A Markov chain predicts the next state based \emph{only} on the
+        current state, ignoring all history. Your phone's autocomplete
+        is a descendant of this idea.
+      \end{insightbox}
+    \end{column}
+
+    \begin{column}{0.45\textwidth}
+      \visualplaceholder[5.5cm]{Top: State diagram --- states are words
+      (``the'', ``cat'', ``sat'', ``on''), arrows labelled with
+      transition probabilities.
+      Bottom: Text generated by a Markov chain vs.\ text from an LLM.
+      Markov text is grammatical locally but incoherent globally.}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``Markov analysed poetry to prove a point about probability theory.
+    His chain model became the ancestor of every language model, including
+    the one in your phone's autocomplete.''
+
+    \verifytag{``Eugene Onegin'' analysis dated to 1913 in some sources,
+    while the mathematical framework was published 1906. Clarify the
+    distinction.}
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 65: Hidden Markov Models
+% ----------------------------------------------------------
+\begin{frame}{Hidden Markov Models --- Adding Depth}
+
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
+      \begin{personbox}[Leonard Baum et al.\ (1960s--1972)]{aiViolet}
+        \textbf{Origin:} USA\\[3pt]
+        Developed the mathematical framework for \textbf{Hidden Markov
+        Models} (HMMs) and the \textbf{Baum--Welch algorithm} for
+        training them.\\[3pt]
+        HMMs add a hidden state layer: the observed output depends on
+        an unobserved internal state that must be inferred.
+      \end{personbox}
+
+      \vspace{0.3em}
+      \begin{insightbox}
+        Speech recognition used HMMs for 30+ years before deep learning
+        replaced them. The idea of ``hidden internal states'' producing
+        observable outputs is conceptually similar to the hidden layers
+        of a neural network.
+      \end{insightbox}
+    \end{column}
+
+    \begin{column}{0.45\textwidth}
+      \visualplaceholder[5.5cm]{HMM diagram: hidden states on top (connected
+      by transition arrows), observed outputs below (connected to hidden
+      states by emission arrows).
+      Caption: ``The hidden states cannot be seen directly --- they must
+      be inferred from observations.''}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``HMMs dominated speech recognition from the 1970s through the 2010s.
+    Siri's original speech engine used HMMs.''
+
+    \verifytag{Baum--Welch algorithm dates: key papers 1966, 1970, 1972.
+    Baum's full name and dates are surprisingly hard to pin down.}
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 66: Recurrent Neural Networks
+% ----------------------------------------------------------
+\begin{frame}{Recurrent Neural Networks --- Memory in a Loop}
+
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
+      \begin{personbox}[Michael Jordan -- Jordan Network (1986)]{aiViolet}
+        \textbf{Origin:} USA\\[3pt]
+        An early form of recurrent neural network.\\
+        \emph{Yes, the field has its own Michael Jordan.}
+      \end{personbox}
+
+      \vspace{0.2em}
+
+      \begin{personbox}[Jeffrey Elman (1948--2018) --- Elman Network (1990)]{aiViolet}
+        \textbf{Origin:} USA\\[3pt]
+        The hidden state at time $t$ is fed back as input at time $t{+}1$.
+        This is the standard form of RNN.
+      \end{personbox}
+
+      \vspace{0.2em}
+      \begin{tcolorbox}[colback=red!5,colframe=red!60,
+        boxrule=0.5pt,rounded corners,left=3pt,right=3pt,top=2pt,bottom=2pt]
+        \small\textbf{Fatal flaw:} The hidden state gets overwritten
+        at each step. After 50~words, the memory of word~1 has been
+        washed away. This is the \alert{vanishing gradient problem}.
+      \end{tcolorbox}
+    \end{column}
+
+    \begin{column}{0.45\textwidth}
+      \visualplaceholder[5.5cm]{An RNN unrolled across time steps: the same
+      network processing word 1, then word 2, then word 3, with the
+      hidden state carried forward like a ``memory'' arrow.
+      Caption: ``The hidden state is the RNN's memory. But it is a
+      very leaky memory.''}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``RNNs have a fatal flaw: the hidden state gets overwritten at each step.
+    By the time you have read 50 words, the memory of word 1 has been
+    washed away. This is the vanishing gradient problem.''
+
+    \verifytag{Jordan 1986 --- sometimes cited as 1986 technical report.}
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 67: LSTM [EXTENDED]
+% ----------------------------------------------------------
+\begin{frame}{LSTM --- Long Short-Term Memory
+  \hfill\small\textcolor{gray}{[EXTENDED]}}
+
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
+      \begin{personbox}[Hochreiter \& Schmidhuber]{aiViolet}
+        \textbf{Sepp Hochreiter:} Austria\\
+        \textbf{J\"urgen Schmidhuber:} Munich, Germany\\[3pt]
+        Published \emph{``Long Short-Term Memory''} (1997).\\[3pt]
+        Hochreiter's diploma thesis (1991, supervised by Schmidhuber)
+        identified the vanishing gradient problem. The 1997 LSTM paper
+        provided the solution: explicit \textbf{memory cells} with
+        \textbf{gates} that control what to remember and what to forget.
+      \end{personbox}
+
+      \vspace{0.3em}
+      \begin{insightbox}
+        LSTM dominated language tasks from the late 1990s through 2017.
+        Google Translate used LSTMs. But LSTMs process words
+        \emph{one at a time} --- you cannot parallelise them.
+        This bottleneck led to \alert{attention}.
+      \end{insightbox}
+    \end{column}
+
+    \begin{column}{0.45\textwidth}
+      \visualplaceholder[5.5cm]{Simplified LSTM cell: input gate, forget
+      gate, output gate, cell state. Caption: ``The forget gate decides
+      what to remember. The input gate decides what is new. The output
+      gate decides what to reveal.''}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``LSTM solved the memory problem. But it introduced a new bottleneck:
+    sequential processing. You cannot parallelise an LSTM --- each word
+    must wait for the previous one. For long documents, this is painfully
+    slow. The key idea that changed everything: attention.''
+
+    This slide is EXTENDED --- can cut if short on time. Mention LSTM
+    en route to attention if skipping.
+
+    \verifytag{Hochreiter 1991 diploma thesis as vanishing gradient analysis.}
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 68: The Attention Mechanism -- KEY BREAKTHROUGH
+% ----------------------------------------------------------
+\begin{frame}{The Attention Mechanism --- The Bridge to Transformers}
+
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
+      \begin{personbox}[Bahdanau/Cho/Bengio (2014)]{aiViolet}
+        \textbf{Dzmitry Bahdanau:} Belarus/Canada\\
+        \textbf{Kyunghyun Cho:} South Korea/Canada\\
+        \textbf{Yoshua Bengio:} France/Canada\\[3pt]
+        Published \emph{``Neural Machine Translation by Jointly Learning
+        to Align and Translate''} (2014 arXiv; 2015 ICLR).\\[3pt]
+        \textbf{Key insight:} Instead of compressing the entire input
+        into a fixed-size vector, let the model \alert{look back}
+        at all previous positions and decide which ones are relevant.
+      \end{personbox}
+
+      \vspace{0.3em}
+      \begin{tcolorbox}[colback=aiViolet!8,colframe=aiViolet,
+        fonttitle=\bfseries,title={The Breakthrough},
+        rounded corners,boxrule=1pt,left=4pt,right=4pt,top=3pt,bottom=3pt]
+        \small \textbf{Attention} = the ability to look back and focus.\\[3pt]
+        Without this 2014 paper, there would be no GPT,
+        no Claude, no ChatGPT.
+      \end{tcolorbox}
+    \end{column}
+
+    \begin{column}{0.45\textwidth}
+      \visualplaceholder[5.5cm]{Top: Attention diagram --- translating
+      ``Le chat est sur le tapis.'' When generating ``cat,'' the model
+      attends strongly to ``chat.'' When generating ``mat,'' it attends
+      to ``tapis.'' Colour-coded attention weights shown as lines of
+      varying thickness.
+      Bottom: Comparison --- RNN (compresses everything into one vector)
+      vs.\ Attention (can look back at everything).}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``Bahdanau's insight was simple but transformative: why compress
+    everything into one vector when you can look back at the whole input?
+    This idea --- attention --- became the core of the transformer.''
+
+    Give this slide weight. It is the key intellectual bridge.
+
+    Convergence diagram update: ``Sequence Modeling'' node lit in teal.
+    Label: ``Attention = context.''
+
+    Transition: ``We now have ALL the building blocks. It is time to
+    put them together.''
+  }
+\end{frame}
+
+
+% ============================================================
+% SECTION 9: THE TRANSFORMER (Slides 69--74)
+% "Where Everything Converges"
+% Timeline: 2017
+% ============================================================
+\section{The Transformer}
+
+% ----------------------------------------------------------
+% Slide 69: Section Divider
+% ----------------------------------------------------------
+{
+\setbeamercolor{background canvas}{bg=aiViolet}
+\begin{frame}[plain]
+  \centering
+  \vspace{1.6cm}
+  \textcolor{white}{\Huge\bfseries The Transformer}\\[0.5em]
+  \textcolor{white}{\Large Where Everything Converges}\\[1em]
+  \textcolor{white!80}{\large 2017}\\[1.5em]
+  \textcolor{white!60}{\normalsize Vaswani \(\cdot\) Shazeer \(\cdot\)
+    Parmar \(\cdot\) Uszkoreit \(\cdot\) Jones}\\[0.2em]
+  \textcolor{white!60}{\normalsize Gomez \(\cdot\) Kaiser \(\cdot\)
+    Polosukhin}\\[1em]
+  \textcolor{white!50}{\small Eight branches of mathematics meet
+  in one architecture.}\\[0.3em]
+  \textcolor{white!40}{\footnotesize\itshape ``Attention Is All You Need.''}
+
+  \note{
+    Convergence diagram: 8 of 10 nodes lit. Section 9 pulsing.
+
+    ``2017: Eight branches of mathematics, developed over more than two
+    millennia, all converge in one architecture.''
+  }
+\end{frame}
+}
+
+% ----------------------------------------------------------
+% Slide 70: "Attention Is All You Need"
+% ----------------------------------------------------------
+\begin{frame}{``Attention Is All You Need'' --- The Paper That Changed AI}
+
+  \begin{columns}[T]
+    \begin{column}{0.55\textwidth}
+      {\small In 2017, a team at Google published a paper proposing an
+      architecture that used \textbf{only attention} --- no recurrence,
+      no convolution. It was simpler, faster, and better.}
+
+      \vspace{0.4em}
+
+      \begin{personbox}[The Eight Authors (2017 NeurIPS)]{aiViolet}
+        \textbf{Ashish Vaswani}, \textbf{Noam Shazeer},
+        \textbf{Niki Parmar}, \textbf{Jakob Uszkoreit},
+        \textbf{Llion Jones}, \textbf{Aidan Gomez},
+        \textbf{{\L}ukasz Kaiser}, \textbf{Illia Polosukhin}\\[3pt]
+        Most in their 20s and 30s. Several have since founded major AI
+        companies (Cohere, Character.AI).
+      \end{personbox}
+
+      \vspace{0.3em}
+      \begin{insightbox}
+        Eight researchers. One paper. The architecture that powers
+        \emph{every} major LLM.
+      \end{insightbox}
+    \end{column}
+
+    \begin{column}{0.42\textwidth}
+      \visualplaceholder[5cm]{Top: The first page of ``Attention Is All You
+      Need'' with title highlighted.
+      Bottom: Stylised portraits or photos of the eight authors.
+      Caption: ``Eight researchers. One paper. One architecture.''}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``The title is bold: `Attention Is All You Need.' They were right.
+    This single architecture --- the transformer --- is the foundation of
+    GPT, Claude, Gemini, and virtually every LLM in existence.''
+
+    \verifytag{Gomez founded Cohere; Jones and Shazeer co-founded
+    Character.AI. Confirm details.}
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 71: Self-Attention -- The Core Mechanism
+% ----------------------------------------------------------
+\begin{frame}{Self-Attention --- The Core Mechanism}
+
+  {\small Each token generates three vectors: a \textbf{Query}
+  (``what am I looking for?''), a \textbf{Key} (``what do I contain?''),
+  and a \textbf{Value} (``what information do I carry?'').}
+
+  \vspace{0.3em}
+
+  % Step-by-step with back-references
+  \begin{tcolorbox}[colback=aiViolet!5,colframe=aiViolet,
+    fonttitle=\bfseries,title={Self-Attention Step by Step},
+    rounded corners,boxrule=0.8pt,left=4pt,right=4pt,top=4pt,bottom=4pt]
+    \small
+    \begin{enumerate}\setlength\itemsep{2pt}
+      \item Compute attention scores: \textbf{dot product} of each Query
+            with each Key \hfill\textcolor{gray}{\scriptsize(Gibbs, Slide~10)}
+      \item Scale scores: divide by $\sqrt{d}$ to keep numbers
+            manageable \hfill\textcolor{gray}{\scriptsize(cosine-like scaling, Slide~11)}
+      \item Normalise with \textbf{softmax}: scores become
+            probabilities \hfill\textcolor{gray}{\scriptsize(Boltzmann, Slide~33)}
+      \item Output = weighted sum of Values via
+            \textbf{matrix multiplication}
+            \hfill\textcolor{gray}{\scriptsize(Cayley, Slide~9)}
+    \end{enumerate}
+  \end{tcolorbox}
+
+  \vspace{0.2em}
+
+  % Formal inset
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{tcolorbox}[colback=gray!5,colframe=gray!40,
+        boxrule=0.5pt,rounded corners,left=3pt,right=3pt,top=2pt,bottom=2pt]
+        {\scriptsize\textbf{Formal notation (small inset):}
+        \[
+          \text{Attention}(Q,K,V)
+            = \text{softmax}\!\left(\frac{Q K^{\!\top}}{\sqrt{d_k}}\right) V
+        \]
+        $K^{\!\top}$ means ``flip the matrix on its side'' (transpose).}
+      \end{tcolorbox}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      {\small\textbf{Concrete example:} In ``The cat sat on the mat because
+      \emph{it} was tired,'' the word ``it'' attends most strongly to
+      ``cat.'' Self-attention learns that ``it'' refers to ``cat.''}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``Self-attention is the convergence point. Linear algebra, probability,
+    and information theory, all in one equation.''
+
+    Walk through the concrete ``it'' $\to$ ``cat'' example. This is how
+    the model resolves references across a sentence.
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 72: Feed-Forward Block and Multi-Head Attention
+% ----------------------------------------------------------
+\begin{frame}{Multi-Head Attention \& Feed-Forward Networks}
+
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
+      \textbf{Multi-Head Attention}\\[3pt]
+      {\small Instead of one set of Q/K/V, the transformer uses multiple
+      ``heads'' (8, 12, or more) in parallel. Each head learns different
+      relationships: syntax, semantics, position, etc.
+      Results are concatenated and projected back.}
+
+      \vspace{0.5em}
+      \textbf{Feed-Forward Network (FFN)}\\[3pt]
+      {\small Two matrix multiplications with a GELU activation in between.
+      This is the universal approximation theorem
+      (Cybenko, Slide~52) applied within each transformer layer ---
+      the FFN provides the raw computational power.}
+
+      \vspace{0.5em}
+      \begin{insightbox}
+        \small One transformer layer = Attention + FFN + two rounds of
+        ``Add \& Norm.'' Stack 96 of these and you have GPT-4.
+      \end{insightbox}
+    \end{column}
+
+    \begin{column}{0.45\textwidth}
+      \visualplaceholder[5.5cm]{A single transformer block, annotated:
+      Multi-Head Attention sub-block $\to$ Add \& Norm
+      (residual + layer norm, Slides 60--61) $\to$
+      Feed-Forward Network sub-block $\to$ Add \& Norm.
+      Every component labelled with its origin section.}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``One transformer layer = attention + feed-forward + two rounds of
+    `add and normalise.' Stack 96 of these layers and you have GPT-4.
+    Every component was taught in an earlier section of this lecture.''
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 73: THE CLIMAX -- Full Annotated Transformer Diagram
+% ----------------------------------------------------------
+\begin{frame}{The Full Transformer --- Annotated with 2,000+ Years of Math}
+
+  % Large placeholder -- THIS IS THE LECTURE'S CLIMAX
+  \visualplaceholder[13cm]{%
+    \textbf{CLIMAX DIAGRAM --- Full decoder-only transformer architecture}\\[4pt]
+    Annotated components (back-references to earlier slides):\\
+    \textbullet\ \textbf{Input Embedding:} Words $\to$ Vectors
+      (Grassmann 1844, Mikolov 2013, Slide~14)\\
+    \textbullet\ \textbf{Positional Encoding:} Sine/cosine
+      (Fourier 1807, Slide~50)\\
+    \textbullet\ \textbf{Multi-Head Self-Attention:} Dot product + softmax
+      + matrix mult.\ (Gibbs 1880s Slide~10, Boltzmann 1870s Slide~33,
+      Cayley 1858 Slide~9, Bahdanau 2014 Slide~68)\\
+    \textbullet\ \textbf{Add \& Norm:} Residual + Layer Norm
+      (He 2015 Slide~60, Ba 2016 Slide~61)\\
+    \textbullet\ \textbf{FFN:} Matrix mult.\ + GELU
+      (Cybenko 1989 Slide~52, Hendrycks 2016 Slide~59)\\
+    \textbullet\ \textbf{Dropout:} (Srivastava/Hinton 2014 Slide~61)\\
+    \textbullet\ \textbf{Output Softmax:} Probability over vocabulary
+      (Fisher 1922, Boltzmann/Luce Slide~33)\\
+    \textbullet\ \textbf{Training:} Cross-entropy + backprop + SGD
+      (Shannon 1948, Cauchy 1847, Linnainmaa 1970)\\
+    \textbullet\ \textbf{Hardware:} GPU arrays
+      (NVIDIA CUDA 2007, AlexNet 2012 Slide~47)%
+  }
+
+  \vspace{0.3em}
+  \begin{tcolorbox}[colback=accentOrange!10,colframe=accentOrange,
+    fonttitle=\bfseries,
+    title={\faUsers\ Interactive Moment: ``Count the Building Blocks''},
+    rounded corners,boxrule=1pt,left=4pt,right=4pt,top=3pt,bottom=3pt]
+    \small Students: look at this diagram and try to identify which of
+    the 10~sections each component comes from. How many can you find?
+    \hfill\emph{(3~min)}
+  \end{tcolorbox}
+
+  \note{
+    THIS IS THE CENTRAL THESIS OF THE ENTIRE LECTURE, crystallised in
+    one diagram. Let this land. \textbf{Pause.}
+
+    ``Look at this diagram. Every single piece has a history. The sine
+    functions come from Fourier in 1807. The matrix multiplications come
+    from Cayley in 1858. The softmax comes from Boltzmann in the 1870s.
+    The training algorithm uses Cauchy's gradient descent from 1847 and
+    Linnainmaa's automatic differentiation from 1970. The residual
+    connections come from He in 2015. The layer normalisation from Ba in
+    2016. When you talk to an AI, you are talking to 2,000 years of
+    mathematics, all running at once.''
+
+    Interactive moment: give students 3 minutes to ``count the building
+    blocks'' --- identify which of the 10 sections each component comes
+    from.
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 74: Positional Encoding -- Fourier Meets Transformers
+% ----------------------------------------------------------
+\begin{frame}{Positional Encoding --- Fourier Meets Transformers}
+
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
+      {\small Transformers have no built-in notion of word order (unlike
+      RNNs). To fix this, they add \textbf{positional encodings} ---
+      sine and cosine functions at different frequencies.
+      This is Fourier's idea, applied directly.}
+
+      \vspace{0.4em}
+
+      \textbf{Recipe (CONCEPTUAL):}\\
+      {\small For each position in the sentence and each dimension in
+      the vector, compute a sine or cosine wave with a specific
+      frequency. Different dimensions use different frequencies ---
+      just like Fourier's decomposition. Each position gets a unique
+      ``fingerprint'' of wave values.}
+
+      \vspace{0.3em}
+
+      % Formal inset
+      \begin{tcolorbox}[colback=gray!5,colframe=gray!40,
+        boxrule=0.5pt,rounded corners,left=3pt,right=3pt,top=2pt,bottom=2pt]
+        {\scriptsize\textbf{Formal:}
+        \begin{align*}
+          PE(\text{pos}, 2i) &= \sin\!\bigl(\text{pos}\, /\, 10000^{2i/d}\bigr)\\
+          PE(\text{pos}, 2i{+}1) &= \cos\!\bigl(\text{pos}\, /\, 10000^{2i/d}\bigr)
+        \end{align*}
+        The $10000^{2i/d}$ creates a spectrum of frequencies from
+        very slow to very fast.}
+      \end{tcolorbox}
+    \end{column}
+
+    \begin{column}{0.45\textwidth}
+      \visualplaceholder[5.5cm]{Heatmap of positional encodings:
+      rows = positions (1st word, 2nd word, \ldots, 100th word),
+      columns = dimensions. Clear sinusoidal wave patterns visible.
+      Caption: ``Fourier's sine and cosine waves, used to tell
+      the transformer which word is which.''}
+
+      \vspace{0.3em}
+      \begin{insightbox}
+        Fourier decomposed heat into waves.
+        Vaswani decomposed word position into waves.
+        Same math, 210 years apart.
+      \end{insightbox}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``Fourier decomposed heat into waves. Vaswani decomposed word
+    position into waves. The same math, 210 years apart, for completely
+    different purposes.''
+
+    Convergence diagram update: ALL 10 nodes now lit (Sections 9 and 10).
+    Central ``?'' becomes ``TRANSFORMER.'' The full convergence diagram
+    is complete.
+  }
+\end{frame}
+
+
+% ============================================================
+% SECTION 10: SCALING TO LLMs + CLOSING (Slides 75--78)
+% "The Final Leap"
+% Timeline: 2018--2026
+% ============================================================
+\section{Scaling to LLMs}
+
+% ----------------------------------------------------------
+% Slide 75: The Scaling Leap
+% ----------------------------------------------------------
+\begin{frame}{The Scaling Leap --- From Transformer to LLM}
+
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
+      {\small The transformer architecture, scaled up with more parameters,
+      more data, and more compute, produces Large Language Models with
+      emergent abilities.}
+
+      \vspace{0.3em}
+
+      \begin{tcolorbox}[colback=aiViolet!5,colframe=aiViolet,
+        fonttitle=\bfseries\small,title={The GPT Series},
+        rounded corners,boxrule=0.8pt,left=3pt,right=3pt,top=3pt,bottom=3pt]
+        \scriptsize
+        \begin{tabular}{@{}lrl@{}}
+          \textbf{GPT-1} (2018) & 117M params & Pre-train + fine-tune\\
+          \textbf{GPT-2} (2019) & 1.5B params & Convincing text gen.\\
+          \textbf{GPT-3} (2020) & 175B params & Few-shot learning\\
+          \textbf{GPT-4} (2023) & undisclosed & Multimodal\\
+          \textbf{Claude} (2023--26) & --- & Constitutional AI
+        \end{tabular}
+      \end{tcolorbox}
+
+      \vspace{0.3em}
+
+      \begin{personbox}[Jared Kaplan et al.\ (2020) --- Scaling Laws]{aiViolet}
+        \scriptsize LLM performance scales as a smooth \textbf{power law}
+        with compute, data, and parameters. Predictable improvement.
+      \end{personbox}
+    \end{column}
+
+    \begin{column}{0.45\textwidth}
+      \visualplaceholder[5.5cm]{Top: Log-log plot of parameter count vs.\
+      year: GPT-1 (2018) $\to$ GPT-2 (2019) $\to$ GPT-3 (2020) $\to$
+      PaLM (2022) $\to$ GPT-4 (2023) $\to$ frontier models (2025--26).
+      Exponential growth visible.
+      Bottom: Timeline of key milestones: RLHF (2017), InstructGPT (2022),
+      ChatGPT (Nov 2022), GPT-4 (Mar 2023), Claude~3 (2024), open-source
+      explosion (Llama, Mistral).}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``The transformer is the same architecture from 2017. What changed is
+    scale. More parameters, more training data, more compute. And somewhere
+    along the way, these models started doing things nobody programmed them
+    to do --- reasoning, writing code, translating languages they were
+    barely trained on.''
+
+    \verifytag{Kaplan et al.\ 2020 scaling laws paper.}
+    \verifytag{ChatGPT launch: November 30, 2022.}
+    \verifytag{Christiano et al.\ 2017 for RLHF.}
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 76: Return to the Exploded Diagram
+% ----------------------------------------------------------
+\begin{frame}{Return to the Exploded Diagram --- Now You Understand Every Piece}
+
+  \visualplaceholder[13cm]{%
+    \textbf{The SAME exploded transformer diagram from Slide~3},
+    now with every label including the mathematician's name, date,
+    AND slide number:\\[3pt]
+    \textbullet\ Matrix multiplication (Cayley, 1858 --- Slide~9)
+    \textbullet\ Dot product (Gibbs, 1880s --- Slide~10)\\
+    \textbullet\ Gradient descent (Cauchy, 1847 --- Slide~21)
+    \textbullet\ Softmax (Boltzmann, 1870s --- Slide~33)\\
+    \textbullet\ Cross-entropy (Shannon, 1948 --- Slide~37)
+    \textbullet\ Backpropagation (Linnainmaa 1970, Rumelhart/Hinton/Williams
+    1986 --- Slide~22)\\
+    \textbullet\ Activation functions (Verhulst 1838, Nair/Hinton 2010
+    --- Slide~59)\\
+    \textbullet\ Residual connections (He et al.\ 2015 --- Slide~60)
+    \textbullet\ Layer norm (Ba et al.\ 2016 --- Slide~61)\\
+    \textbullet\ Self-attention (Bahdanau 2014, Vaswani 2017
+    --- Slides~68, 71)\\
+    \textbullet\ Positional encoding (Fourier 1807 --- Slide~74)
+    \textbullet\ GPU computing (NVIDIA CUDA 2007 --- Slide~47)%
+  }
+
+  \note{
+    ``At the start of this lecture, this diagram was overwhelming.
+    Now you can point to each piece and say who invented it, when,
+    and why. That is the power of understanding the history.''
+
+    Caption on slide: ``You now know the history of every piece of
+    this machine.''
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 77: Convergence Diagram -- Final State
+% ----------------------------------------------------------
+\begin{frame}{Convergence Diagram --- Final State}
+
+  \visualplaceholder[10cm]{The completed convergence diagram. All 10 nodes
+  lit. Central ``TRANSFORMER'' node glowing. Each node label includes its
+  cumulative date range:\\
+  1.\ Linear Algebra (1809--2013) --- blue\\
+  2.\ Calculus \& Optimisation (c.\,250 BCE--1986) --- green\\
+  3.\ Probability \& Statistics (1654--1959) --- orange\\
+  4.\ Information Theory (1865--2016) --- red\\
+  5.\ Logic \& Computation (1854--2012) --- grey\\
+  6.\ Function Approximation (1807--1991) --- purple\\
+  7.\ The Neuron \& Depth (1943--2016) --- yellow\\
+  8.\ Sequence Modeling (1906--2014) --- teal\\
+  9.\ The Transformer (2017) --- multicolour\\
+  10.\ Scaling to LLMs (2018--2026) --- gradient}
+
+  \vspace{0.3em}
+  \begin{center}
+    {\large\bfseries\color{aiViolet}
+    Ten streams of human invention, flowing into one machine.}
+  \end{center}
+
+  \note{
+    Let the diagram speak. This is the visual summary of the entire lecture.
+    All 10 nodes active. All arrows visible. 2,000+ years of mathematics
+    converging.
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 78: Closing -- The Story Is Not Over
+% ----------------------------------------------------------
+\begin{frame}{The Story Is Not Over}
+
+  \begin{tcolorbox}[colback=aiViolet!8,colframe=aiViolet,
+    fonttitle=\bfseries\Large,
+    title={\raisebox{-0.2em}{\faInfinity}\ 2,000+ Years of Mathematics.
+    One Machine. Your Turn.},
+    rounded corners,boxrule=1.5pt,
+    left=6pt,right=6pt,top=6pt,bottom=6pt]
+
+    \begin{itemize}\setlength\itemsep{6pt}
+      \item Every component of an LLM was invented by someone, for a
+            specific purpose, often centuries before AI existed.
+
+      \item Grassmann imagined abstract vector spaces. Boltzmann studied
+            gas molecules. Fourier solved the heat equation. Markov
+            analysed poetry. Archimedes approximated circles.
+            \textbf{None of them imagined AI.}
+
+      \item The math you learn in school --- algebra, calculus,
+            probability --- is the \emph{same math} running inside the
+            AI you talk to every day.
+
+      \item The next building block has not been invented yet.
+            It might come from pure mathematics, from physics, from
+            linguistics, from neuroscience ---
+            \textbf{or from someone in this room.}
+    \end{itemize}
+  \end{tcolorbox}
+
+  \vspace{0.3em}
+  \visualplaceholder[10cm]{Reprise of the completed convergence diagram
+  from Slide~77 / Exploded diagram from Slide~3.
+  Below: ``2,000+ years of mathematics. One machine. Your turn.''}
+
+  \note{
+    ``When you talk to an AI, you are talking to the accumulated genius
+    of Archimedes, Grassmann, Cayley, Newton, Leibniz, Cauchy, Boltzmann,
+    Shannon, Turing, Mikolov, McCulloch, Pitts, Rosenblatt, Hochreiter,
+    Schmidhuber, Bahdanau, Vaswani, and dozens of others. Two thousand
+    years of human curiosity, all running at once, on hardware that
+    Boole's algebra made possible. The next invention is yours.''
+
+    Let the final line resonate. End.
+  }
+\end{frame}

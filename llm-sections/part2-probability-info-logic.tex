@@ -1,0 +1,1536 @@
+% ============================================================
+% Part 2: Probability & Statistics, Information Theory,
+%         Logic & Computation (Slides 26-48)
+% Companion lecture: "The Building Blocks of LLMs"
+% This file is \input'ed from the main document.
+% ============================================================
+
+
+% ************************************************************
+% SECTION 3: PROBABILITY & STATISTICS (Slides 26-34)
+% "The Language of Uncertainty"
+% Section color: aiViolet
+% ************************************************************
+\section{Probability \& Statistics}
+
+% ----------------------------------------------------------
+% Slide 26: Section Divider
+% ----------------------------------------------------------
+{
+\setbeamercolor{background canvas}{bg=aiViolet}
+\begin{frame}[plain]
+  \centering
+  \vspace{2cm}
+  \textcolor{white}{\Huge\bfseries Probability \& Statistics}\\[0.5em]
+  \textcolor{white}{\Huge\bfseries The Language of Uncertainty}\\[1em]
+  \textcolor{white!80}{\large 1654--1933}\\[1.5em]
+  \textcolor{white!60}{\normalsize Pascal \(\cdot\) Fermat \(\cdot\) Bernoulli \(\cdot\) Bayes \(\cdot\) Kolmogorov \(\cdot\) Fisher \(\cdot\) Shannon \(\cdot\) Boltzmann}
+
+  \note{
+    Transition from Section~2: ``The network can now learn. But learn WHAT?
+    It learns to predict probability distributions over words.
+    For that, we need probability theory.''
+
+    Tagline: An LLM doesn't KNOW the next word. It assigns PROBABILITIES
+    to every possible word.
+
+    This section covers \(\sim\)10 minutes.
+  }
+\end{frame}
+}
+
+% ----------------------------------------------------------
+% Slide 27: The Birth of Probability -- A Gambling Problem
+% ----------------------------------------------------------
+\begin{frame}{The Birth of Probability --- A Gambling Problem (1654)}
+
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{personbox}[Blaise Pascal (1623--1662)]{aiViolet}
+        \textbf{Origin:} Clermont-Ferrand, France\\[3pt]
+        Mathematician, physicist, philosopher. Co-founded probability
+        theory in correspondence with Fermat (1654) about the
+        \alert{problem of points}: how to divide stakes in an
+        interrupted game of chance.
+      \end{personbox}
+
+      \vspace{0.4em}
+      \begin{personbox}[Pierre de Fermat (1601--1665)]{aiViolet}
+        \textbf{Origin:} Beaumont-de-Lomagne, France\\[3pt]
+        His reply to Pascal laid out the counting arguments that
+        became \textbf{combinatorial probability}.
+      \end{personbox}
+    \end{column}
+
+    \begin{column}{0.49\textwidth}
+      % Visual: Letter exchange and game tree
+      \begin{tikzpicture}[
+        letter/.style={draw=aiViolet!60, rounded corners, fill=aiViolet!5,
+          text width=2cm, align=center, font=\scriptsize, inner sep=4pt},
+        >=Stealth
+      ]
+        \node[letter] (pascal) at (0,2.5) {Pascal\\Paris};
+        \node[letter] (fermat) at (3.5,2.5) {Fermat\\Toulouse};
+        \draw[->,thick,aiViolet!70] (pascal.east) -- node[above,font=\tiny] {1654} (fermat.west);
+        \draw[<-,thick,aiViolet!70] ([yshift=-3pt]pascal.east) -- ([yshift=-3pt]fermat.west);
+
+        % Simplified game tree
+        \node[font=\footnotesize\bfseries,aiViolet] at (1.75,1.4) {Problem of Points};
+        \node[circle,draw=aiViolet,fill=aiViolet!10,inner sep=1pt,font=\tiny] (r) at (1.75,0.8) {Game};
+        \node[circle,draw=aiViolet!60,fill=aiViolet!5,inner sep=1pt,font=\tiny] (a) at (0.5,0) {A wins};
+        \node[circle,draw=aiViolet!60,fill=aiViolet!5,inner sep=1pt,font=\tiny] (b) at (3,0) {B wins};
+        \draw[->,aiViolet!60] (r) -- (a);
+        \draw[->,aiViolet!60] (r) -- (b);
+        \node[font=\tiny\itshape,text=gray,text width=4cm,align=center] at (1.75,-0.6)
+          {How to split the pot if the game stops early?};
+      \end{tikzpicture}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``Probability theory was born because a gambler asked Pascal a question
+    about how to split the pot in an unfinished dice game. Pascal wrote to
+    Fermat. Their letters invented a new branch of mathematics.''
+
+    Fermat again! We saw him in calculus (tangent lines, Slide~19). He
+    contributed foundational ideas to TWO separate pillars of the LLM.
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 28: From Gambling to Laws -- Bernoulli and Laplace
+% ----------------------------------------------------------
+\begin{frame}{From Gambling to Laws --- Bernoulli and Laplace}
+
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \begin{personbox}[Jacob Bernoulli (1655--1705)]{aiViolet}
+        \textbf{Origin:} Basel, Switzerland\\[3pt]
+        Proved the \alert{law of large numbers} (published posthumously
+        in \emph{Ars Conjectandi}, 1713): as you repeat an experiment,
+        the observed frequency converges to the true probability.
+      \end{personbox}
+
+      \vspace{0.3em}
+      \begin{personbox}[Pierre-Simon Laplace (1749--1827)]{aiViolet}
+        \textbf{Origin:} Beaumont-en-Auge, France\\[3pt]
+        \emph{Th\'eorie analytique des probabilit\'es} (1812)
+        systematized the entire field. Popularized Bayes' theorem.
+      \end{personbox}
+    \end{column}
+
+    \begin{column}{0.47\textwidth}
+      % Law of large numbers illustration
+      \begin{tikzpicture}[scale=0.85]
+        \begin{axis}[
+          width=6cm, height=4cm,
+          xlabel={\scriptsize Number of flips},
+          ylabel={\scriptsize Running average},
+          ymin=0.3, ymax=0.7,
+          xmin=0, xmax=100,
+          ytick={0.3,0.4,0.5,0.6,0.7},
+          xtick={0,25,50,75,100},
+          grid=major,
+          grid style={gray!20},
+          axis lines=left,
+          tick label style={font=\tiny},
+          label style={font=\tiny},
+        ]
+          % Simulated convergence to 0.5
+          \addplot[aiViolet, thick, smooth] coordinates {
+            (1,1.0) (3,0.67) (5,0.6) (10,0.6) (15,0.53)
+            (20,0.55) (30,0.47) (40,0.52) (50,0.48)
+            (60,0.51) (70,0.49) (80,0.50) (100,0.50)
+          };
+          \draw[dashed, accentOrange, thick] (axis cs:0,0.5) -- (axis cs:100,0.5);
+          \node[font=\tiny, accentOrange] at (axis cs:85,0.54) {$p = 0.5$};
+        \end{axis}
+      \end{tikzpicture}
+
+      \vspace{0.3em}
+      \begin{insightbox}
+        Why do LLMs improve with more data?
+        Bernoulli's law: more data \(\Rightarrow\) learned probabilities
+        converge to the true patterns of language.
+      \end{insightbox}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``Flip a coin 10 times: anything could happen.
+    Flip it 10 million times: the average WILL be 50\%.''
+
+    LLM connection: LLMs get better with more training data because the
+    law of large numbers ensures that the learned word-frequency
+    probabilities converge to the true distribution.
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 29: Bayes' Theorem -- Updating Beliefs with Evidence
+% ----------------------------------------------------------
+\begin{frame}{Bayes' Theorem --- Updating Beliefs with Evidence (1763)}
+
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{personbox}[{Thomas Bayes (c.\,1701--1761)}]{aiViolet}
+        \textbf{Origin:} London, England\\[3pt]
+        Presbyterian minister and mathematician.
+        \emph{Essay towards solving a Problem in the Doctrine of Chances}
+        published \textbf{posthumously} (1763) by his friend Richard
+        Price.
+      \end{personbox}
+
+      \vspace{0.4em}
+      % Conceptual recipe
+      \begin{tcolorbox}[colback=aiViolet!5, colframe=aiViolet!60,
+        fonttitle=\bfseries\small, title={Recipe: Updating Beliefs},
+        rounded corners, boxrule=0.5pt, left=3pt, right=3pt, top=2pt, bottom=2pt]
+        \footnotesize
+        New belief =\\[2pt]
+        \(\dfrac{\text{(how likely the evidence if my guess is right)}
+          \;\times\; \text{(original guess)}}
+          {\text{(how likely the evidence overall)}}\)
+      \end{tcolorbox}
+    \end{column}
+
+    \begin{column}{0.49\textwidth}
+      % Formal inset
+      \begin{tcolorbox}[colback=gray!5, colframe=gray!40,
+        fonttitle=\bfseries\small, title={Formal},
+        rounded corners, boxrule=0.5pt, left=3pt, right=3pt, top=2pt, bottom=2pt]
+        \[
+          P(A \mid B) = \frac{P(B \mid A)\; P(A)}{P(B)}
+        \]
+      \end{tcolorbox}
+
+      \vspace{0.3em}
+      % Surprising example
+      \begin{tcolorbox}[colback=accentOrange!5, colframe=accentOrange!60,
+        fonttitle=\bfseries\small, title={Surprise Example},
+        rounded corners, boxrule=0.5pt, left=3pt, right=3pt, top=2pt, bottom=2pt]
+        \footnotesize
+        Test accuracy: 99\%\\
+        Disease prevalence: 1 in 10,000\\
+        Positive test \(\Rightarrow\) chance you have it?\\[3pt]
+        \textbf{Answer: \(\sim\)1\%}\\
+        Most positives are \emph{false} positives!
+      \end{tcolorbox}
+
+      \vspace{0.3em}
+      \begin{insightbox}
+        LLMs implicitly learn conditional probabilities:\\
+        \(P(\text{next word} \mid \text{previous words})\)
+      \end{insightbox}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``Bayes was a minister, not a professor. He published almost nothing
+    in his lifetime. His one big idea --- how to update beliefs from
+    evidence --- was published after his death by a friend. It became one
+    of the most important ideas in all of science.''
+
+    LLM connection: While LLMs don't explicitly compute Bayes' theorem,
+    training causes them to learn conditional probabilities. That IS
+    Bayesian reasoning, learned from data.
+
+    \verifytag{Bayes birth year uncertain --- some sources give 1701,
+    others 1702.}
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 30: Kolmogorov's Axioms [EXTENDED]
+% ----------------------------------------------------------
+\begin{frame}{Kolmogorov's Axioms --- Probability Made Rigorous (1933)}
+
+  \begin{columns}[T]
+    \begin{column}{0.45\textwidth}
+      \begin{personbox}[Andrey Kolmogorov (1903--1987)]{aiViolet}
+        \textbf{Origin:} Tambov, Russia\\[3pt]
+        Published \emph{Grundbegriffe der Wahrscheinlichkeitsrechnung}
+        (Foundations of the Theory of Probability, 1933), axiomatizing
+        probability using measure theory.
+      \end{personbox}
+
+      \vspace{0.3em}
+      {\small\itshape This put probability on the same rigorous footing
+      as geometry (Euclid) and calculus (Cauchy/Weierstrass).}
+
+      \vspace{0.3em}
+      {\footnotesize\textcolor{gray}{[EXTENDED] --- can be cut without
+      losing the narrative}}
+    \end{column}
+
+    \begin{column}{0.52\textwidth}
+      % Three axioms in plain English
+      \begin{tcolorbox}[colback=aiViolet!5, colframe=aiViolet,
+        fonttitle=\bfseries, title={Kolmogorov's Three Axioms},
+        rounded corners, boxrule=1pt, left=4pt, right=4pt, top=3pt, bottom=3pt]
+        \begin{enumerate}\setlength\itemsep{6pt}
+          \item \textbf{Non-negativity:} Probabilities are between 0 and~1.
+          \item \textbf{Certainty:} Something must happen\\
+                (total probability = 1).
+          \item \textbf{Additivity:} Probabilities of mutually exclusive
+                events add up.
+        \end{enumerate}
+      \end{tcolorbox}
+
+      \vspace{0.4em}
+      {\small\centering Three simple rules. Every probability calculation
+      in every LLM obeys them.\par}
+    \end{column}
+  \end{columns}
+
+  \note{
+    This slide is marked [EXTENDED] and can be cut if time is short.
+
+    The conceptual point: before Kolmogorov, probability was a collection
+    of tricks. After Kolmogorov, it was a branch of mathematics as
+    rigorous as geometry.
+
+    \verifytag{Publication year 1933 and German title confirmed in
+    standard references.}
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 31: Maximum Likelihood -- Finding the Best Fit
+% ----------------------------------------------------------
+\begin{frame}{Maximum Likelihood --- Finding the Best Fit}
+
+  \begin{columns}[T]
+    \begin{column}{0.47\textwidth}
+      \begin{personbox}[Ronald A. Fisher (1890--1962)]{aiViolet}
+        \textbf{Origin:} London, England\\[3pt]
+        Introduced \alert{maximum likelihood estimation} (concept 1912,
+        formalized 1922). His 1922 paper ``On the Mathematical
+        Foundations of Theoretical Statistics'' established MLE as a
+        foundational method.
+      \end{personbox}
+
+      \vspace{0.3em}
+      % Conceptual recipe
+      \begin{tcolorbox}[colback=aiViolet!5, colframe=aiViolet!60,
+        fonttitle=\bfseries\small, title={Recipe: Maximum Likelihood},
+        rounded corners, boxrule=0.5pt, left=3pt, right=3pt, top=2pt, bottom=2pt]
+        \footnotesize
+        Given the data I observed, which parameters make
+        this data \textbf{most probable}?\\[2pt]
+        \(\rightarrow\) Choose the best fit.
+      \end{tcolorbox}
+    \end{column}
+
+    \begin{column}{0.5\textwidth}
+      % Visual: curve fitting
+      \begin{tikzpicture}[scale=0.85]
+        \begin{axis}[
+          width=6cm, height=4.5cm,
+          axis lines=left,
+          xlabel={\scriptsize $x$},
+          ylabel={\scriptsize Probability},
+          xtick=\empty, ytick=\empty,
+          xmin=-3, xmax=3,
+          ymin=0, ymax=0.5,
+          tick label style={font=\tiny},
+          label style={font=\tiny},
+        ]
+          % Data histogram hint (points)
+          \addplot[only marks, mark=*, mark size=1.5pt, aiViolet]
+            coordinates {(-2,0.06) (-1.5,0.13) (-1,0.22) (-0.5,0.33)
+              (0,0.40) (0.5,0.35) (1,0.24) (1.5,0.12) (2,0.05)};
+          % Candidate curves (light)
+          \addplot[gray!40, thick, smooth, domain=-3:3, samples=40]
+            {0.4*exp(-x*x/0.5)};
+          \addplot[gray!40, thick, smooth, domain=-3:3, samples=40]
+            {0.3*exp(-(x-0.5)*(x-0.5)/2)};
+          % MLE curve (bold)
+          \addplot[aiViolet, very thick, smooth, domain=-3:3, samples=40]
+            {0.4*exp(-x*x/2)};
+          \node[font=\tiny\bfseries, aiViolet] at (axis cs:1.8,0.35)
+            {MLE fit};
+        \end{axis}
+      \end{tikzpicture}
+
+      \vspace{0.2em}
+      \begin{insightbox}
+        LLM training is MLE at scale: find weights that maximize
+        the probability of the training text. Fisher's method from 1922,
+        applied to trillions of words.
+      \end{insightbox}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``Fisher introduced the concept in 1912 and formalized it in 1922.
+    He was also a pioneering statistician and controversial eugenicist ---
+    we mention the math, not the politics.''
+
+    LLM connection: LLM training is essentially maximum likelihood
+    estimation: find the model parameters (weights) that maximize the
+    probability of the training text.
+
+    \verifytag{Fisher introduced concept in 1912 undergraduate paper,
+    formalized in 1922 --- confirm both dates.}
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 32: Statistical Language Models -- Shannon's Breakthrough
+% ----------------------------------------------------------
+\begin{frame}{Statistical Language Models --- Shannon's Breakthrough (1948)}
+
+  \begin{columns}[T]
+    \begin{column}{0.45\textwidth}
+      \begin{personbox}[Claude Shannon (1916--2001)]{aiViolet}
+        \textbf{Origin:} Petoskey, Michigan, USA\\[3pt]
+        Published \emph{A Mathematical Theory of Communication} (1948),
+        founding information theory. Modeled English as a stochastic
+        process and built \textbf{n-gram language models} decades before
+        AI.
+      \end{personbox}
+
+      \vspace{0.3em}
+      % Diagram: Shannon to LLM
+      \begin{tikzpicture}[
+        box/.style={draw=aiViolet!60, rounded corners, fill=aiViolet!5,
+          font=\scriptsize, inner sep=3pt, text width=2.8cm, align=center},
+        >=Stealth
+      ]
+        \node[box] (sh) at (0,0) {Shannon (1948):\\predict next letter\\using previous $N$ letters};
+        \node[box] (llm) at (0,-1.6) {LLM (2024):\\predict next token\\using ALL previous tokens};
+        \draw[->,thick,aiViolet!70] (sh) -- (llm);
+      \end{tikzpicture}
+    \end{column}
+
+    \begin{column}{0.52\textwidth}
+      % Shannon's text examples
+      \begin{tcolorbox}[colback=gray!5, colframe=gray!50,
+        fonttitle=\bfseries\small,
+        title={Shannon's Approximations to English},
+        rounded corners, boxrule=0.5pt, left=3pt, right=3pt, top=2pt, bottom=2pt]
+        \scriptsize
+        \textbf{0th order} (random letters):\\
+        {\ttfamily XFOML RXKHRJFFJUJ}\\[2pt]
+        \textbf{1st order} (letter frequencies):\\
+        {\ttfamily OCRO HLI RGWR NMIE}\\[2pt]
+        \textbf{2nd order} (letter pairs):\\
+        {\ttfamily ON IE ANTSOUTINYS}\\[2pt]
+        \textbf{Word-level bigram}:\\
+        {\ttfamily THE HEAD AND IN FRONTAL ATTACK}\\[3pt]
+        \textit{More context \(\Rightarrow\) more readable!}
+      \end{tcolorbox}
+
+      \vspace{0.2em}
+      \begin{insightbox}
+        Shannon was doing language modeling in 1948 --- 70~years
+        before GPT. The same core idea, vastly more data.
+      \end{insightbox}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``Shannon showed that language has statistical structure, and that you
+    can exploit that structure to predict what comes next. That's exactly
+    what every LLM does.''
+
+    Shannon will appear AGAIN in Section 4 (Information Theory, Slide~36)
+    for his entropy formula. Flag to students: ``We'll see Shannon again
+    very soon --- his 1948 paper is so foundational it contributes to
+    multiple sections.''
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 33: The Softmax Function -- From Thermodynamics to
+%           Token Prediction
+% ----------------------------------------------------------
+\begin{frame}{The Softmax Function --- From Physics to Token Prediction}
+
+  \begin{columns}[T]
+    \begin{column}{0.46\textwidth}
+      \begin{personbox}[Ludwig Boltzmann (1844--1906)]{aiViolet}
+        \textbf{Origin:} Vienna, Austria\\[3pt]
+        His \alert{Boltzmann distribution} (1870s) describes the
+        probability of a physical system being in a state based on its
+        energy: \(P \propto e^{-E/kT}\).
+      \end{personbox}
+
+      \vspace{0.3em}
+      {\footnotesize
+      \textbf{Lineage:}
+      Boltzmann (1870s, physics) \(\to\)
+      Gibbs (1900s, statistical mechanics) \(\to\)
+      Luce (1959, psychology of choice) \(\to\)
+      \textbf{Softmax} (ML)}
+
+      \vspace{0.3em}
+      % Conceptual recipe
+      \begin{tcolorbox}[colback=aiViolet!5, colframe=aiViolet!60,
+        fonttitle=\bfseries\small, title={Recipe: Softmax},
+        rounded corners, boxrule=0.5pt, left=3pt, right=3pt, top=2pt, bottom=2pt]
+        \footnotesize
+        1. Take each raw score, raise $e$ to that power\\
+        {\scriptsize\itshape (makes everything positive, magnifies differences)}\\
+        2. Add up all the results\\
+        3. Divide each by the total\\[2pt]
+        \(\Rightarrow\) Now they are probabilities that sum to~1!
+      \end{tcolorbox}
+    \end{column}
+
+    \begin{column}{0.51\textwidth}
+      % Softmax pipeline
+      \begin{tikzpicture}[
+        softstep/.style={draw=aiViolet!60, rounded corners, fill=aiViolet!5,
+          font=\scriptsize, inner sep=3pt, text width=4.2cm, align=left},
+        >=Stealth
+      ]
+        \node[softstep] (s1) at (0, 3.0)
+          {\textbf{Logits:} $[2.1,\; 0.8,\; 0.3,\; {-}1.5]$};
+        \node[softstep] (s2) at (0, 2.0)
+          {\textbf{Exp:} $[8.17,\; 2.23,\; 1.35,\; 0.22]$};
+        \node[softstep] (s3) at (0, 1.0)
+          {\textbf{Normalize:} $[0.68,\; 0.19,\; 0.11,\; 0.02]$};
+        \draw[->,aiViolet!70] (s1.south) -- (s2.north);
+        \draw[->,aiViolet!70] (s2.south) -- (s3.north);
+
+        % Bar chart
+        \fill[aiViolet!70] (0, -0.1) rectangle (2.3, 0.3);
+        \fill[aiViolet!50] (2.5, -0.1) rectangle (3.15, 0.3);
+        \fill[aiViolet!35] (3.35, -0.1) rectangle (3.72, 0.3);
+        \fill[aiViolet!20] (3.92, -0.1) rectangle (3.99, 0.3);
+        \node[font=\tiny,below] at (1.15, -0.15) {``the'' 68\%};
+        \node[font=\tiny,below] at (2.82, -0.15) {``a'' 19\%};
+        \node[font=\tiny,below] at (3.53, -0.15) {``that''};
+        \node[font=\tiny,below] at (3.95, -0.15) {\ldots};
+      \end{tikzpicture}
+
+      \vspace{0.3em}
+      % Formal inset
+      \begin{tcolorbox}[colback=gray!5, colframe=gray!40,
+        fonttitle=\bfseries\small, title={Formal},
+        rounded corners, boxrule=0.5pt, left=3pt, right=3pt, top=1pt, bottom=1pt]
+        \footnotesize
+        $\displaystyle \mathrm{softmax}(z_i) = \frac{e^{z_i}}{\sum_j e^{z_j}}$
+        \hfill {\scriptsize $\sum$ = ``add up for all $j$''}
+      \end{tcolorbox}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``Boltzmann invented this formula to describe how gas molecules
+    distribute among energy states. 150 years later, the exact same
+    formula tells an LLM which word to say next.''
+
+    INTERACTIVE MOMENT: Quick poll --- ``What word comes next:
+    `The cat sat on the \rule{1cm}{0.15mm}'?'' Collect student answers,
+    then show the AI's softmax distribution for the same prompt.
+
+    \verifytag{Boltzmann distribution typically dated to 1870s; ``1868''
+    may refer to early papers. R.~Duncan Luce's 1959 book
+    \emph{Individual Choice Behavior} --- confirm.}
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 34: Convergence Diagram Update -- Probability
+% ----------------------------------------------------------
+\begin{frame}{Building the Transformer --- Probability \& Statistics}
+
+  \begin{columns}[T]
+    \begin{column}{0.45\textwidth}
+      % Convergence diagram placeholder
+      \visualplaceholder[5cm]{Convergence diagram: Sections 1--2 lit
+        (Linear Algebra in blue, Calculus in green). Section~3
+        ``Probability \& Statistics'' now lights up in orange/violet.
+        Label: ``Softmax = next-token prediction.''}
+    \end{column}
+
+    \begin{column}{0.52\textwidth}
+      \begin{tcolorbox}[colback=aiViolet!5, colframe=aiViolet,
+        fonttitle=\bfseries, title={Section 3 Summary},
+        rounded corners, boxrule=1pt, left=4pt, right=4pt, top=3pt, bottom=3pt]
+        \footnotesize
+        \begin{tabular}{@{}ll@{}}
+          \toprule
+          \textbf{Who / When} & \textbf{Contribution}\\
+          \midrule
+          Pascal / Fermat (1654) & Birth of probability\\
+          Bernoulli (1713) & Law of large numbers\\
+          Bayes (1763) / Laplace & Updating beliefs from evidence\\
+          Kolmogorov (1933) & Rigorous axioms\\
+          Fisher (1922) & Maximum likelihood estimation\\
+          Shannon (1948) & Language as a statistical process\\
+          Boltzmann (1870s) & \(\to\) Luce (1959) \(\to\) Softmax\\
+          \bottomrule
+        \end{tabular}
+      \end{tcolorbox}
+
+      \vspace{0.3em}
+      \begin{insightbox}
+        Every time an LLM generates a word, it computes a softmax
+        probability distribution. The math started with a gambling
+        question in 1654.
+      \end{insightbox}
+    \end{column}
+  \end{columns}
+
+  \note{
+    Connection arrow: ``Every time an LLM generates a word, it computes
+    a softmax probability distribution. The math started with a gambling
+    question in 1654.''
+
+    Transition: ``The network predicts probabilities. But how do we
+    measure whether those probabilities are GOOD? For that, we need
+    information theory.''
+  }
+\end{frame}
+
+
+% ************************************************************
+% SECTION 4: INFORMATION THEORY (Slides 35-41)
+% "Measuring Meaning"
+% Section color: aiViolet
+% ************************************************************
+\section{Information Theory}
+
+% ----------------------------------------------------------
+% Slide 35: Section Divider
+% ----------------------------------------------------------
+{
+\setbeamercolor{background canvas}{bg=aiViolet}
+\begin{frame}[plain]
+  \centering
+  \vspace{2cm}
+  \textcolor{white}{\Huge\bfseries Information Theory}\\[0.5em]
+  \textcolor{white}{\Huge\bfseries Measuring Meaning}\\[1em]
+  \textcolor{white!80}{\large 1865--1948}\\[1.5em]
+  \textcolor{white!60}{\normalsize Clausius \(\cdot\) Boltzmann \(\cdot\) Shannon \(\cdot\) Kullback \(\cdot\) Zipf}
+
+  \note{
+    Transition: ``The network predicts probabilities. But how do we
+    measure whether those probabilities are GOOD? For that, we need
+    information theory.''
+
+    Tagline: How surprised should you be by the next word? Information
+    theory measures that.
+
+    This section covers \(\sim\)8 minutes.
+  }
+\end{frame}
+}
+
+% ----------------------------------------------------------
+% Slide 36: Entropy -- From Steam Engines to Bits
+% ----------------------------------------------------------
+\begin{frame}{Entropy --- Invented Three Times}
+
+  \begin{columns}[T]
+    \begin{column}{0.32\textwidth}
+      % Column 1: Clausius
+      \begin{tcolorbox}[colback=aiViolet!5, colframe=aiViolet!60,
+        fonttitle=\bfseries\scriptsize, title={Clausius (1865)},
+        rounded corners, boxrule=0.5pt, left=2pt, right=2pt, top=2pt, bottom=2pt]
+        \scriptsize
+        \visualplaceholder[3cm]{Steam engine diagram}
+        Entropy as ``energy unavailable for work.''
+        Named from Greek \emph{entropia} (transformation).
+      \end{tcolorbox}
+    \end{column}
+
+    \begin{column}{0.32\textwidth}
+      % Column 2: Boltzmann
+      \begin{tcolorbox}[colback=aiViolet!5, colframe=aiViolet!60,
+        fonttitle=\bfseries\scriptsize, title={Boltzmann (1870s)},
+        rounded corners, boxrule=0.5pt, left=2pt, right=2pt, top=2pt, bottom=2pt]
+        \scriptsize
+        \visualplaceholder[3cm]{Gas molecules in a box; Boltzmann's
+          tombstone with $S = k \log W$}
+        Entropy as ``number of arrangements.''
+        \[S = k \log W\]
+      \end{tcolorbox}
+    \end{column}
+
+    \begin{column}{0.32\textwidth}
+      % Column 3: Shannon
+      \begin{tcolorbox}[colback=aiViolet!5, colframe=aiViolet!60,
+        fonttitle=\bfseries\scriptsize, title={Shannon (1948)},
+        rounded corners, boxrule=0.5pt, left=2pt, right=2pt, top=2pt, bottom=2pt]
+        \scriptsize
+        \visualplaceholder[3cm]{Fair coin vs loaded coin; entropy
+          formula diagram}
+        Entropy as ``average surprise.''
+        \[H = -\!\sum_i p_i \log p_i\]
+        {\tiny $\sum$ = ``add up for every outcome $i$''}
+      \end{tcolorbox}
+    \end{column}
+  \end{columns}
+
+  \vspace{0.3em}
+  {\small\centering\itshape The same formula. Three completely different domains.\par}
+
+  \note{
+    CROSS-REFERENCE: Shannon appears again! We saw him in Section~3
+    (statistical language models, Slide~32). His 1948 paper is so
+    foundational that it contributes to BOTH the probability and
+    information theory sections. He modeled language statistically AND
+    created the measure for how good that model is.
+
+    Conceptual recipe for Shannon's formula: ``For each possible outcome,
+    multiply its probability by the `surprise' (the logarithm of how
+    unexpected it is). Add them all up. The result is the average
+    surprise.''
+
+    Anecdote: ``Shannon supposedly asked von Neumann what to call his new
+    quantity. Von Neumann said: `Call it entropy. Nobody knows what
+    entropy really is, so in a debate you will always have the
+    advantage.'\,'' (May be apocryphal.)
+
+    \verifytag{Clausius coined ``entropy'' in 1865 but the concept appears
+    in his earlier 1850s work. Shannon--von Neumann anecdote is widely
+    attributed but may be apocryphal.}
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 37: Cross-Entropy -- The Loss Function of LLMs
+% ----------------------------------------------------------
+\begin{frame}{Cross-Entropy --- THE Loss Function of LLMs}
+
+  \begin{columns}[T]
+    \begin{column}{0.46\textwidth}
+      % Conceptual recipe
+      \begin{tcolorbox}[colback=aiViolet!5, colframe=aiViolet!60,
+        fonttitle=\bfseries\small, title={Recipe: Cross-Entropy Loss},
+        rounded corners, boxrule=0.5pt, left=3pt, right=3pt, top=3pt, bottom=3pt]
+        \footnotesize
+        1. The true answer is one specific word.\\
+        2. Look at the probability your model gave that word.\\
+        3. Take the logarithm.\\
+        4. Negate it.\\[3pt]
+        High confidence in right answer \(\Rightarrow\) low loss.\\
+        Low confidence in right answer \(\Rightarrow\) high loss.
+      \end{tcolorbox}
+
+      \vspace{0.3em}
+      % Formal inset
+      \begin{tcolorbox}[colback=gray!5, colframe=gray!40,
+        fonttitle=\bfseries\small, title={Formal},
+        rounded corners, boxrule=0.5pt, left=3pt, right=3pt, top=1pt, bottom=1pt]
+        \footnotesize
+        \[\text{Loss} = -\log\bigl(p_{\text{model}}(\text{correct token})\bigr)\]
+        {\scriptsize Full form uses $\sum$ over all tokens, but since
+        only one is correct, it simplifies to this.}
+      \end{tcolorbox}
+    \end{column}
+
+    \begin{column}{0.51\textwidth}
+      % Concrete example
+      {\footnotesize ``The cat sat on the \rule{0.8cm}{0.4pt}''}
+
+      \vspace{0.3em}
+      \begin{tikzpicture}[scale=0.85]
+        \begin{axis}[
+          width=6.5cm, height=4cm,
+          ybar,
+          bar width=10pt,
+          ylabel={\scriptsize Probability},
+          ylabel style={at={(axis description cs:-0.05,0.5)}},
+          symbolic x coords={mat, rug, floor, ground, ...},
+          xtick=data,
+          tick label style={font=\scriptsize},
+          label style={font=\scriptsize},
+          ymin=0, ymax=0.45,
+          ytick={0,0.1,0.2,0.3,0.4},
+          axis lines=left,
+          nodes near coords={\scriptsize\pgfmathprintnumber\pgfplotspointmeta},
+          every node near coord/.append style={font=\tiny},
+        ]
+          \addplot[fill=aiViolet!70] coordinates
+            {(mat,0.30) (rug,0.25) (floor,0.20) (ground,0.15) (...,0.10)};
+        \end{axis}
+        \node[font=\scriptsize,aiViolet] at (1.2,-0.4)
+          {Loss $= -\log(0.30) = 1.20$};
+      \end{tikzpicture}
+
+      \vspace{0.1em}
+      {\scriptsize If model improves to 80\% for ``mat'':
+       loss $= -\log(0.80) = 0.22$}
+
+      \vspace{0.2em}
+      \begin{insightbox}
+        Training an LLM = minimizing cross-entropy = making the model
+        more confident about the RIGHT next word.
+      \end{insightbox}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``Every time an LLM gets a training example, it predicts the next
+    token, checks how wrong it was using cross-entropy, then uses
+    backpropagation (Section~2!) to improve. Cross-entropy is the bridge
+    between information theory and gradient descent.''
+
+    Bridge to earlier sections: Softmax (Section~3) produces the
+    probabilities. Cross-entropy measures how good they are.
+    Backpropagation (Section~2) improves them.
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 38: Surprisal and Perplexity
+% ----------------------------------------------------------
+\begin{frame}{Surprisal and Perplexity --- How We Evaluate LLMs}
+
+  \begin{columns}[T]
+    \begin{column}{0.47\textwidth}
+      \begin{tcolorbox}[colback=aiViolet!5, colframe=aiViolet!60,
+        fonttitle=\bfseries\small, title={Surprisal},
+        rounded corners, boxrule=0.5pt, left=3pt, right=3pt, top=3pt, bottom=3pt]
+        \footnotesize
+        $\text{Surprisal} = -\log\bigl(p(\text{word})\bigr)$\\[3pt]
+        High probability \(\Rightarrow\) low surprisal\\
+        Low probability \(\Rightarrow\) high surprisal
+      \end{tcolorbox}
+
+      \vspace{0.3em}
+      \begin{tcolorbox}[colback=aiViolet!5, colframe=aiViolet!60,
+        fonttitle=\bfseries\small, title={Perplexity},
+        rounded corners, boxrule=0.5pt, left=3pt, right=3pt, top=3pt, bottom=3pt]
+        \footnotesize
+        Average surprisal, exponentiated.\\[3pt]
+        Lower perplexity = better model.\\[3pt]
+        {\scriptsize ``GPT-4 has lower perplexity than GPT-3'' means
+        it's less surprised by real text.}
+      \end{tcolorbox}
+
+      \vspace{0.3em}
+      \begin{insightbox}
+        A good language model is rarely surprised by real text.
+        Shannon would have understood this immediately.
+      \end{insightbox}
+    \end{column}
+
+    \begin{column}{0.5\textwidth}
+      % Surprisal example
+      {\footnotesize ``The cat sat on the \rule{0.8cm}{0.4pt}''}
+
+      \vspace{0.4em}
+      \begin{tikzpicture}[
+        bar/.style={draw=none, rounded corners=1pt},
+        lbl/.style={font=\scriptsize, anchor=west},
+      ]
+        % mat -- low surprisal
+        \fill[aiViolet!30] (0, 2.4) rectangle (1.5, 2.8);
+        \node[lbl] at (1.7, 2.6) {``mat'' --- low surprisal (expected)};
+
+        % chandelier -- high surprisal
+        \fill[aiViolet!60] (0, 1.4) rectangle (4.0, 1.8);
+        \node[lbl] at (4.2, 1.6) {``chandelier''};
+        \node[font=\tiny\itshape,gray,anchor=west] at (4.2,1.3) {high surprisal};
+
+        % asdfghjkl -- very high
+        \fill[aiViolet!90] (0, 0.4) rectangle (5.5, 0.8);
+        \node[lbl] at (0.1, 0.1) {``asdfghjkl'' --- very high surprisal};
+
+        % Arrow label
+        \draw[->,thick,gray] (0,0.0) -- (5.8,0.0);
+        \node[font=\tiny,gray,anchor=north] at (2.9,-0.1) {Surprisal \(\to\)};
+      \end{tikzpicture}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``When researchers say GPT-4 has `lower perplexity' than GPT-3, they
+    mean it's less surprised by real text --- it predicts better.
+    Shannon would have understood this immediately.''
+
+    Perplexity is the standard evaluation metric for language models. It
+    connects directly to Shannon's information-theoretic framework.
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 39: KL Divergence [EXTENDED]
+% ----------------------------------------------------------
+\begin{frame}{KL Divergence --- Measuring the Gap Between Distributions}
+
+  \begin{columns}[T]
+    \begin{column}{0.47\textwidth}
+      {\footnotesize
+      \textbf{Solomon Kullback} (1907--1994) \&
+      \textbf{Richard Leibler} (1914--2003), USA.\\
+      Published KL divergence in 1951.}
+
+      \vspace{0.3em}
+      % Conceptual recipe
+      \begin{tcolorbox}[colback=aiViolet!5, colframe=aiViolet!60,
+        fonttitle=\bfseries\small, title={Recipe: KL Divergence},
+        rounded corners, boxrule=0.5pt, left=3pt, right=3pt, top=2pt, bottom=2pt]
+        \footnotesize
+        For each possible outcome, ask:\\
+        ``How much more surprising is this under model $Q$ compared to
+        truth $P$?''\\[3pt]
+        Average over all outcomes.\\[3pt]
+        If $Q$ matches $P$ perfectly $\Rightarrow$ KL $= 0$.
+      \end{tcolorbox}
+
+      \vspace{0.3em}
+      \begin{insightbox}
+        In RLHF (the technique that makes ChatGPT helpful), KL divergence
+        prevents the model from changing too much during fine-tuning.
+      \end{insightbox}
+
+      \vspace{0.2em}
+      {\footnotesize\textcolor{gray}{[EXTENDED] --- can be cut without
+      losing the narrative}}
+    \end{column}
+
+    \begin{column}{0.5\textwidth}
+      % Two overlapping distributions
+      \begin{tikzpicture}[scale=0.85]
+        \begin{axis}[
+          width=6.5cm, height=4.5cm,
+          axis lines=left,
+          xlabel={\scriptsize Outcome},
+          ylabel={\scriptsize Probability},
+          xtick=\empty, ytick=\empty,
+          xmin=-3, xmax=4,
+          ymin=0, ymax=0.5,
+          tick label style={font=\tiny},
+          label style={font=\tiny},
+        ]
+          % P (true)
+          \addplot[aiViolet, very thick, smooth, domain=-3:4, samples=50]
+            {0.4*exp(-x*x/2)};
+          % Q (model)
+          \addplot[accentOrange, very thick, smooth, dashed, domain=-3:4, samples=50]
+            {0.35*exp(-(x-1)*(x-1)/2.5)};
+          % Gap annotation
+          \draw[<->, thick, red!60] (axis cs:0,0.35) -- (axis cs:1,0.28)
+            node[midway, above, font=\tiny, text=red!70] {gap};
+          \node[font=\scriptsize, aiViolet] at (axis cs:-1.5,0.35) {$P$ (true)};
+          \node[font=\scriptsize, accentOrange] at (axis cs:2.5,0.3) {$Q$ (model)};
+        \end{axis}
+        \node[font=\scriptsize\itshape,gray] at (3.2,-0.3)
+          {Bigger gap = worse model};
+      \end{tikzpicture}
+
+      \vspace{0.3em}
+      % Formal
+      \begin{tcolorbox}[colback=gray!5, colframe=gray!40,
+        fonttitle=\bfseries\small, title={Formal},
+        rounded corners, boxrule=0.5pt, left=3pt, right=3pt, top=1pt, bottom=1pt]
+        \footnotesize
+        $\displaystyle D_{\text{KL}}(P \| Q) = \sum_i P(i)\,\log\frac{P(i)}{Q(i)}$
+      \end{tcolorbox}
+    \end{column}
+  \end{columns}
+
+  \note{
+    This slide is marked [EXTENDED] and can be cut if time is short.
+
+    ``In RLHF (Reinforcement Learning from Human Feedback), KL divergence
+    is used to prevent the model from diverging too far from its base
+    behavior during fine-tuning.''
+
+    \verifytag{Kullback--Leibler 1951 paper ``On Information and
+    Sufficiency'' --- confirm title and year.}
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 40: Tokenization -- Carving Language into Pieces
+% ----------------------------------------------------------
+\begin{frame}{Tokenization --- Carving Language into Pieces}
+
+  \begin{columns}[T]
+    \begin{column}{0.46\textwidth}
+      {\footnotesize
+      \textbf{George Kingsley Zipf} (1902--1950, USA).\\
+      \alert{Zipf's law} (1935/1949): word frequency is inversely
+      proportional to its rank. ``The'' is \#1, ``of'' is \#2, \ldots}
+
+      \vspace{0.3em}
+      {\footnotesize
+      \textbf{Rico Sennrich}, \textbf{Barry Haddow},
+      \textbf{Alexandra Birch} (Edinburgh, 2016).\\
+      Adapted \alert{Byte Pair Encoding} (BPE) for neural machine
+      translation. BPE is the tokenization method used by GPT and most
+      modern LLMs.}
+
+      \vspace{0.3em}
+      \begin{insightbox}
+        The AI doesn't see words --- it sees tokens. BPE gives short
+        tokens to common patterns (Zipf's law!) and splits rare words
+        into pieces.
+      \end{insightbox}
+    \end{column}
+
+    \begin{column}{0.51\textwidth}
+      % Tokenization example
+      \begin{tcolorbox}[colback=aiViolet!5, colframe=aiViolet!60,
+        fonttitle=\bfseries\small, title={BPE Tokenization Example},
+        rounded corners, boxrule=0.5pt, left=3pt, right=3pt, top=3pt, bottom=3pt]
+        \footnotesize
+        \textbf{Input:}\\
+        {\ttfamily The mathematician calculated the eigenvalue}\\[4pt]
+        \textbf{Tokens:}\\
+        \colorbox{aiViolet!15}{\ttfamily The}\;
+        \colorbox{aiViolet!25}{\ttfamily\, mathematic}\,%
+        \colorbox{aiViolet!35}{\ttfamily ian}\;
+        \colorbox{aiViolet!15}{\ttfamily\, calculated}\;
+        \colorbox{aiViolet!15}{\ttfamily\, the}\;
+        \colorbox{aiViolet!25}{\ttfamily\, eigen}\,%
+        \colorbox{aiViolet!35}{\ttfamily value}\\[4pt]
+        {\scriptsize Common words \(\to\) single token\\
+        Rare words \(\to\) split into pieces}
+      \end{tcolorbox}
+
+      \vspace{0.3em}
+      % Zipf's law sketch
+      \begin{tikzpicture}[scale=0.8]
+        \begin{axis}[
+          width=5.5cm, height=3cm,
+          axis lines=left,
+          xlabel={\tiny Word rank},
+          ylabel={\tiny Frequency},
+          xtick={1,10,100,1000},
+          xmode=log,
+          ymode=log,
+          ymin=1, ymax=100000,
+          tick label style={font=\tiny},
+          label style={font=\tiny},
+        ]
+          \addplot[aiViolet, thick, domain=1:1000, samples=30] {80000/x};
+          \node[font=\tiny] at (axis cs:3,40000) {``the''};
+          \node[font=\tiny] at (axis cs:50,800) {``eigenvalue''};
+        \end{axis}
+      \end{tikzpicture}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``Common words like `the' get one token. Uncommon words like
+    `eigenvalue' get split into `eigen' + `value.' This encoding scheme
+    is deeply connected to information theory: give short codes to
+    frequent patterns.''
+
+    Historical lineage: Philip Gage published BPE as a compression
+    algorithm in 1994. Sennrich et al.\ adapted it for NLP in 2016.
+
+    \verifytag{Zipf's law appears in his 1935 book and more fully in his
+    1949 book. Sennrich et al.\ 2016 ACL paper --- confirm venue.}
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 41: Convergence Diagram Update -- Information Theory
+% ----------------------------------------------------------
+\begin{frame}{Building the Transformer --- Information Theory}
+
+  \begin{columns}[T]
+    \begin{column}{0.45\textwidth}
+      % Convergence diagram placeholder
+      \visualplaceholder[5cm]{Convergence diagram: Sections 1--3 lit
+        (Linear Algebra, Calculus, Probability). Section~4
+        ``Information Theory'' now lights up in red.
+        Label: ``Cross-entropy = the loss function.''}
+    \end{column}
+
+    \begin{column}{0.52\textwidth}
+      \begin{tcolorbox}[colback=aiViolet!5, colframe=aiViolet,
+        fonttitle=\bfseries, title={Section 4 Summary},
+        rounded corners, boxrule=1pt, left=4pt, right=4pt, top=3pt, bottom=3pt]
+        \footnotesize
+        \begin{tabular}{@{}ll@{}}
+          \toprule
+          \textbf{Who / When} & \textbf{Contribution}\\
+          \midrule
+          Clausius (1865) & Thermodynamic entropy\\
+          Boltzmann (1870s) & Statistical entropy, $S = k\log W$\\
+          Shannon (1948) & Information entropy, the ``bit''\\
+          Kullback--Leibler (1951) & Divergence between distributions\\
+          Zipf (1935/1949) & Word frequency laws\\
+          Sennrich et al.\ (2016) & BPE tokenization\\
+          \bottomrule
+        \end{tabular}
+      \end{tcolorbox}
+
+      \vspace{0.3em}
+      \begin{insightbox}
+        LLMs are trained by minimizing cross-entropy loss.
+        Shannon's 1948 formula is literally the objective function.
+      \end{insightbox}
+    \end{column}
+  \end{columns}
+
+  \note{
+    Connection arrow: ``LLMs are trained by minimizing cross-entropy
+    loss. Shannon's 1948 formula is literally the objective function.''
+
+    Transition: ``We have the math for learning and the math for
+    measuring. But we need something to run it on. Enter: logic and
+    computation.''
+  }
+\end{frame}
+
+
+% ************************************************************
+% SECTION 5: LOGIC & COMPUTATION (Slides 42-48)
+% "The Substrate"
+% Section color: aiViolet
+%
+% NARRATIVE TENSION: Logicians dreamed of mechanical reasoning.
+% They proved it was impossible. Then neural networks did it
+% anyway.
+% ************************************************************
+\section{Logic \& Computation}
+
+% ----------------------------------------------------------
+% Slide 42: Section Divider
+% ----------------------------------------------------------
+{
+\setbeamercolor{background canvas}{bg=aiViolet}
+\begin{frame}[plain]
+  \centering
+  \vspace{2cm}
+  \textcolor{white}{\Huge\bfseries Logic \& Computation}\\[0.5em]
+  \textcolor{white}{\Huge\bfseries The Substrate}\\[1em]
+  \textcolor{white!80}{\large 1854--1970s}\\[1.5em]
+  \textcolor{white!60}{\normalsize Boole \(\cdot\) Frege \(\cdot\) G\"odel \(\cdot\) Turing \(\cdot\) von Neumann}\\[1em]
+  \textcolor{white!70}{\itshape\normalsize ``Logicians dreamed of mechanical thought.\\
+    They proved it was impossible.\\
+    Then neural networks did it anyway.''}
+
+  \note{
+    Transition: ``We have the math for learning and the math for
+    measuring. But we need something to run it on.''
+
+    This section is structured around a paradox: logicians tried to
+    reduce all reasoning to mechanical rules, Turing and G\"odel proved
+    that's impossible, and yet neural networks learned to do things
+    formal logic cannot: translate, write poetry, reason by analogy.
+
+    The machines that logic built transcended the limitations that logic
+    discovered.
+
+    This section covers \(\sim\)8 minutes.
+  }
+\end{frame}
+}
+
+% ----------------------------------------------------------
+% Slide 43: Boolean Algebra -- The Language of Computers
+% ----------------------------------------------------------
+\begin{frame}{Boolean Algebra --- The Language of Computers (1854)}
+
+  \begin{columns}[T]
+    \begin{column}{0.45\textwidth}
+      \begin{personbox}[George Boole (1815--1864)]{aiViolet}
+        \textbf{Origin:} Lincoln, England; worked at Queen's College
+        Cork, Ireland\\[3pt]
+        Published \emph{An Investigation of the Laws of Thought} (1854).
+        Self-taught mathematician who showed that \textbf{logical
+        reasoning} could be expressed as \textbf{algebra}: variables
+        take values 0 (false) or 1 (true).
+      \end{personbox}
+
+      \vspace{0.3em}
+      \begin{insightbox}
+        Boole was a self-taught son of a shoemaker who became a
+        university professor. His algebra is now the foundation of every
+        digital device on Earth.
+      \end{insightbox}
+    \end{column}
+
+    \begin{column}{0.52\textwidth}
+      % Boolean logic gates
+      \begin{tikzpicture}[
+        gate/.style={draw=aiViolet, thick, rounded corners, fill=aiViolet!8,
+          minimum width=1.6cm, minimum height=0.7cm, font=\small\bfseries,
+          align=center},
+        tbl/.style={font=\tiny, inner sep=2pt},
+        >=Stealth
+      ]
+        % AND gate
+        \node[gate] (and) at (0, 2.5) {AND};
+        \node[tbl,right=0.3cm of and] {%
+          \begin{tabular}{cc|c}
+            A & B & Out\\ \hline
+            0 & 0 & 0\\
+            0 & 1 & 0\\
+            1 & 0 & 0\\
+            1 & 1 & 1
+          \end{tabular}
+        };
+
+        % OR gate
+        \node[gate] (or) at (0, 0.8) {OR};
+        \node[tbl,right=0.3cm of or] {%
+          \begin{tabular}{cc|c}
+            A & B & Out\\ \hline
+            0 & 0 & 0\\
+            0 & 1 & 1\\
+            1 & 0 & 1\\
+            1 & 1 & 1
+          \end{tabular}
+        };
+
+        % NOT gate
+        \node[gate] (not) at (0, -0.5) {NOT};
+        \node[tbl,right=0.3cm of not] {%
+          \begin{tabular}{c|c}
+            A & Out\\ \hline
+            0 & 1\\
+            1 & 0
+          \end{tabular}
+        };
+      \end{tikzpicture}
+
+      \vspace{0.3em}
+      {\small\centering Every GPU in every AI data center is made of
+      \emph{billions} of these gates.\par}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``Boolean algebra reduced logical reasoning to symbols and rules.
+    Every digital computer --- from your phone to a data center full of
+    GPUs --- is built from AND, OR, and NOT gates. Billions of them.''
+
+    Boole's work was abstract and philosophical. He had no idea it would
+    become the foundation of hardware.
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 44: The Dream and Its Limits -- Frege to Godel to Turing
+% ----------------------------------------------------------
+\begin{frame}{The Dream and Its Limits --- From Frege to Turing}
+
+  {\small After Boole, logicians dreamed of reducing ALL reasoning to
+  mechanical symbol manipulation. They almost succeeded --- and then
+  proved it was \textbf{impossible}.}
+
+  \vspace{0.3em}
+  % Timeline
+  \begin{tikzpicture}[
+    person/.style={draw=aiViolet!60, rounded corners, fill=aiViolet!5,
+      font=\scriptsize, inner sep=3pt, text width=3.1cm, align=left,
+      minimum height=1.6cm},
+    arr/.style={-Stealth, thick, aiViolet!50},
+  ]
+    \node[person] (frege) at (0, 0) {%
+      \textbf{Frege} (1879)\\
+      First formal logical system.\\
+      A precursor to programming languages.};
+    \node[person] (rw) at (3.8, 0) {%
+      \textbf{Russell \& Whitehead}\\
+      \emph{Principia} (1910--13)\\
+      362 pages to prove $1{+}1{=}2$.};
+    \node[person] (godel) at (7.6, 0) {%
+      \textbf{G\"odel} (1931)\\
+      \alert{Incompleteness:} true statements exist that \emph{cannot}
+      be proved.};
+    \node[person] (turing) at (11.4, 0) {%
+      \textbf{Turing} (1936)\\
+      \alert{Halting problem:} no algorithm can decide if any program
+      will stop.};
+
+    \draw[arr] (frege.east) -- (rw.west);
+    \draw[arr] (rw.east) -- (godel.west);
+    \draw[arr] (godel.east) -- (turing.west);
+  \end{tikzpicture}
+
+  \vspace{0.3em}
+  \begin{insightbox}
+    The irony: neural networks, built from Boole's logic gates, learned
+    to translate, reason, and create --- not by following rules, but by
+    learning patterns from data. The machines that logic built went
+    beyond what logic can do.
+  \end{insightbox}
+
+  \note{
+    Key persons (brief):
+    \begin{itemize}\setlength\itemsep{1pt}
+      \item \textbf{Gottlob Frege} (1848--1925, Wismar, Germany).
+        Created the first formal logic powerful enough to express math
+        (\emph{Begriffsschrift}, 1879).
+      \item \textbf{Bertrand Russell} (1872--1970) \&
+        \textbf{Alfred North Whitehead} (1861--1947).
+        \emph{Principia Mathematica} (1910--1913): derive ALL math from
+        logical axioms.
+      \item \textbf{Kurt G\"odel} (1906--1978, Brno / Princeton).
+        Incompleteness theorems (1931).
+      \item \textbf{Alan Turing} (1912--1954, London). ``On Computable
+        Numbers'' (1936): the Turing machine and the halting problem.
+    \end{itemize}
+
+    ``They tried to reduce all reasoning to logic. G\"odel proved some
+    truths escape any formal system. Turing proved some questions can't
+    be answered by any algorithm. And yet --- neural networks, built from
+    Boole's logic gates, learned to translate, reason, and create.''
+
+    \verifytag{Page number 362 for 1+1=2 in Principia is commonly cited
+    but may be approximate.}
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 45: Von Neumann Architecture [EXTENDED]
+% ----------------------------------------------------------
+\begin{frame}{Von Neumann Architecture --- The Hardware Blueprint (1945)}
+
+  \begin{columns}[T]
+    \begin{column}{0.45\textwidth}
+      \begin{personbox}[John von Neumann (1903--1957)]{aiViolet}
+        \textbf{Born:} Neumann J\'anos Lajos\\
+        \textbf{Origin:} Budapest, Hungary; worked at Princeton, USA\\[3pt]
+        Published \emph{First Draft of a Report on the EDVAC} (1945),
+        describing the \alert{stored-program architecture}: instructions
+        and data share the same memory.
+      \end{personbox}
+
+      \vspace{0.3em}
+      {\footnotesize\textcolor{gray}{[EXTENDED] --- can be cut;
+      summarize verbally}}
+
+      \vspace{0.2em}
+      {\small\itshape LLM inference runs on this architecture. But
+      training requires massively parallel hardware. Enter the GPU.}
+    \end{column}
+
+    \begin{column}{0.52\textwidth}
+      % Von Neumann architecture diagram
+      \begin{tikzpicture}[
+        comp/.style={draw=aiViolet, thick, rounded corners=4pt,
+          fill=aiViolet!10, minimum width=2.2cm, minimum height=0.9cm,
+          font=\small\bfseries, align=center},
+        bus/.style={draw=aiViolet, thick, -Stealth, line width=1.5pt},
+        dbus/.style={draw=aiViolet, thick, Stealth-Stealth, line width=1.5pt},
+      ]
+        \node[comp] (cpu) at (0, 2) {CPU\\{\scriptsize Control + ALU}};
+        \node[comp] (mem) at (0, 0) {Memory\\{\scriptsize Programs + Data}};
+        \node[comp] (inp) at (-2.5, 0) {Input};
+        \node[comp] (out) at (2.5, 0) {Output};
+
+        \draw[dbus] (cpu) -- (mem);
+        \draw[bus] (inp) -- (mem);
+        \draw[bus] (mem) -- (out);
+      \end{tikzpicture}
+
+      \vspace{0.4em}
+      {\small\centering This basic design has powered nearly every
+      computer for 80~years.\par}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``The stored-program concept: keep both the program and its data in
+    the same memory. Nearly every computer follows this design.''
+
+    Note: the 1945 draft was controversial --- it was circulated under
+    von Neumann's name alone, but was based on collaborative work by
+    Eckert and Mauchly. We present the architecture concept, not the
+    priority dispute.
+
+    \verifytag{First Draft of a Report on the EDVAC, 1945 --- confirm
+    attribution context.}
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 46: Floating Point Arithmetic
+% ----------------------------------------------------------
+\begin{frame}{Floating Point --- How Computers Handle Real Numbers}
+
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      {\footnotesize
+      \textbf{Konrad Zuse} (1910--1995, Berlin, Germany).\\
+      Built the \alert{Z3} (1941), the first programmable computer using
+      floating-point arithmetic.}
+
+      \vspace{0.3em}
+      % Floating-point layout
+      \begin{tcolorbox}[colback=aiViolet!5, colframe=aiViolet!60,
+        fonttitle=\bfseries\small, title={How 3.14159 is stored},
+        rounded corners, boxrule=0.5pt, left=3pt, right=3pt, top=3pt, bottom=3pt]
+        \footnotesize
+        \begin{tikzpicture}
+          \fill[aiViolet!20] (0,0) rectangle (0.5,0.5);
+          \node[font=\tiny] at (0.25,0.25) {sign};
+          \fill[aiViolet!35] (0.6,0) rectangle (2.6,0.5);
+          \node[font=\tiny] at (1.6,0.25) {exponent (8 bits)};
+          \fill[aiViolet!50] (2.7,0) rectangle (5.8,0.5);
+          \node[font=\tiny,white] at (4.25,0.25) {mantissa (23 bits)};
+        \end{tikzpicture}
+
+        \vspace{2pt}
+        {\scriptsize IEEE 754 standard (1985)}
+      \end{tcolorbox}
+
+      \vspace{0.3em}
+      \begin{insightbox}
+        Every weight in an LLM is a floating-point number. Large models
+        have hundreds of billions of them.
+      \end{insightbox}
+    \end{column}
+
+    \begin{column}{0.49\textwidth}
+      % Precision comparison
+      \begin{tcolorbox}[colback=gray!5, colframe=gray!50,
+        fonttitle=\bfseries\small,
+        title={Precision vs.\ Speed Trade-off},
+        rounded corners, boxrule=0.5pt, left=3pt, right=3pt, top=3pt, bottom=3pt]
+        \footnotesize
+        \begin{tabular}{@{}lcc@{}}
+          \toprule
+          \textbf{Format} & \textbf{Bits} & \textbf{Use}\\
+          \midrule
+          FP32 & 32 & Traditional training\\
+          FP16 / BF16 & 16 & Modern LLM training\\
+          INT8 & 8 & Fast inference\\
+          INT4 & 4 & Aggressive compression\\
+          \bottomrule
+        \end{tabular}
+
+        \vspace{4pt}
+        {\scriptsize Fewer bits = less precise but faster and smaller.\\
+        Modern LLMs accept small rounding errors in exchange for fitting
+        bigger models.}
+      \end{tcolorbox}
+
+      \vspace{0.3em}
+      {\small\centering\itshape From Zuse's Z3 (1941) to today's
+      GPU clusters: the same fundamental idea, vastly more scale.\par}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``Modern LLMs use reduced-precision floating point (16-bit or even
+    8-bit instead of 32-bit) to save memory and speed up computation.
+    This means accepting small rounding errors in exchange for being able
+    to fit a bigger model.''
+
+    \verifytag{Z3 as first floating-point computer is standard but note
+    it was electromechanical, not electronic.}
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 47: GPU Computing -- Why Matrix Multiplication Won
+% ----------------------------------------------------------
+\begin{frame}{GPU Computing --- Why Matrix Multiplication Won}
+
+  \begin{columns}[T]
+    \begin{column}{0.47\textwidth}
+      {\footnotesize
+      \textbf{NVIDIA} released \alert{CUDA} (2007): general-purpose
+      computing on GPUs.}
+
+      \vspace{0.2em}
+      {\footnotesize
+      \textbf{Alex Krizhevsky}, \textbf{Ilya Sutskever},
+      \textbf{Geoffrey Hinton} --- \alert{AlexNet} (2012): GPUs could
+      train deep neural networks dramatically faster, launching the deep
+      learning era.}
+
+      \vspace{0.3em}
+      \begin{insightbox}
+        Without GPUs, deep learning would still be a curiosity.
+        Video game hardware accidentally enabled AI.
+      \end{insightbox}
+
+      \vspace{0.3em}
+      {\small\itshape ``AlexNet showed GPUs could train networks
+      10--100$\times$ faster than CPUs. That single result changed the
+      trajectory of AI.''}
+    \end{column}
+
+    \begin{column}{0.5\textwidth}
+      \visualplaceholder[5cm]{CPU vs GPU comparison:\\CPU: 4--16 powerful cores\\GPU: 5,000--16,000 simple cores\\Neural networks = parallel matrix math = perfect for GPU}
+
+      \vspace{0.3em}
+      {\small\centering Neural network training: millions of
+      \emph{independent} matrix multiplications\\
+      \(\Rightarrow\) perfect for GPU.\par}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``Without GPUs, deep learning would still be a curiosity. The
+    AlexNet result in 2012 showed that GPUs could train networks
+    10--100$\times$ faster than CPUs. That single result changed the
+    trajectory of AI.''
+
+    Key insight: GPUs were designed for rendering video game graphics ---
+    which is also parallel matrix math. The fit with neural networks was
+    accidental and transformative.
+
+    \verifytag{AlexNet: Krizhevsky et al., NeurIPS (then NIPS) 2012 ---
+    confirm venue.}
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 48: Convergence Diagram Update -- Logic & Computation
+% ----------------------------------------------------------
+\begin{frame}{Building the Transformer --- Logic \& Computation}
+
+  \begin{columns}[T]
+    \begin{column}{0.45\textwidth}
+      % Convergence diagram placeholder
+      \visualplaceholder[5cm]{Convergence diagram: Sections 1--4 lit
+        (Linear Algebra, Calculus, Probability, Information Theory).
+        Section~5 ``Logic \& Computation'' now lights up in gray/steel.
+        Label: ``GPUs = the hardware.''}
+
+      \vspace{0.3em}
+      \begin{insightbox}
+        Boolean logic built the hardware. Turing defined computation.
+        GPUs made deep learning possible. And neural networks surpassed
+        what formal logic can do.
+      \end{insightbox}
+    \end{column}
+
+    \begin{column}{0.52\textwidth}
+      \begin{tcolorbox}[colback=aiViolet!5, colframe=aiViolet,
+        fonttitle=\bfseries, title={Section 5 Summary},
+        rounded corners, boxrule=1pt, left=4pt, right=4pt, top=3pt, bottom=3pt]
+        \footnotesize
+        \begin{tabular}{@{}ll@{}}
+          \toprule
+          \textbf{Who / When} & \textbf{Contribution}\\
+          \midrule
+          Boole (1854) & Boolean algebra\\
+          Frege (1879) & Formal logic\\
+          Russell/Whitehead (1910--13) & \emph{Principia Mathematica}\\
+          G\"odel (1931) & Incompleteness theorems\\
+          Turing (1936) & Computability, Turing machine\\
+          Von Neumann (1945) & Stored-program architecture\\
+          Zuse (1941) & Floating-point computation\\
+          CUDA (2007) + AlexNet (2012) & GPU revolution\\
+          \bottomrule
+        \end{tabular}
+      \end{tcolorbox}
+    \end{column}
+  \end{columns}
+
+  \note{
+    Connection arrow: ``Boolean logic built the hardware. Turing defined
+    computation. GPUs made deep learning possible. And neural networks
+    surpassed what formal logic can do.''
+
+    Transition: ``We have math AND hardware. But here's a deep question:
+    WHY should a pile of matrix multiplications be able to learn
+    ANYTHING? For the answer, we need the theory of function
+    approximation.''
+
+    This marks the natural end of Session~2 (Slides 26--48,
+    \(\sim\)26 minutes). Natural break line: ``We have the math and the
+    hardware. But can we actually build a brain?''
+  }
+\end{frame}

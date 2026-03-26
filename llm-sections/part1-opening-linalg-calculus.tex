@@ -1,0 +1,1150 @@
+% ============================================================
+% Building Blocks of LLMs -- Part 1
+% Section 0: Opening (Slides 1-4)
+% Section 1: Linear Algebra (Slides 5-16)
+% Section 2: Calculus & Optimization (Slides 17-25)
+% ============================================================
+
+% ============================================================
+% SECTION 0: OPENING (Slides 1-4)
+% ============================================================
+\section{Opening}
+
+% ----------------------------------------------------------
+% Slide 1: Title Slide
+% ----------------------------------------------------------
+\begin{frame}[plain]
+  \begin{tikzpicture}[remember picture, overlay]
+    \fill[aiViolet] (current page.south west) rectangle (current page.north east);
+  \end{tikzpicture}
+
+  \vspace{1cm}
+  \begin{center}
+    {\Huge\bfseries\textcolor{white}{The Building Blocks of LLMs}}\\[0.6em]
+    {\Large\textcolor{white!90}{A Mathematical History}}\\[1.5em]
+    {\large\textcolor{white!80}{From Archimedes to Attention:}}\\[0.3em]
+    {\large\textcolor{white!80}{2,000+ Years of Mathematics Inside Your AI}}\\[2em]
+    {\normalsize\textcolor{white!70}{Prof.\ J.\ Osterrieder \hspace{2em} 2026}}
+  \end{center}
+
+  \note{
+    Welcome slide. Frame the lecture: this is not about hype or ``intelligence.''
+    This is about tracing every mathematical component of the LLMs students use daily
+    back to the person who invented it.
+    Core throughline: ``Every component of an LLM was invented by someone,
+    for a specific purpose, often centuries before AI existed.''
+    Audience takeaway: ``I already know some of this math ---
+    I just didn't know it was inside my AI.''
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 2: What's Inside Your AI?
+% ----------------------------------------------------------
+\begin{frame}{What's Inside Your AI?}
+
+  \begin{columns}[T]
+    \begin{column}{0.45\textwidth}
+      \vspace{0.5em}
+      When you type a question to ChatGPT or Claude\ldots
+
+      \vspace{0.5em}
+      The machine that answers is built \alert{entirely from mathematics}.
+
+      \vspace{0.5em}
+      \begin{itemize}
+        \item Not magic
+        \item Not ``intelligence''
+        \item \textbf{Specific math}, invented by \textbf{specific people},\\
+              at \textbf{specific times}
+      \end{itemize}
+
+      \vspace{0.8em}
+      \begin{insightbox}
+        You already know some of this math.
+        You just don't know it's inside your AI yet.
+      \end{insightbox}
+    \end{column}
+
+    \begin{column}{0.52\textwidth}
+      \visualplaceholder[6cm]{Smartphone screen showing an AI chat. Floating labeled arrows point to different parts of the response: ``Linear Algebra,'' ``Calculus,'' ``Probability,'' ``Information Theory,'' ``Logic,'' ``Function Approximation''}
+    \end{column}
+  \end{columns}
+
+  \note{
+    Key message: the AI they use every day is made of math they can learn to understand.
+    ``You already know some of this math. You just don't know it's inside your AI yet.
+    Today we're going to fix that.''
+    Do NOT use hype language. Let the math speak for itself.
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 3: The Exploded Diagram -- What We Will Build Today
+% ----------------------------------------------------------
+\begin{frame}{The Exploded Transformer --- What We Will Build Today}
+
+  \begin{center}
+    \visualplaceholder[12cm]{EXPLODED TRANSFORMER DIAGRAM (full-slide).
+      Color-coded components:
+      Matrix multiplication layers (blue, Linear Algebra) ---
+      Dot product scores (blue) ---
+      Gradient descent arrows (green, Calculus) ---
+      Softmax probability bars (orange, Probability) ---
+      Cross-entropy loss (red, Information Theory) ---
+      Boolean gates / GPU chips (gray, Logic) ---
+      Activation function curves (purple, Function Approx.) ---
+      Neuron nodes (yellow, The Neuron) ---
+      Residual connections / skip arrows (yellow) ---
+      Layer normalization (yellow) ---
+      Attention arrows (teal, Sequence Modeling).
+      Intentionally overwhelming on first view.}
+  \end{center}
+
+  \vspace{-0.3em}
+  {\small\centering\textcolor{gray}{This looks complicated now. By the end, you will know every piece --- and WHO invented it.}\par}
+
+  \note{
+    ``This looks complicated right now. Good. By the end of today, you'll know what
+    every one of these pieces does and WHO invented it.''
+    This slide is meant to overwhelm --- we will return to it in Slide 73
+    with full understanding.
+    Each color maps to a section of the lecture.
+    Do not explain the components yet; just let students absorb the visual.
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 4: The Convergence Diagram -- Our Roadmap
+% ----------------------------------------------------------
+\begin{frame}{Our Roadmap --- The Convergence Diagram}
+
+  \begin{center}
+    \visualplaceholder[12cm]{CONVERGENCE DIAGRAM -- INITIAL STATE.
+      Central node: large ``?'' (gray).
+      10 gray nodes in a semicircle around it, each labeled:
+      (1) Linear Algebra [1809--1900s],
+      (2) Calculus \& Optimization [c.\,250\,BCE--1986],
+      (3) Probability \& Statistics [1654--1933],
+      (4) Information Theory [1865--1948],
+      (5) Logic \& Computation [1854--1970s],
+      (6) Function Approximation [1807--1991],
+      (7) The Neuron \& Depth [1943--2016],
+      (8) Sequence Modeling [1906--2014],
+      (9) The Transformer [2017],
+      (10) Scaling to LLMs [2018--2026].
+      Gray arrows from each node toward center ``?'' node.
+      All nodes are dim/gray --- none lit up yet.}
+  \end{center}
+
+  \note{
+    ``We're going to light up these nodes one by one. Each one is a piece of math
+    that somebody invented, often for a completely different purpose, that ended up
+    inside the machines you use every day.''
+    This diagram will recur at the end of every section, progressively lighting up.
+    Emphasize: ten branches of mathematics, developed over 2,000+ years,
+    all converge in one architecture.
+  }
+\end{frame}
+
+
+% ============================================================
+% SECTION 1: LINEAR ALGEBRA -- "The Skeleton of Neural Networks"
+% Slides 5-16
+% ============================================================
+\section{Linear Algebra}
+
+% ----------------------------------------------------------
+% Slide 5: Section Divider
+% ----------------------------------------------------------
+{
+\setbeamercolor{background canvas}{bg=digitalBlue}
+\begin{frame}[plain]
+  \centering
+  \vspace{1.5cm}
+  \textcolor{white}{\Huge\bfseries Linear Algebra}\\[0.6em]
+  \textcolor{white!80}{\large The Skeleton of Neural Networks}\\[1em]
+  \textcolor{white!60}{\normalsize 1809--1900s}\\[1.5em]
+  \textcolor{white!70}{\itshape``Neural networks are, at their core, matrix multiplication machines.''}
+
+  \note{
+    Section transition. Linear algebra provides the fundamental data structures
+    (vectors, matrices) and operations (multiplication, dot product) of neural networks.
+    Timeline: formal theory begins around 1809 (Grassmann born), but roots in Gauss and earlier.
+    Convergence diagram: Section 1 node pulsing.
+  }
+\end{frame}
+}
+
+% ----------------------------------------------------------
+% Slide 6: What Is a Vector?
+% ----------------------------------------------------------
+\begin{frame}{What Is a Vector? --- Forces, Velocities, and Words}
+
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
+      \begin{personbox}[Hermann Grassmann (1809--1877)]{digitalBlue}
+        \small
+        \textbf{Origin:} Stettin, Prussia (now Szczecin, Poland)\\
+        \textbf{Key work:} \emph{Die lineale Ausdehnungslehre} (1844) ---
+        the first general theory of vector spaces in any number of dimensions.\\
+        A schoolteacher whose work was so ahead of its time that almost nobody read it.
+      \end{personbox}
+
+      \vspace{0.3em}
+      \begin{personbox}[Sir William Rowan Hamilton (1805--1865)]{digitalBlue}
+        \small
+        \textbf{Origin:} Dublin, Ireland\\
+        \textbf{Key work:} Invented quaternions (1843) while walking along the Royal Canal
+        in Dublin --- famously carved the formula into Brougham Bridge.
+      \end{personbox}
+    \end{column}
+
+    \begin{column}{0.45\textwidth}
+      A \textbf{vector} is a list of numbers that represents something.
+
+      \vspace{0.5em}
+      \visualplaceholder[5cm]{Left: a 2D vector arrow. Middle: a 3D vector arrow.
+        Right: ``768-dimensional vector'' with fading dots.
+        Below: ``In an LLM, each word becomes a vector --- a list of 768+ numbers.''}
+
+      \vspace{0.3em}
+      \visualplaceholder[5cm]{Plaque on Brougham Bridge showing Hamilton's quaternion
+        formula $i^2 = j^2 = k^2 = ijk = -1$}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``Hamilton was so excited that he carved his formula into a bridge. Grassmann's
+    far more general idea was ignored for decades. Both were building the language
+    that neural networks would eventually speak.''
+    LLM connection: every word is converted into a vector (an ``embedding'')
+    with 768 or more numbers. Grassmann's abstract vector spaces ARE the embedding
+    spaces of modern AI.
+    \verifytag{Grassmann's 1844 publication date and characterization of reception.}
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 7: Modern Vector Notation -- Gibbs and Heaviside
+% ----------------------------------------------------------
+\begin{frame}{Modern Vector Notation --- Gibbs and Heaviside}
+
+  \begin{columns}[T]
+    \begin{column}{0.50\textwidth}
+      \begin{personbox}[Josiah Willard Gibbs (1839--1903)]{digitalBlue}
+        \small
+        \textbf{Origin:} New Haven, Connecticut, USA\\
+        \textbf{Key work:} Extracted the useful vector parts from Hamilton's
+        quaternions; created modern vector analysis
+        (lecture notes \emph{Elements of Vector Analysis}, c.\,1881--1884).
+      \end{personbox}
+
+      \vspace{0.3em}
+      \begin{personbox}[Oliver Heaviside (1850--1925)]{digitalBlue}
+        \small
+        \textbf{Origin:} London, England\\
+        \textbf{Key work:} Self-taught electrical engineer who independently developed
+        vector calculus; reformulated Maxwell's equations into their compact modern form.
+      \end{personbox}
+    \end{column}
+
+    \begin{column}{0.47\textwidth}
+      \visualplaceholder[6cm]{Side-by-side comparison:
+        LEFT --- Hamilton's quaternion notation (complex, multi-line).
+        RIGHT --- Gibbs's vector notation for the same operation (clean, compact).
+        The simplification is visually obvious.
+        Caption: ``Same math. Simpler notation.''}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``Gibbs and Heaviside were not trying to build AI. They were trying to make
+    physics easier to write down. But their notation is exactly what we use to
+    describe neural networks today.''
+    \verifytag{Gibbs's lecture notes dated 1881--1884. Confirm exact years of the
+    two printings.}
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 8: Matrices -- Cayley and Sylvester
+% ----------------------------------------------------------
+\begin{frame}{Matrices --- Cayley and Sylvester}
+
+  \begin{columns}[T]
+    \begin{column}{0.50\textwidth}
+      \begin{personbox}[Arthur Cayley (1821--1895)]{digitalBlue}
+        \small
+        \textbf{Origin:} Richmond, Surrey, England\\
+        \textbf{Key work:} ``A Memoir on the Theory of Matrices'' (1858) ---
+        established matrices as algebraic objects in their own right.\\
+        Also a practicing lawyer for 14 years before returning to academia.
+      \end{personbox}
+
+      \vspace{0.3em}
+      \begin{personbox}[James Joseph Sylvester (1814--1897)]{digitalBlue}
+        \small
+        \textbf{Origin:} London, England\\
+        \textbf{Key work:} Coined the word ``matrix'' (1850), from Latin for
+        ``womb'' --- he saw it as something from which determinants are born.
+        Also coined ``discriminant,'' ``invariant,'' and many other terms.
+      \end{personbox}
+    \end{column}
+
+    \begin{column}{0.47\textwidth}
+      \visualplaceholder[5.5cm]{TOP: A simple $3 \times 3$ matrix, annotated:
+        ``This is a matrix. Cayley (1858) made it a mathematical object.''
+        BOTTOM: A schematic LLM weight matrix (much larger, dots indicating millions
+        of entries): ``This is also a matrix. Millions of entries. Same math.''}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``Sylvester literally named it. `Matrix' --- from Latin for `womb.'
+    He thought of it as something that gives birth to numbers.
+    He had no idea it would give birth to AI.''
+    LLM connection: every layer in a neural network is defined by a matrix of
+    ``weights.'' When your prompt passes through GPT, it is multiplied by dozens
+    of these matrices. Each one was learned during training.
+    \verifytag{Cayley's 1858 paper title. Sylvester's coinage of ``matrix''
+    in 1850 --- some sources say 1848. Verify exact year and publication.}
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 9: Matrix Multiplication -- The Core Operation
+% ----------------------------------------------------------
+\begin{frame}{Matrix Multiplication --- The Core Operation}
+
+  \begin{columns}[T]
+    \begin{column}{0.47\textwidth}
+      \begin{personbox}[Carl Friedrich Gauss (1777--1855)]{digitalBlue}
+        \small
+        \textbf{Origin:} Brunswick, Germany\\
+        \textbf{Key work:} Gaussian elimination (c.\,1809--1810) for solving
+        linear systems --- laid groundwork for computational linear algebra.
+        Originally used for astronomical orbit calculations.
+      \end{personbox}
+
+      \vspace{0.5em}
+      \begin{insightbox}
+        Every neural network layer is a matrix multiplication
+        followed by a nonlinear function. That's it.
+      \end{insightbox}
+    \end{column}
+
+    \begin{column}{0.50\textwidth}
+      \visualplaceholder[6cm]{TOP: Step-by-step diagram of matrix multiplication ---
+        a $3 \times 3$ matrix times a $3 \times 1$ vector, showing dot products
+        row by row.
+        BOTTOM: The SAME operation drawn as a neural network layer --- inputs on
+        the left, weights as connections, outputs on the right.
+        Caption: ``Same math. Different picture.''}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``Every time you send a message to an AI, your words pass through about 96 layers.
+    Each layer multiplies your data by a matrix. That's roughly 96 matrix multiplications
+    just to generate one word of the response.''
+    Emphasize: this is NOT an analogy. Neural network layers ARE matrix multiplications.
+    The connection is literal and exact.
+    \verifytag{Gauss's elimination method typically dated to c.\,1809--1810.
+    Method has earlier precedents in Chinese mathematics (Jiuzhang suanshu).}
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 10: The Dot Product -- Measuring Similarity
+% ----------------------------------------------------------
+\begin{frame}{The Dot Product --- Measuring Similarity}
+
+  \begin{columns}[T]
+    \begin{column}{0.47\textwidth}
+      \textbf{Recipe} (the dot product in plain language):
+      \begin{enumerate}
+        \item Take two lists of numbers, same length
+        \item Multiply matching entries:\\
+              first $\times$ first, second $\times$ second, \ldots
+        \item Add up all the products
+        \item Result is \textbf{one number}:
+      \end{enumerate}
+
+      \vspace{0.3em}
+      \begin{center}
+        \small
+        \begin{tabular}{rl}
+          Big positive & $=$ very similar \\
+          Near zero & $=$ unrelated \\
+          Big negative & $=$ opposites
+        \end{tabular}
+      \end{center}
+
+      \vspace{0.3em}
+      {\footnotesize\colorbox{digitalBlue!8}{\parbox{0.9\linewidth}{%
+        \textbf{Formal:}\quad $\mathbf{a} \cdot \mathbf{b}
+        = a_1 b_1 + a_2 b_2 + \cdots + a_n b_n$}}}
+    \end{column}
+
+    \begin{column}{0.50\textwidth}
+      \visualplaceholder[6cm]{Two 2D arrows in three configurations:
+        (1) pointing same direction $\to$ large positive dot product,
+        (2) perpendicular $\to$ zero,
+        (3) opposite $\to$ large negative.
+        Caption: ``The dot product measures how much two vectors agree.''}
+
+      \vspace{0.3em}
+      \visualplaceholder[6cm]{LLM context: ``The Query vector for `it' and the Key
+        vector for `cat' have a large dot product. The model attends `it' to `cat.'
+        This is how it figures out what `it' refers to.''}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``The dot product is the simplest possible measure of similarity between two vectors.
+    Multiply matching entries and add up. That's it. This tiny operation, repeated
+    billions of times, is what lets an LLM understand which words relate to which.''
+    Historical: formalized by Gibbs (1880s), implicit in earlier work by Grassmann.
+    LLM connection: in the attention mechanism, the dot product of a Query vector and
+    a Key vector determines how much ``attention'' one word pays to another.
+    Every attention score in every LLM is a dot product.
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 11: Cosine Similarity
+% ----------------------------------------------------------
+\begin{frame}{Cosine Similarity --- Dot Product, Normalized}
+
+  \begin{columns}[T]
+    \begin{column}{0.45\textwidth}
+      \textbf{Recipe:}
+      \begin{enumerate}
+        \item Compute the dot product
+        \item Divide by the length of each vector
+        \item Result is always between $-1$ and $+1$
+      \end{enumerate}
+
+      \vspace{0.3em}
+      Think of it as: \emph{how much do these two vectors point the same way?}
+      (Ignoring how long they are.)
+
+      \vspace{0.5em}
+      {\footnotesize\colorbox{digitalBlue!8}{\parbox{0.9\linewidth}{%
+        \textbf{Formal:}\quad $\cos(\theta) = \dfrac{\mathbf{a} \cdot \mathbf{b}}%
+        {\lvert\mathbf{a}\rvert \;\lvert\mathbf{b}\rvert}$}}}
+
+      \vspace{0.5em}
+      \begin{insightbox}
+        When you ask an LLM to find ``similar words,'' it computes cosine similarity.
+        The math is from the 1880s. The application is from last Tuesday.
+      \end{insightbox}
+    \end{column}
+
+    \begin{column}{0.52\textwidth}
+      \visualplaceholder[6.5cm]{A 2D embedding space with word vectors as points.
+        ``King'' and ``queen'' are close (high cosine similarity).
+        ``King'' and ``banana'' are far apart (low cosine similarity).
+        Angle arcs drawn between vector pairs.
+        Caption: ``Cosine similarity = the angle between word vectors.''}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``When you ask an LLM to find `similar words,' it computes cosine similarity
+    in embedding space. The math is from the 1880s. The application is from
+    last Tuesday.''
+    This is how search engines, recommendation systems, and LLMs measure
+    semantic similarity between pieces of text.
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 12: Eigenvalues and Eigenvectors [EXTENDED]
+% ----------------------------------------------------------
+\begin{frame}{Eigenvalues --- The Natural Modes \hfill {\small\textcolor{gray}{[EXTENDED]}}}
+
+  \begin{columns}[T]
+    \begin{column}{0.50\textwidth}
+      \begin{personbox}[Leonhard Euler (1707--1783)]{digitalBlue}
+        \small
+        \textbf{Origin:} Basel, Switzerland / St.\ Petersburg / Berlin\\
+        \textbf{Key work:} First encountered eigenvalue-like concepts studying
+        vibrating strings and rotating bodies (1740s--1750s).
+      \end{personbox}
+
+      \vspace{0.2em}
+      \begin{personbox}[Augustin-Louis Cauchy (1789--1857)]{digitalBlue}
+        \small
+        \textbf{Origin:} Paris, France\\
+        \textbf{Key work:} Proved symmetric matrices have real eigenvalues (1829).
+      \end{personbox}
+
+      \vspace{0.2em}
+      \begin{personbox}[David Hilbert (1862--1943)]{digitalBlue}
+        \small
+        \textbf{Origin:} K\"onigsberg / G\"ottingen, Germany\\
+        \textbf{Key work:} Extended eigenvalue theory to infinite-dimensional
+        spaces (spectral theory, early 1900s).
+      \end{personbox}
+    \end{column}
+
+    \begin{column}{0.47\textwidth}
+      \visualplaceholder[6cm]{A 2D linear transformation shown as arrows: most arrows
+        change direction, but the EIGENVECTOR arrows only stretch or shrink.
+        Caption: ``Eigenvectors are the directions a transformation doesn't rotate.''}
+
+      \vspace{0.3em}
+      {\small\textbf{LLM connection:} Principal Component Analysis (PCA)
+        uses eigenvalues to visualize and understand what LLMs learn.
+        ``What does this neuron represent?'' --- eigenvalue analysis helps answer.}
+    \end{column}
+  \end{columns}
+
+  \note{
+    This is an [EXTENDED] slide --- can be cut if short on time.
+    Eigenvalues reveal the ``natural modes'' of a transformation.
+    They appear in dimensionality reduction (PCA), used for understanding
+    and compressing neural network representations.
+    \verifytag{Euler's eigenvalue work --- verify precise context
+    (vibrating membranes vs.\ rotating bodies) and dates.
+    Cauchy's 1829 result on symmetric matrices.}
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 13: High-Dimensional Spaces -- Where Words Live
+% ----------------------------------------------------------
+\begin{frame}{High-Dimensional Spaces --- Where Words Live}
+
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      LLMs represent words as vectors in spaces with
+      \textbf{hundreds or thousands of dimensions}.
+
+      \vspace{0.3em}
+      The math works the same as in 2D or 3D --- we just can't draw it.
+
+      \vspace{0.5em}
+      \begin{personbox}[Richard Bellman (1920--1984)]{digitalBlue}
+        \small
+        \textbf{Origin:} New York City, USA\\
+        \textbf{Key work:} Coined ``the curse of dimensionality'' (c.\,1957--1961):
+        in high dimensions, data becomes sparse and distances behave
+        counterintuitively.
+      \end{personbox}
+    \end{column}
+
+    \begin{column}{0.49\textwidth}
+      \visualplaceholder[6cm]{2D scatter plot of word embeddings:
+        ``king,'' ``queen,'' ``man,'' ``woman'' as labeled points.
+        Arrow showing the famous analogy:
+        king $-$ man $+$ woman $=$ queen.
+        Caption: ``Projected from 768 dimensions down to 2.
+        In the full space, THOUSANDS of such relationships exist simultaneously.''}
+
+      \vspace{0.3em}
+      {\small\textbf{Tomas Mikolov} et al.\ demonstrated this with
+        \textbf{Word2Vec} (2013) --- word vectors trained on large text corpora
+        capture semantic relationships as \emph{linear directions}.}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``In 768 dimensions, words that mean similar things end up near each other.
+    `Dog' is near `puppy.' `Paris' is near `France.' The AI doesn't know what
+    these words mean --- it only knows their coordinates. But the coordinates
+    capture meaning. Mikolov showed this in 2013 and it stunned the field.''
+    \verifytag{Confirm both Mikolov et al.\ 2013 papers: ``Efficient Estimation
+    of Word Representations in Vector Space'' (arXiv) and ``Distributed
+    Representations of Words and Phrases'' (NeurIPS).}
+    \verifytag{Bellman coined ``curse of dimensionality'' --- may be from
+    his 1961 book \emph{Adaptive Control Processes}, not 1957. Verify.}
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% INTERACTIVE MOMENT 1 (after Slide 13)
+% ----------------------------------------------------------
+\begin{frame}{Quick Experiment --- Word Vector Arithmetic}
+
+  \begin{center}
+    {\Large\bfseries\textcolor{aiViolet}{What does this equal?}}
+
+    \vspace{1.5em}
+    {\Huge $\underset{\text{king}}{\mathbf{v}} \;-\;
+           \underset{\text{man}}{\mathbf{v}} \;+\;
+           \underset{\text{woman}}{\mathbf{v}} \;=\; ?$}
+
+    \vspace{1.5em}
+    \visualplaceholder[8cm]{Space for student responses.
+      After reveal: show the embedding space diagram with the parallelogram
+      connecting king, man, woman, queen.
+      Large text: ``QUEEN'' with a checkmark.
+      Attribution: ``Mikolov et al., Word2Vec, 2013''}
+  \end{center}
+
+  \note{
+    INTERACTIVE MOMENT 1 (approx.\ 2 minutes).
+    Ask students: ``If we take the vector for `king,' subtract the vector for `man,'
+    and add the vector for `woman' --- what word's vector do we land nearest to?''
+    Let them guess. Collect answers.
+    Reveal: ``queen.'' This works because of the geometry of high-dimensional vector
+    spaces, as Mikolov's Word2Vec demonstrated in 2013.
+    This is not a trick --- it is a mathematical property of the embedding space.
+    Grassmann's abstract vector spaces from 1844 make this possible.
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 14: From Words to Numbers -- The Embedding
+% ----------------------------------------------------------
+\begin{frame}{From Words to Numbers --- The Embedding}
+
+  \begin{center}
+    \visualplaceholder[12cm]{Step-by-step pipeline diagram (full-width):
+      Step 1: User types: ``The cat sat on the mat''
+      Step 2: Tokenizer splits it: [``The'', ``cat'', ``sat'', ``on'', ``the'', ``mat'']
+      Step 3: Each token becomes a vector: [0.23, $-$0.87, 0.44, \ldots] (768 numbers)
+      Step 4: The sentence becomes a MATRIX: 6 rows (tokens) $\times$ 768 columns (dimensions)
+      Final caption: ``Your sentence is now a matrix. Everything that follows is linear algebra.''}
+  \end{center}
+
+  \vspace{0.3em}
+  {\small\textbf{Historical lineage:}
+    Grassmann (1844, abstract vector spaces)
+    $\to$ Mikolov (2013, Word2Vec learned embeddings)
+    $\to$ Modern LLM embedding layers (2017--present, learned jointly with the transformer)}
+
+  \note{
+    ``Grassmann imagined abstract spaces with any number of dimensions. Cayley gave
+    us matrices. Mikolov showed words could live in those spaces. Now, 170 years after
+    Grassmann, your words live in his spaces.''
+    Key point: after embedding, the sentence IS a matrix. Every operation that follows
+    is a matrix operation. This is the bridge from language to linear algebra.
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 15: Attention as Matrix Multiplication (Preview)
+% ----------------------------------------------------------
+\begin{frame}{Attention as Matrix Multiplication --- A Preview}
+
+  \begin{columns}[T]
+    \begin{column}{0.55\textwidth}
+      \textbf{The attention recipe} (conceptual pipeline):
+
+      \vspace{0.3em}
+      \begin{enumerate}
+        \item Start with input matrix $X$ (sentence as matrix)
+        \item Multiply by $W_Q$ $\to$ get Queries\\
+              {\scriptsize (matrix multiplication --- Cayley)}
+        \item Multiply by $W_K$ $\to$ get Keys\\
+              {\scriptsize (matrix multiplication --- Cayley)}
+        \item Multiply by $W_V$ $\to$ get Values\\
+              {\scriptsize (matrix multiplication --- Cayley)}
+        \item Scores $=$ dot product of each Query with each Key\\
+              {\scriptsize (dot product --- Gibbs, Slide 10)}
+        \item Normalize scores with softmax\\
+              {\scriptsize (probability --- Section 3)}
+        \item Output $=$ scores $\times$ Values
+      \end{enumerate}
+
+      \vspace{0.3em}
+      {\footnotesize\colorbox{digitalBlue!8}{\parbox{0.92\linewidth}{%
+        \textbf{Formal (preview):}\quad
+        $\text{Attn} = \text{softmax}\!\left(\frac{QK^T}{\sqrt{d}}\right) V$\\[2pt]
+        $K^T$ $=$ ``flip the matrix on its side'' (transpose).
+        $\sqrt{d}$ $=$ scaling factor.\\
+        We will unpack this fully in Section~9.}}}
+    \end{column}
+
+    \begin{column}{0.42\textwidth}
+      \visualplaceholder[5.5cm]{Simplified attention diagram showing the pipeline:
+        $X \to W_Q \to Q$, $X \to W_K \to K$, $X \to W_V \to V$,
+        then $Q \cdot K^T \to$ scores $\to$ softmax $\to \times V \to$ output.
+        Each step labeled with its mathematical origin and section reference.}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``The `attention' mechanism --- the thing that lets an AI understand context ---
+    is three matrix multiplications, a dot product, and a softmax. That's it.
+    The math was all invented by the 1880s. The architecture was invented in 2017.''
+    This is a PREVIEW. We return to attention in detail in Section 9.
+    The point: show students early that ``attention'' is not magic --- it is the
+    linear algebra they just learned.
+    Do NOT let students get stuck on the formal equation. The conceptual pipeline
+    is what matters here.
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 16: Convergence Diagram Update -- Linear Algebra
+% ----------------------------------------------------------
+\begin{frame}{Building the Diagram --- Linear Algebra Complete}
+
+  \begin{columns}[T]
+    \begin{column}{0.55\textwidth}
+      \begin{center}
+        \visualplaceholder[6.5cm]{CONVERGENCE DIAGRAM UPDATE:
+          The ``Linear Algebra'' node now lights up in BLUE.
+          Label appears: ``Matrix multiplication = neural network layers.''
+          All other 9 nodes remain gray.
+          Central node still ``?''}
+      \end{center}
+    \end{column}
+
+    \begin{column}{0.42\textwidth}
+      \textbf{Summary --- who built the skeleton:}
+
+      \vspace{0.3em}
+      {\small
+      \begin{tabular}{@{}rl@{}}
+        1843 & Hamilton --- quaternions \\
+        1844 & Grassmann --- vector spaces \\
+        1850 & Sylvester --- named ``matrix'' \\
+        1858 & Cayley --- matrix theory \\
+        1880s & Gibbs/Heaviside --- notation \\
+        1809+ & Gauss --- elimination \\
+        2013 & Mikolov --- Word2Vec \\
+      \end{tabular}}
+
+      \vspace{0.5em}
+      \begin{insightbox}
+        Every layer of an LLM is a matrix multiplication.
+        Every attention score is a dot product.
+        The math of 1850 is the engine of 2026.
+      \end{insightbox}
+    \end{column}
+  \end{columns}
+
+  \note{
+    Transition: ``Now we have the skeleton. But a skeleton doesn't move. For that,
+    we need calculus.''
+    Recap all six mathematicians and Mikolov. Emphasize the time span:
+    from Grassmann's ignored 1844 paper to the core of every modern LLM.
+    Connection arrow: ``Every layer of an LLM is a matrix multiplication.
+    Every attention score is a dot product. The math of 1850 is the engine of 2026.''
+  }
+\end{frame}
+
+
+% ============================================================
+% SECTION 2: CALCULUS & OPTIMIZATION -- "How Neural Networks Learn"
+% Slides 17-25
+% ============================================================
+\section{Calculus \& Optimization}
+
+% ----------------------------------------------------------
+% Slide 17: Section Divider
+% ----------------------------------------------------------
+{
+\setbeamercolor{background canvas}{bg=enlightenmentTeal}
+\begin{frame}[plain]
+  \centering
+  \vspace{1.5cm}
+  \textcolor{white}{\Huge\bfseries Calculus \& Optimization}\\[0.6em]
+  \textcolor{white!80}{\large How Neural Networks Learn}\\[1em]
+  \textcolor{white!60}{\normalsize c.\,250 BCE -- 1986}\\[1.5em]
+  \textcolor{white!70}{\itshape``A neural network learns by rolling downhill
+    on a landscape made of calculus.''}
+
+  \note{
+    Section transition. Without calculus, you can BUILD a neural network but you
+    cannot TRAIN it. Calculus provides the learning algorithm.
+    Timeline: from Archimedes' proto-calculus (c.\,250 BCE) to Rumelhart, Hinton,
+    and Williams' backpropagation paper (1986).
+    Convergence diagram: Section 2 node pulsing.
+  }
+\end{frame}
+}
+
+% ----------------------------------------------------------
+% Slide 18: Roots in Antiquity -- Archimedes
+% ----------------------------------------------------------
+\begin{frame}{Roots in Antiquity --- Archimedes and Infinitesimals}
+
+  \begin{columns}[T]
+    \begin{column}{0.50\textwidth}
+      \begin{personbox}[Archimedes of Syracuse]{enlightenmentTeal}
+        \small
+        \textbf{Origin:} Syracuse, Sicily\\
+        \textbf{Key work:} The ``method of exhaustion'' --- calculated areas and
+        volumes by approximating with ever-finer polygons.\\[3pt]
+        His lost \emph{Method} manuscript, rediscovered in 1906 in the
+        Archimedes Palimpsest, shows he used infinitesimal reasoning
+        more explicitly than previously known.
+      \end{personbox}
+
+      \vspace{0.5em}
+      \begin{insightbox}
+        The core idea of calculus: approximate with simple pieces, take the limit.
+        Archimedes had this 1,900 years before Newton.
+      \end{insightbox}
+    \end{column}
+
+    \begin{column}{0.47\textwidth}
+      \visualplaceholder[6cm]{Archimedes' method of exhaustion: a circle with inscribed
+        polygons (4 sides, 8 sides, 16 sides, 32 sides), visually converging
+        to the circle's area.
+        Caption: ``Approximate, refine, repeat. This is what calculus does.''}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``Archimedes was doing proto-calculus in the 3rd century BCE,
+    1,900 years before Newton.''
+    The Archimedes Palimpsest was rediscovered in 1906 --- a medieval prayer book
+    written over his mathematical manuscripts. Modern imaging technology revealed
+    the hidden text, showing more sophisticated infinitesimal reasoning than
+    historians had expected.
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 19: The Derivative -- Measuring Change
+% ----------------------------------------------------------
+\begin{frame}{The Derivative --- Measuring Change}
+
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{personbox}[Pierre de Fermat (1601--1665)]{enlightenmentTeal}
+        \small
+        \textbf{Origin:} Beaumont-de-Lomagne, France\\
+        \textbf{Key work:} Method for tangent lines (c.\,1636--1638);
+        found maxima and minima by setting a difference quotient to zero.
+      \end{personbox}
+
+      \vspace{0.2em}
+      \begin{personbox}[Isaac Newton (1642--1726/27)]{enlightenmentTeal}
+        \small
+        \textbf{Origin:} Woolsthorpe, England\\
+        \textbf{Key work:} ``Method of fluxions'' (c.\,1665--1666) ---
+        rates of change for physics.
+      \end{personbox}
+
+      \vspace{0.2em}
+      \begin{personbox}[Gottfried Wilhelm Leibniz (1646--1716)]{enlightenmentTeal}
+        \small
+        \textbf{Origin:} Leipzig, Germany\\
+        \textbf{Key work:} Independently developed calculus (published 1684--1686)
+        with the $dy/dx$ notation we still use today.
+      \end{personbox}
+    \end{column}
+
+    \begin{column}{0.49\textwidth}
+      \visualplaceholder[6cm]{TOP: Three notations side by side --- Fermat's tangent method
+        (geometric), Newton's fluxion dot notation, Leibniz's $dy/dx$.
+        Three different notations for the same idea.}
+
+      \vspace{0.3em}
+      \visualplaceholder[6cm]{A simple curve with a tangent line.
+        Label: ``The derivative = the slope of this line
+        = how fast things are changing.''}
+
+      \vspace{0.3em}
+      {\small\textbf{LLM connection:} Training means computing
+        derivatives of the error w.r.t.\ \emph{every} weight ---
+        billions of weights, billions of derivatives, millions of times.}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``Newton and Leibniz famously fought over who invented calculus. Fermat was
+    doing something similar decades earlier. None of them imagined that 300 years
+    later, derivatives would be computed trillions of times to train a chatbot.''
+    Note: Fermat also appears in Section 3 (Probability) with Pascal.
+    When he comes up again, point out: ``Fermat again! He contributed to both
+    calculus and probability --- two separate pillars of the LLM.''
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 20: The Chain Rule -- The Key to Backpropagation
+% ----------------------------------------------------------
+\begin{frame}{The Chain Rule --- The Key to Backpropagation}
+
+  \begin{columns}[T]
+    \begin{column}{0.47\textwidth}
+      \textbf{Recipe} (the chain rule in plain language):
+
+      \vspace{0.3em}
+      If $y$ depends on $u$ and $u$ depends on $x$\ldots
+
+      \vspace{0.2em}
+      To find how much $x$ affected $y$ through the chain,
+      \alert{multiply the effects at each step}.
+
+      \vspace{0.5em}
+      {\footnotesize\colorbox{enlightenmentTeal!8}{\parbox{0.92\linewidth}{%
+        \textbf{Formal:}\quad
+        $\dfrac{dy}{dx} = \dfrac{dy}{du} \cdot \dfrac{du}{dx}$\\[4pt]
+        Leibniz's notation makes this look almost obvious ---
+        the $du$'s ``cancel.'' (They don't really, but the intuition helps.)}}}
+
+      \vspace{0.5em}
+      \begin{insightbox}
+        Backpropagation uses the chain rule to figure out which weights
+        to blame for the error.
+      \end{insightbox}
+    \end{column}
+
+    \begin{column}{0.50\textwidth}
+      \visualplaceholder[6.5cm]{Pipeline diagram:
+        TOP: $x \to$ [function $f$] $\to u \to$ [function $g$] $\to y$
+        with arrows. Below: ``If the error changes $y$, how much did $x$ contribute?
+        Multiply along the chain.''
+        BOTTOM: Same diagram relabeled as a neural network:
+        ``Input $\to$ Layer 1 $\to$ Hidden $\to$ Layer 2 $\to$ Output.''
+        Red backward arrows labeled ``chain rule'' at each step.}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``Backpropagation --- the algorithm that trains every neural network --- is
+    `just' the chain rule applied over and over, layer by layer, backwards through
+    the network. It's calculus class, running at scale.''
+    Historical: the chain rule was implicit in Leibniz; made explicit by various
+    18th--19th century mathematicians. No single ``inventor.''
+    \verifytag{The precise attribution of the chain rule is diffuse --- Leibniz,
+    Euler, and others all used it.}
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 21: Gradient Descent [EXTENDED]
+% ----------------------------------------------------------
+\begin{frame}{Gradient Descent --- Rolling Downhill \hfill {\small\textcolor{gray}{[EXTENDED]}}}
+
+  \begin{columns}[T]
+    \begin{column}{0.45\textwidth}
+      \begin{personbox}[Augustin-Louis Cauchy (1789--1857)]{enlightenmentTeal}
+        \small
+        \textbf{Origin:} Paris, France\\
+        \textbf{Key work:} Published the first description of the method of
+        steepest descent (1847), \emph{M\'ethode g\'en\'erale pour la
+        r\'esolution des syst\`emes d'\'equations simultan\'ees}.
+      \end{personbox}
+
+      \vspace{0.5em}
+      \textbf{Recipe:}
+      \begin{enumerate}
+        \item Compute the gradient (``which way is uphill?'')
+        \item Take a small step in the \alert{opposite} direction
+        \item Repeat
+      \end{enumerate}
+
+      \vspace{0.3em}
+      {\small Cauchy was solving equations, not training neural networks.\\
+       But the algorithm is the same.}
+    \end{column}
+
+    \begin{column}{0.52\textwidth}
+      \visualplaceholder[6.5cm]{A 3D ``loss surface'' landscape with contour lines.
+        A ball sits at a high point. Arrows show the gradient direction (steepest uphill).
+        The ball moves in the OPPOSITE direction (steepest downhill).
+        Multiple steps shown as a zigzagging path toward a valley.
+        Caption: ``Gradient descent: always walk downhill. Cauchy, 1847.''}
+    \end{column}
+  \end{columns}
+
+  \note{
+    This is an [EXTENDED] slide --- can be cut, covered verbally in the backprop slide.
+    ``Cauchy described this in 1847 to solve equations. 170 years later, it's how
+    every LLM on Earth is trained. The error is the height. The gradient tells you
+    which way is downhill. You take a step. Repeat a billion times.''
+    \verifytag{Cauchy 1847 paper on steepest descent --- confirm exact title and year.}
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 22: Backpropagation
+% ----------------------------------------------------------
+\begin{frame}{Backpropagation --- The Algorithm That Changed Everything}
+
+  \begin{columns}[T]
+    \begin{column}{0.50\textwidth}
+      \begin{personbox}[{Seppo Linnainmaa (b.\,1945)}]{enlightenmentTeal}
+        \small
+        \textbf{Origin:} Finland\\
+        \textbf{Key work:} Published automatic differentiation in his
+        Master's thesis (1970, University of Helsinki) --- the mathematical
+        core of backpropagation.
+      \end{personbox}
+
+      \vspace{0.2em}
+      \begin{personbox}[Rumelhart/Hinton/Williams (1986)]{enlightenmentTeal}
+        \small
+        \textbf{David Rumelhart} (1942--2011, USA)\\
+        \textbf{Geoffrey Hinton} (b.\,1947, London, UK/Canada)\\
+        \textbf{Ronald Williams} (USA)\\[3pt]
+        Published ``Learning representations by back-propagating errors''
+        (1986, \emph{Nature}). Demonstrated backprop could train
+        multi-layer networks. Reignited the field.\\[3pt]
+        \textbf{Hinton shared the 2024 Nobel Prize in Physics}
+        with John Hopfield for foundational work enabling machine learning.
+      \end{personbox}
+    \end{column}
+
+    \begin{column}{0.47\textwidth}
+      \visualplaceholder[6cm]{Multi-layer network diagram.
+        Forward pass: blue arrows left to right.
+        Backward pass: red arrows right to left,
+        labeled ``chain rule'' at each step.}
+
+      \vspace{0.3em}
+      {\small\textbf{Timeline:}}
+
+      \vspace{0.2em}
+      {\footnotesize
+      \begin{tabular}{@{}rl@{}}
+        1847 & Cauchy --- steepest descent \\
+        1970 & Linnainmaa --- auto.\ differentiation \\
+        1986 & Rumelhart/Hinton/Williams --- backprop \\
+        2024 & Hinton --- Nobel Prize in Physics \\
+      \end{tabular}}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``Linnainmaa figured out the algorithm in 1970. Rumelhart, Hinton, and Williams
+    showed it could train neural networks in 1986. Hinton shared the Nobel Prize
+    in Physics in 2024 with John Hopfield for foundational work enabling machine
+    learning with artificial neural networks.''
+    \verifytag{Linnainmaa's 1970 thesis --- some sources describe it as reverse-mode
+    automatic differentiation. Others credit earlier related ideas (Bryson, Dreyfus,
+    Kelley in the 1960s, control theory). Present Linnainmaa as key formalization
+    but note broader lineage.}
+    \verifytag{Nobel Prize 2024 --- Hinton and Hopfield shared the Nobel Prize
+    in Physics 2024. Confirm exact citation wording.}
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 23: Stochastic Gradient Descent
+% ----------------------------------------------------------
+\begin{frame}{Stochastic Gradient Descent --- Learning from Samples}
+
+  \begin{columns}[T]
+    \begin{column}{0.45\textwidth}
+      \begin{personbox}[Robbins \& Monro (1951)]{enlightenmentTeal}
+        \small
+        \textbf{Herbert Robbins} (1915--2001, New Castle, PA, USA)\\
+        \textbf{Sutton Monro} (1920--1995, USA)\\[3pt]
+        Published the Robbins--Monro algorithm (1951) --- the first
+        stochastic approximation method.
+        The theoretical foundation for SGD.
+      \end{personbox}
+
+      \vspace{0.5em}
+      \begin{insightbox}
+        Every LLM you have ever used was trained with some variant of SGD.
+        The Robbins--Monro paper from 1951 is running inside every AI lab today.
+      \end{insightbox}
+    \end{column}
+
+    \begin{column}{0.52\textwidth}
+      \visualplaceholder[6.5cm]{Comparison diagram, side by side:
+        LEFT: ``Full gradient descent'' --- smooth downhill path.
+        Label: ``Must look at ALL data for each step. Too slow.''
+        RIGHT: ``Stochastic gradient descent'' --- noisy, zigzagging path
+        that still reaches the bottom.
+        Label: ``Look at a random sample each step. Much faster.''}
+    \end{column}
+  \end{columns}
+
+  \note{
+    ``Training GPT-4 used trillions of tokens. You can't compute the gradient
+    on all of them at once. SGD says: just grab a random batch, compute the
+    gradient on that, take a step, repeat. It's noisy, but it works. And it's fast.''
+    LLM connection: every LLM ever deployed was trained with some variant of SGD.
+    \verifytag{Monro's dates (1920--1995) and birthplace --- verify.}
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 24: The Loss Landscape -- A Visual Tour
+% ----------------------------------------------------------
+\begin{frame}{The Loss Landscape --- A Visual Tour}
+
+  \begin{center}
+    \visualplaceholder[12cm]{FULL-SLIDE VISUAL: A 3D rendering of a neural network
+      loss landscape (in the style of Li et al., 2018,
+      ``Visualizing the Loss Landscape of Neural Nets'').
+      Labeled features:
+      --- ``Global minimum'' (the best the network can do)
+      --- ``Local minima'' (good but not the best)
+      --- ``Saddle points'' (flat regions that look like minima but aren't)
+      --- ``The path of SGD'' (a noisy trajectory from a random start to a good minimum)
+      Source: reconstructed from Li et al.\ 2018 or similar public-domain visualization.}
+  \end{center}
+
+  \vspace{-0.3em}
+  {\small\centering\textcolor{gray}{This is what training an LLM looks like
+    mathematically. The landscape has \emph{billions} of dimensions ---
+    we can only visualize a 2D slice.}\par}
+
+  \note{
+    ``This is what training an LLM looks like mathematically. You start at a random
+    point on this landscape and try to find the lowest valley. The landscape has
+    billions of dimensions --- we can only visualize a 2D slice.''
+    The ``loss'' measures how wrong the network's predictions are.
+    Training = finding the lowest point on this landscape.
+    SGD's noisy path actually helps --- it can escape shallow local minima
+    that full gradient descent might get stuck in.
+  }
+\end{frame}
+
+% ----------------------------------------------------------
+% Slide 25: Convergence Diagram Update -- Calculus & Optimization
+% ----------------------------------------------------------
+\begin{frame}{Building the Diagram --- Calculus Complete}
+
+  \begin{columns}[T]
+    \begin{column}{0.55\textwidth}
+      \begin{center}
+        \visualplaceholder[6.5cm]{CONVERGENCE DIAGRAM UPDATE:
+          ``Linear Algebra'' node lit in blue (from last section).
+          ``Calculus \& Optimization'' node now lights up in GREEN.
+          Label: ``Gradient descent = how it learns.''
+          Remaining 8 nodes still gray.
+          Central node still ``?''}
+      \end{center}
+    \end{column}
+
+    \begin{column}{0.42\textwidth}
+      \textbf{Summary --- who taught it to learn:}
+
+      \vspace{0.3em}
+      {\small
+      \begin{tabular}{@{}rl@{}}
+        c.\,250 BCE & Archimedes --- proto-calculus \\
+        c.\,1636 & Fermat --- tangents, extrema \\
+        1665--66 & Newton --- fluxions \\
+        1684--86 & Leibniz --- $dy/dx$ notation \\
+        1847 & Cauchy --- steepest descent \\
+        1951 & Robbins--Monro --- SGD \\
+        1970 & Linnainmaa --- auto.\ diff. \\
+        1986 & Rumelhart/Hinton/Williams \\
+               & \quad --- backpropagation \\
+      \end{tabular}}
+
+      \vspace{0.5em}
+      \begin{insightbox}
+        Gradient descent + backpropagation = the learning algorithm of every LLM.
+      \end{insightbox}
+    \end{column}
+  \end{columns}
+
+  \note{
+    Transition: ``The network can now learn. But learn WHAT? It learns to predict
+    probability distributions over words. For that, we need probability theory.''
+    Connection arrow: ``Gradient descent + backpropagation = the learning algorithm
+    of every LLM.''
+    This is the end of Session 1 (Slides 1--25). Natural break point.
+    ``We now know the skeleton of a neural network and how it learns.
+    Next: how does it deal with uncertainty?''
+  }
+\end{frame}
