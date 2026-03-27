@@ -1,0 +1,25 @@
+% ============================================================
+% Shared layout fixes for all Beamer lectures
+% Eliminates Overfull vbox/hbox warnings globally
+% Include via \input{layout-fixes} after \setbeamertemplate{navigation symbols}{}
+% ============================================================
+
+% --- Tolerate minor hbox overflows from TikZ/pgfplots internals ---
+\hfuzz=11pt
+
+% --- Frametitle vertical tightening ---
+\addtobeamertemplate{frametitle}{\vspace{-0.15em}}{\vspace{-0.4em}}
+
+% --- Default body font to \small ---
+\setbeamerfont{normal text}{size=\small}
+\AtBeginDocument{\usebeamerfont{normal text}}
+
+% --- Tighten list spacing globally ---
+\setbeamertemplate{itemize/enumerate body begin}{%
+  \setlength{\itemsep}{2pt plus 1pt minus 1pt}%
+  \setlength{\parskip}{0pt}%
+}
+\setbeamertemplate{itemize/enumerate subbody begin}{%
+  \setlength{\itemsep}{1pt}%
+  \setlength{\parskip}{0pt}%
+}

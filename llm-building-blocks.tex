@@ -76,33 +76,36 @@
 \newtcolorbox{personbox}[2][]{%
   colback=#2!5,
   colframe=#2,
-  fonttitle=\bfseries,
+  fonttitle=\bfseries\small,
   title=#1,
   rounded corners,
-  boxrule=1pt,
-  left=4pt,right=4pt,top=4pt,bottom=4pt
+  boxrule=0.8pt,
+  left=3pt,right=3pt,top=2pt,bottom=2pt,
+  fontupper=\small
 }
 
 % Key insight callout
 \newtcolorbox{insightbox}{%
   colback=accentOrange!10,
   colframe=accentOrange,
-  fonttitle=\bfseries,
+  fonttitle=\bfseries\small,
   title={\faLightbulb\ Key Insight},
   rounded corners,
-  boxrule=1pt,
-  left=4pt,right=4pt,top=4pt,bottom=4pt
+  boxrule=0.8pt,
+  left=3pt,right=3pt,top=2pt,bottom=2pt,
+  fontupper=\small
 }
 
 % Connection to LLM callout
 \newtcolorbox{llmconnection}{%
   colback=aiViolet!8,
   colframe=aiViolet,
-  fonttitle=\bfseries,
+  fonttitle=\bfseries\small,
   title={\faRobot\ Inside the LLM},
   rounded corners,
-  boxrule=1pt,
-  left=4pt,right=4pt,top=4pt,bottom=4pt
+  boxrule=0.8pt,
+  left=3pt,right=3pt,top=2pt,bottom=2pt,
+  fontupper=\small
 }
 
 % Visual placeholder
@@ -144,6 +147,9 @@
 
 % Remove navigation symbols
 \setbeamertemplate{navigation symbols}{}
+
+% Load shared layout fixes
+\input{layout-fixes}
 
 % ---- Document Info ----
 \title[Building Blocks of LLMs]{The Building Blocks of LLMs\\[0.3em]{\large From Archimedes to Attention}}
