@@ -193,32 +193,30 @@
 
   \begin{columns}[T]
     \begin{column}{0.46\textwidth}
-      \vspace{0.1em}
-      {\small When you type a question to ChatGPT or Claude\ldots}
+      {\small When you type a question to ChatGPT or Claude\ldots
 
-      \vspace{0.1em}
-      {\small The machine that answers is built \alert{entirely from mathematics}.}
+      The machine that answers is built \alert{entirely from mathematics}.}
 
-      \vspace{0.1em}
+      \vspace{-0.1em}
       {\small
-      \begin{itemize}\setlength\itemsep{0pt}
+      \begin{itemize}\setlength\itemsep{-1pt}
         \item Not magic
         \item Not ``intelligence''
         \item \textbf{Specific math}, invented by \textbf{specific people},
               at \textbf{specific times}
       \end{itemize}}
 
-      \vspace{0.1em}
+      \vspace{-0.1em}
       \begin{tcolorbox}[colback=accentOrange!10, colframe=accentOrange,
-        fonttitle=\bfseries, title={\faLightbulb\ Key Insight},
-        rounded corners, boxrule=1pt, left=3pt, right=3pt, top=2pt, bottom=2pt]
+        fonttitle=\bfseries\small, title={\faLightbulb\ Key Insight},
+        rounded corners, boxrule=1pt, left=3pt, right=3pt, top=1pt, bottom=1pt]
         \small You already know some of this math.
         You just don't know it's inside your AI yet.
       \end{tcolorbox}
     \end{column}
 
     \begin{column}{0.50\textwidth}
-      \begin{tikzpicture}[scale=0.72, every node/.style={transform shape},
+      \begin{tikzpicture}[scale=0.6, every node/.style={transform shape},
         every node/.append style={font=\scriptsize\bfseries},
         arr/.style={->,>=stealth,thick}
       ]
@@ -247,6 +245,17 @@
       \end{tikzpicture}
     \end{column}
   \end{columns}
+
+  \vspace{-0.6em}
+  \begin{center}
+  \scriptsize\textcolor{gray}{The people inside your AI:}\hspace{4pt}%
+  \includegraphics[height=0.48cm]{figures/euler.jpg}\hspace{2pt}%
+  \includegraphics[height=0.48cm]{figures/gauss.jpg}\hspace{2pt}%
+  \includegraphics[height=0.48cm]{figures/pascal.jpg}\hspace{2pt}%
+  \includegraphics[height=0.48cm]{figures/turing.jpg}\hspace{2pt}%
+  \includegraphics[height=0.48cm]{figures/shannon.jpg}\hspace{2pt}%
+  \includegraphics[height=0.48cm]{figures/hinton.jpg}
+  \end{center}
 
   \note{
     NOW: Your phone, right now, runs a machine built from 10 branches of
@@ -581,6 +590,16 @@
           % Ball positions showing descent
           \addplot[only marks, mark=*, mark size=3pt, accentOrange]
             coordinates {(-2.2,7.5) (-1.2,4.8) (-0.3,3.3) (0.3,2.9)};
+          % Tangent line at the second ball (x=-1.2)
+          \addplot[accentOrange, thick, domain=-2.2:-0.2, samples=2]
+            {-1.7*(x+1.2) + 4.8};
+          \fill[accentOrange] (axis cs:-1.2,4.8) circle (2.5pt);
+          \node[font=\tiny, right, text=accentOrange] at (axis cs:-0.4,6.0)
+            {slope $=$ derivative};
+          % Gradient arrow pointing downhill
+          \draw[-Stealth, thick, calculusRed!80] (axis cs:-1.2,4.8) -- (axis cs:-0.3,3.3);
+          \node[font=\tiny, below, text=calculusRed] at (axis cs:-0.75,3.6)
+            {gradient descent};
         \end{axis}
       \end{tikzpicture}
 
@@ -1038,35 +1057,40 @@
       \convergencebar{6}
 
       \vspace{0.1em}
-      % Fourier series plot
+      % Neural network approximation stages
       \begin{tikzpicture}
         \begin{axis}[
-          width=5cm, height=2.8cm,
-          domain=-3.14:3.14, samples=80,
+          width=5.5cm, height=3cm,
+          domain=-3:3, samples=60,
           axis lines=middle,
-          xlabel={$x$}, ylabel={},
-          ymin=-1.5, ymax=1.5,
+          xlabel={$x$}, ylabel={$f(x)$},
+          ymin=-1.8, ymax=1.8,
           xtick=\empty, ytick=\empty,
           legend style={at={(0.02,0.98)},anchor=north west,
-            font=\tiny, draw=none, fill=none},
+            font=\tiny, draw=none, fill=none,
+            row sep=-2pt},
           every axis plot/.append style={thick, no markers},
           clip=false
         ]
-          \addplot[calculusRed!50, dashed]
-            {(4/3.14159)*sin(deg(x))};
-          \addlegendentry{$N{=}1$}
-          \addplot[approxGreen, thick]
-            {(4/3.14159)*(sin(deg(x))
-             + sin(deg(3*x))/3
-             + sin(deg(5*x))/5
-             + sin(deg(7*x))/7
-             + sin(deg(9*x))/9
-             + sin(deg(11*x))/11
-             + sin(deg(13*x))/13)};
-          \addlegendentry{$N{=}7$}
+          % Target function (bumpy)
+          \addplot[black, very thick]
+            {sin(deg(x)) + 0.3*sin(deg(3*x))};
+          \addlegendentry{target}
+          % 1 neuron (very rough)
+          \addplot[calculusRed!60, dashed]
+            {0.8*sin(deg(x))};
+          \addlegendentry{1 neuron}
+          % 5 neurons (better)
+          \addplot[probBlue!70, dashed]
+            {sin(deg(x)) + 0.1*sin(deg(3*x))};
+          \addlegendentry{5 neurons}
+          % 100 neurons (near perfect)
+          \addplot[approxGreen, densely dotted, very thick]
+            {sin(deg(x)) + 0.28*sin(deg(3*x))};
+          \addlegendentry{100 neurons}
         \end{axis}
       \end{tikzpicture}%
-      {\scriptsize\centering Any function $=$ sum of waves. \emph{Fourier, 1807.}\par}
+      {\scriptsize\centering More neurons $\to$ better fit. \emph{Cybenko, 1989.}\par}
     \end{column}
 
     \begin{column}{0.47\textwidth}
@@ -1151,17 +1175,21 @@
         fonttitle=\bfseries\small, title={Rosenblatt's Perceptron (1958)},
         rounded corners, boxrule=0.8pt, left=3pt, right=3pt, top=2pt, bottom=2pt]
         \scriptsize
+        \begin{minipage}[t]{0.55\linewidth}
         A room-sized machine with 400 photocells that could \textbf{learn}.
 
         \vspace{0.2em}
-        The New York Times: ``a machine that could walk, talk, see, write\ldots''
-
-        \vspace{0.3em}
-        \centering
-        The hype was enormous.
+        NYT: ``\,a machine that could walk, talk, see, write\ldots\!''
 
         \vspace{0.2em}
+        The hype was enormous.\\
         \textbf{And then came the crash.}
+        \end{minipage}\hfill
+        \begin{minipage}[t]{0.40\linewidth}
+        \centering
+        \includegraphics[height=1.5cm]{figures/perceptron.jpg}\\[1pt]
+        {\tiny Mark\,I Perceptron}
+        \end{minipage}
       \end{tcolorbox}
 
       \vspace{0.3em}
@@ -2052,28 +2080,33 @@
     \begin{tcolorbox}[colback=aiViolet!5, colframe=aiViolet,
       fonttitle=\bfseries\small, title={The Complete Inventory},
       rounded corners, boxrule=1pt, width=0.92\textwidth,
-      left=4pt, right=4pt, top=3pt, bottom=3pt]
-      \scriptsize
-      \begin{tabular}{@{}lll@{}}
+      left=3pt, right=3pt, top=2pt, bottom=2pt]
+      \scriptsize\setlength{\tabcolsep}{3pt}%
+      \begin{tabular}{@{}c@{\hskip 4pt}lll@{}}
         \toprule
-        \textbf{Component} & \textbf{Inventor(s)} & \textbf{Date} \\
+        & \textbf{Component} & \textbf{Inventor(s)} & \textbf{Date} \\
         \midrule
-        Embedding & Grassmann, Mikolov & 1844, 2013 \\
-        Positional encoding & Fourier, Vaswani & 1807, 2017 \\
-        Self-attention (dot product) & Gibbs, Bahdanau & 1881, 2014 \\
-        Softmax & Boltzmann & 1870s \\
-        Matrix multiplication & Cayley & 1858 \\
-        Add \& Norm & He, Ba & 2015, 2016 \\
-        Feed-forward + GELU & Cybenko, Hendrycks & 1989, 2016 \\
-        Output softmax & Boltzmann/Luce & 1870s \\
-        Gradient descent & Cauchy & 1847 \\
-        Backpropagation & Linnainmaa, Hinton & 1970, 1986 \\
-        Cross-entropy loss & Shannon & 1948 \\
+        & Embedding & Grassmann, Mikolov & 1844, 2013 \\
+        \raisebox{-0.15cm}{\includegraphics[height=0.4cm]{figures/euler.jpg}}
+        & Positional encoding & Fourier, Vaswani & 1807, 2017 \\
+        & Self-attention (dot product) & Gibbs, Bahdanau & 1881, 2014 \\
+        & Softmax & Boltzmann & 1870s \\
+        \raisebox{-0.15cm}{\includegraphics[height=0.4cm]{figures/gauss.jpg}}
+        & Matrix multiplication & Cayley & 1858 \\
+        & Add \& Norm & He, Ba & 2015, 2016 \\
+        & Feed-forward + GELU & Cybenko, Hendrycks & 1989, 2016 \\
+        & Output softmax & Boltzmann/Luce & 1870s \\
+        \raisebox{-0.15cm}{\includegraphics[height=0.4cm]{figures/fermat.jpg}}
+        & Gradient descent & Cauchy & 1847 \\
+        \raisebox{-0.15cm}{\includegraphics[height=0.4cm]{figures/hinton.jpg}}
+        & Backpropagation & Linnainmaa, Hinton & 1970, 1986 \\
+        \raisebox{-0.15cm}{\includegraphics[height=0.4cm]{figures/shannon.jpg}}
+        & Cross-entropy loss & Shannon & 1948 \\
         \bottomrule
       \end{tabular}
     \end{tcolorbox}
 
-    \vspace{0.3em}
+    \vspace{0.1em}
     {\small At the start, this was overwhelming. Now you can point to each piece\\
      and say \textbf{who} invented it, \textbf{when}, and \textbf{why}.}
   \end{center}
