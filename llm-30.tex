@@ -738,24 +738,32 @@
 
   \begin{columns}[T]
     \begin{column}{0.48\textwidth}
-      % Pascal-Fermat exchange
+      % Pascal-Fermat exchange with portraits
       \begin{tikzpicture}[
-        letter/.style={draw=probBlue!60, rounded corners, fill=probBlue!5,
-          text width=1.6cm, align=center, font=\scriptsize, inner sep=3pt},
         >=Stealth
       ]
-        \node[letter] (pascal) at (0,0) {Pascal\\Paris};
-        \node[letter] (fermat) at (3,0) {Fermat\\Toulouse};
-        \draw[->,thick,probBlue!70] (pascal.east) --
-          node[above,font=\tiny] {1654} (fermat.west);
-        \draw[<-,thick,probBlue!70] ([yshift=-3pt]pascal.east)
-          -- ([yshift=-3pt]fermat.west);
+        % Pascal portrait + label
+        \node[inner sep=0pt] (pascal_img) at (0,0)
+          {\includegraphics[height=1.2cm,clip]{figures/pascal.jpg}};
+        \node[below=1pt of pascal_img, font=\tiny] {Pascal};
+        % Fermat portrait + label
+        \node[inner sep=0pt] (fermat_img) at (3.2,0)
+          {\includegraphics[height=1.2cm,clip]{figures/fermat.jpg}};
+        \node[below=1pt of fermat_img, font=\tiny] {Fermat};
+        % Exchange arrows
+        \draw[->,thick,probBlue!70] ([yshift=2pt]pascal_img.east) --
+          node[above,font=\tiny] {1654} ([yshift=2pt]fermat_img.west);
+        \draw[<-,thick,probBlue!70] ([yshift=-4pt]pascal_img.east)
+          -- ([yshift=-4pt]fermat_img.west);
       \end{tikzpicture}
 
       \vspace{0.3em}
-      % Bayes theorem
+      % Bayes theorem (no verified portrait exists)
       \begin{tcolorbox}[colback=probBlue!5, colframe=probBlue,
-        fonttitle=\bfseries\small, title={Bayes (1763)},
+        fonttitle=\bfseries\small,
+        title={\tikz[baseline=-0.5ex]{\node[draw=probBlue,fill=probBlue!15,
+          circle,inner sep=1pt,font=\scriptsize\bfseries]{?};}
+          ~Bayes (1763)},
         rounded corners, boxrule=0.5pt, left=3pt, right=3pt, top=2pt, bottom=2pt]
         \small
         $P(A \mid B) = \dfrac{P(B \mid A)\, P(A)}{P(B)}$\\[4pt]
@@ -765,9 +773,11 @@
     \end{column}
 
     \begin{column}{0.49\textwidth}
-      % Shannon's language model
+      % Shannon's language model with portrait
       \begin{tcolorbox}[colback=infoAmber!8, colframe=infoAmber,
-        fonttitle=\bfseries\small, title={Shannon (1948) --- Language as Statistics},
+        fonttitle=\bfseries\small,
+        title={\raisebox{-0.4em}{\includegraphics[height=1cm,clip]{figures/shannon.jpg}}%
+          ~Shannon (1948)},
         rounded corners, boxrule=0.5pt, left=3pt, right=3pt, top=2pt, bottom=2pt]
         \scriptsize
         \textbf{0th order:} XFOML RXKHRJFFJUJ\\[2pt]
